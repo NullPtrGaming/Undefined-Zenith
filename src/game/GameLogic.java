@@ -17,9 +17,15 @@ public class GameLogic {
 	public static final int PRIMARY_PLAYER = 0; 
 	public static final boolean PLAYER_TRUE = true; 
 	public static final int MENU_COOLDOWN = 250; 
+	public static final int ENEMY_COOLDOWN = 5000; 
+	public static final int MAX_ENTITIES = 16; 
 	
 	private static int gameState = 0; // THE GAME'S MAIN STATE VARIABLE - 0=TITLE, 1=MENU, 2=RUNNING 
+	private static long gameTime; 
+	private static long pauseTime; 
+	private static long pauseTimer; 
 	private static long menuCooldownTimer; 
+	private static long enemyCooldownTimer; 
 	
 	private static Player[] playerList; // Stores all game players - referenced by indices 
 	private static ArrayList<Entity> entityList; 
@@ -30,25 +36,24 @@ public class GameLogic {
 	private static ArrayList<Entity> menuButtonList; 
 	
 	// Initializes game logic, including key states and the entity lists 
-	public static void gameInit (long window) { 
+	public static void gameInit (long window) {  
 		menuCooldownTimer = System.currentTimeMillis() + MENU_COOLDOWN; 
+		enemyCooldownTimer = System.currentTimeMillis(); 
+		pauseTimer = System.currentTimeMillis(); 
 		playerList = new Player[4]; 
 		entityList = new ArrayList<Entity> (); 
 		projectileList = new ArrayList<Projectile> (); 
 		titleButtonList = new ArrayList<Entity> (); 
 		menuButtonList = new ArrayList<Entity> (); 
 		playerList[PRIMARY_PLAYER] = new Player(0, 0, 1, 10, 2, 500, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
-		entityList.add(new Entity(128, 64, 50, 10, 10, 1000, Entity.ATTACK_PHYSICAL, true)); // testing, to be removed 
-		entityList.add(new Entity(64, 128, 50, 10, 10, 1000, Entity.ATTACK_PHYSICAL, true)); 
-		entityList.add(new Entity(-96, -96, 100, 10, 10, 1000, Entity.ATTACK_PHYSICAL, true)); 
-		new Input(window, true, keyStates); // Key callbacks set 
+		new Input(window, false, keyStates); // Key callbacks set 
 	} 
 	
 	// gets/sets the main game state - important 
 	public static int getState () { 
 		return gameState; 
 	}
-	public static void setState (int state) {
+	public static void setState (int state) { 
 		gameState = state; 
 	}
 	
@@ -61,12 +66,36 @@ public class GameLogic {
 		for (Projectile p : projectileList) {
 			p.pollMovement(); 
 		}
-		GameLogic.removeDeadEntities(); 
+		removeDeadEntities(); 
+		newEntity(); 
 	}
 	
 	// Enemy generator method - operates on cooldown system 
 	public static void newEntity () {
-		if ()
+		if (entityList.size() <= MAX_ENTITIES && gameTime - enemyCooldownTimer >= ENEMY_COOLDOWN) {
+			enemyCooldownTimer = gameTime; 
+			int[] coords; 
+			for (int i=3; i>0; i--) {
+				coords = genCoordinates(); 
+				entityList.add(new Entity(coords[0], coords[1], 50, 10, 10, 1000, Entity.ATTACK_PHYSICAL, true)); 
+				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
+					return; 
+				else 
+					entityList.remove(entityList.size()-1); 
+			}
+		}
+	}
+	
+	// Generates a random coordinate pair in a 2-position int array 
+	public static int[] genCoordinates () {
+		int[] coords = new int[2]; 
+		coords[0] = (int)(Math.random()*256); 
+		if (Math.random() < 0.5) 
+			coords[0] *= -1; 
+		coords[1] = (int)(Math.random()*144); 
+		if (Math.random() < 0.5) 
+			coords[1] *= -1; 
+		return coords; 
 	}
 		
 	// Returns the referenced entity - referenced by index and which array to get from (true identifies the Player array) 
@@ -130,7 +159,7 @@ public class GameLogic {
 		if (entity.getCooldown() != -1) {
 			for (int i=0; i<projectileList.size(); i++) {
 				Projectile p = projectileList.get(i); 
-				if (!(p.getX() <= Entity.MAX_X-16 && p.getY() <= Entity.MAX_Y-16 && p.getX() >= -1*Entity.MAX_X && p.getY() >= -1*Entity.MAX_Y)) { // destroys projectiles that leave the screen 
+				if (!(p.getX() <= Entity.MAX_X-4 && p.getY() <= Entity.MAX_Y-4 && p.getX() >= -1*Entity.MAX_X && p.getY() >= -1*Entity.MAX_Y)) { // destroys projectiles that leave the screen 
 					projectileList.remove(i); 
 					i--; 
 				}
@@ -159,6 +188,17 @@ public class GameLogic {
 		return move; 
 	}
 	
-	
+	// important method, gets a game-specific time value 
+	public static long getTime () { 
+		return gameTime; 
+	}
+	// updates time 
+	public static void updateTime () { 
+		if (gameState != 2) {
+			pauseTime += (System.currentTimeMillis() - pauseTimer); 
+			pauseTimer = System.currentTimeMillis(); 
+		}
+		gameTime = System.currentTimeMillis() - pauseTime; 
+	}
 }
 

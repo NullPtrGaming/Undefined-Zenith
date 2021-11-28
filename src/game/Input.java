@@ -39,8 +39,8 @@ public class Input {
 		}
 		else 
 			glfwSetKeyCallback(w, (window, key, scancode, action, mods) -> {
-				if (key == GLFW_KEY_BACKSLASH) 
-					keyStates[ATTACK] = (glfwGetKey(window, GLFW_KEY_BACKSLASH) == GLFW_PRESS); 
+				if (key == GLFW_KEY_SPACE) 
+					keyStates[ATTACK] = (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS); 
 				if (key == GLFW_KEY_UP) 
 					keyStates[UP] = (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS); 
 				if (key == GLFW_KEY_DOWN)

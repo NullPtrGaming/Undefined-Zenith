@@ -64,7 +64,9 @@ public class GameLoop {
 		
 		while ( !glfwWindowShouldClose(window) ) { // this is the loop 
 			// to be continued... 
-			FPSCounter.StartCounter(); 
+			//FPSCounter.StartCounter(); 
+			
+			GameLogic.updateTime(); 
 			
 			render.render(); 
 			
@@ -76,7 +78,7 @@ public class GameLoop {
 			else 
 				GameLogic.getEntity(GameLogic.PRIMARY_PLAYER, true).pollMovement(); 
 			
-			FPSCounter.StopAndPost(); 
+			//FPSCounter.StopAndPost(); 
 		}
 	}
 	
@@ -101,8 +103,12 @@ public class GameLoop {
 		}
 	}
 	
+	// loads textures using the TextureLoader 
 	public void loadTextures () { 
-		textureList[0] = TextureLoader.loadTexture("res/e.png"); 
+		textureList[0] = TextureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
+		textureList[1] = TextureLoader.loadTexture("res/Enemies/Searchlight.png"); 
+		textureList[2] = TextureLoader.loadTexture("res/Projectiles/Friendly Projectile.png"); 
+		textureList[3] = TextureLoader.loadTexture("res/Background.png"); 
 	}
 	
 	// gets the window handle 

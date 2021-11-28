@@ -31,38 +31,46 @@ public class Renderer {
 	public void render () { 
 		getWindowSize(); 
 		
-		glBindTexture(GL_TEXTURE_2D, textureList[0]); 
-		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		glBegin(GL_TRIANGLES); 
+		renderBackground(); // outside of state check 
 		
-		if (GameLogic.getState() == 2) {
+		if (GameLogic.getState() == 2) { 
 			for (int i=0; i<4; i++) { 
+				glBindTexture(GL_TEXTURE_2D, textureList[i]); 
+				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(i, true)); 
 				if (vertexArray != null) 
-					renderVertices(GameLogic.getEntity(i, true).getDirection()); 
+					renderVertices(); 
+				glEnd(); 
 			} 
 			
+			glBindTexture(GL_TEXTURE_2D, textureList[1]); 
 			for (int j=0; j<GameLogic.numEntities(); j++) {
+				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(j, false)); 
 				if (vertexArray != null)  
-					renderVertices(GameLogic.getEntity(j, false).getDirection()); 
+					renderVertices(); 
+				glEnd(); 
 			}
-			for (int k=0; k<GameLogic.numProjectiles(); k++) {
+			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
+			for (int k=0; k<GameLogic.numProjectiles(); k++) { 
+				glBegin(GL_TRIANGLES); 
 				vertexArray = getVertexArray(GameLogic.getProjectile(k)); 
 				if (vertexArray != null) 
-					renderVertices(GameLogic.getProjectile(k).getDirection()); 
+					renderVertices(); 
+				glEnd(); 
 			}
 		}
 		else {
 			for (int i=0; i<GameLogic.numButtons(); i++) {
+				glBegin(GL_TRIANGLES); 
 				vertexArray = getVertexArray(GameLogic.getProjectile(i)); 
 				if (vertexArray != null) 
-					renderVertices(GameLogic.getButton(i).getDirection()); 
+					renderVertices(); 
+				glEnd(); 
 			}
 		}
-		glEnd(); 
 	} 
 	
 		// Returns an array of vertices for rendering a single tile entity 
@@ -74,7 +82,7 @@ public class Renderer {
 			int x = entity.getX(), y = entity.getY(); 
 			getWindowSize(); 
 			
-			if (entity.getCooldown() == -1) { 
+			if (entity.getCooldown() == -1) {  
 				vertexArray[0] = (float)x/(Entity.MAX_X); // experimental/unstable code, to be fixed later 
 				vertexArray[1] = (float)y/(Entity.MAX_Y);
 				vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
@@ -99,7 +107,7 @@ public class Renderer {
 		}
 		
 		// OpenGL side of render code 
-		public void renderVertices (int direction) {
+		public void renderVertices () {	
 			glTexCoord2f(1, 0);
 			glVertex2f(vertexArray[0], vertexArray[1]);
 			glTexCoord2f(1, 1);
@@ -114,6 +122,25 @@ public class Renderer {
 			glVertex2f(vertexArray[0], vertexArray[1]);
 		}
 		
+		// specifically renders the background 
+		public void renderBackground () {
+			glBindTexture(GL_TEXTURE_2D, textureList[3]); 
+			
+			glBegin(GL_TRIANGLES); 
+			glTexCoord2f(18, 0);
+			glVertex2f(-1f, -1f);
+			glTexCoord2f(18, 32);
+			glVertex2f(1f, -1f);
+			glTexCoord2f(0, 32);
+			glVertex2f(1f, 1f);
+			glTexCoord2f(0, 32); 
+			glVertex2f(1f, 1f);
+			glTexCoord2f(0, 0);
+			glVertex2f(-1f, 1f);
+			glTexCoord2f(18, 0);
+			glVertex2f(-1f, -1f); 
+			glEnd(); 
+		}
 		
 		// Returns the window's size in (width, height) format in a 2 position array 
 		public int[] getWindowSize () {  
