@@ -48,7 +48,7 @@ public class Entity {
 		this.rotatable = rotatable; 
 		collisionBox = new Rectangle2D.Float((float)x/MAX_X, (float)y/MAX_Y, BOX_WIDTH, BOX_HEIGHT); 
 		setAttackType(type); 
-		cooldownTimer = GameLogic.getTime() + cooldown; 
+		cooldownTimer = GameLogic.getTime(); 
 	}
 	
 	// returns position/status variables 
@@ -79,6 +79,10 @@ public class Entity {
 	}
 	public void setY (int y) {
 		this.y = y; 
+	}
+	// changes speed by given value 
+	public void accelerate (int acceleration) {
+		speed += acceleration; 
 	}
 	// Changes health by the given value 
 	public void healthModify (int h) {
@@ -159,19 +163,19 @@ public class Entity {
 	
 	// generates projectiles and deals damage respectively 
 	public void pollAttack () {
-		if (cooldownTimer - GameLogic.getTime() <= 0) {
+		if (GameLogic.getTime() - cooldownTimer >= cooldown) { 
+			cooldownTimer = GameLogic.getTime(); 
 			if (attackType == ATTACK_PHYSICAL) 
 				GameLogic.testEntityIntersect(this); 
 			else if (attackType == ATTACK_PROJECTILE) 
 				genProjectile(); 
-			cooldownTimer = GameLogic.getTime() + cooldown; 
 		}
-		
-	}  
+	}
 	
 	// Generates a Projectile at the location of the Entity in their direction 
 	public void genProjectile () {
 		GameLogic.createProjectile(x+8, y+8, speed*3, direction, damage, false, this); 
 	}
+	
 }
 

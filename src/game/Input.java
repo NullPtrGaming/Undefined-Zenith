@@ -16,42 +16,46 @@ public class Input {
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
 	public static final int ATTACK = 4; 
-	
 	public static final int SELECT = 5; // for menu navigation 
+	public static final int ESCAPE = 6; 
+	
+	private static int[] keybinds = {GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_LEFT_CONTROL, GLFW_KEY_ENTER, GLFW_KEY_ESCAPE}; 
+	// array for storing different bindings for different keys 
+	
+	private static int lastKey; 
 	
 	// Constructor, sets up GLFW key callback 
 	public Input (long w, boolean isWASD, boolean[] keyStates) {
-		if (isWASD) {
-			glfwSetKeyCallback(w, (window, key, scancode, action, mods) -> {
-				if (key == GLFW_KEY_SPACE) 
-					keyStates[ATTACK] = (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS); 
-				if (key == GLFW_KEY_W) 
-					keyStates[UP] = (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS); 
-				if (key == GLFW_KEY_S)
-					keyStates[DOWN] = (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS); 
-				if (key == GLFW_KEY_A)
-					keyStates[LEFT] = (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS); 
-				if (key == GLFW_KEY_D)
-					keyStates[RIGHT] = (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS); 
-				if (key == GLFW_KEY_ENTER) 
-					keyStates[SELECT] = (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS); 
+		glfwSetKeyCallback(w, (window, key, scancode, action, mods) -> {
+			if (key == keybinds[ATTACK]) 
+				keyStates[ATTACK] = (glfwGetKey(window, keybinds[ATTACK]) == GLFW_PRESS); 
+			if (key == keybinds[UP]) 
+				keyStates[UP] = (glfwGetKey(window, keybinds[UP]) == GLFW_PRESS); 
+			if (key == keybinds[DOWN])
+				keyStates[DOWN] = (glfwGetKey(window, keybinds[DOWN]) == GLFW_PRESS); 
+			if (key == keybinds[LEFT])
+				keyStates[LEFT] = (glfwGetKey(window, keybinds[LEFT]) == GLFW_PRESS); 
+			if (key == keybinds[RIGHT])
+				keyStates[RIGHT] = (glfwGetKey(window, keybinds[RIGHT]) == GLFW_PRESS); 
+			if (key == keybinds[SELECT]) 
+				keyStates[SELECT] = (glfwGetKey(window, keybinds[SELECT]) == GLFW_PRESS); 
+			if (key == keybinds[SELECT]) 
+				keyStates[SELECT] = (glfwGetKey(window, keybinds[SELECT]) == GLFW_PRESS);
+			if (key == keybinds[ESCAPE]) 
+				keyStates[ESCAPE] = (glfwGetKey(window, keybinds[ESCAPE]) == GLFW_PRESS);
+			lastKey = key; 
+			GameLogic.setKeysPoll(); 
 			});
-		}
-		else 
-			glfwSetKeyCallback(w, (window, key, scancode, action, mods) -> {
-				if (key == GLFW_KEY_SPACE) 
-					keyStates[ATTACK] = (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS); 
-				if (key == GLFW_KEY_UP) 
-					keyStates[UP] = (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS); 
-				if (key == GLFW_KEY_DOWN)
-					keyStates[DOWN] = (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS); 
-				if (key == GLFW_KEY_LEFT)
-					keyStates[LEFT] = (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS); 
-				if (key == GLFW_KEY_RIGHT)
-					keyStates[RIGHT] = (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS); 
-				if (key == GLFW_KEY_ENTER) 
-					keyStates[SELECT] = (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS);
-			});
+	}
+	
+	// returns the keybinds array for modification 
+	public static int[] getKeybinds () {
+		return keybinds; 
+	}
+	
+	// returns the last pressed key 
+	public static int getLastKey () {
+		return lastKey; 
 	}
 }
 

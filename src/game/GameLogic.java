@@ -6,8 +6,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWWindowSizeCallback;
+import org.lwjgl.glfw.*; 
 import org.lwjgl.opengl.GL11;
 
 import game.entity.*; 
@@ -26,35 +25,159 @@ public class GameLogic {
 	private static long pauseTimer; 
 	private static long menuCooldownTimer; 
 	private static long enemyCooldownTimer; 
+	private static long gameWindow; 
+	private static boolean isFullscreen = false; 
 	
 	private static Player[] playerList; // Stores all game players - referenced by indices 
 	private static ArrayList<Entity> entityList; 
 	private static ArrayList<Projectile> projectileList; 
-	private static boolean[] keyStates = new boolean[6]; 
+	private static boolean[] keyStates = new boolean[7]; 
+	private static int[] newKeys = new int[7]; 
+	private static int newKeysIndex = 0; 
+	private static boolean rebinding = false; 
 	
-	private static ArrayList<Entity> titleButtonList; // Stores buttons for menus - alternate game states 
-	private static ArrayList<Entity> menuButtonList; 
+	private static ArrayList<Button> titleButtonList; // Stores buttons for menus - alternate game states 
+	private static ArrayList<Button> menuButtonList; 
+	private static ArrayList<Button> optionsButtonList; 
+	private static ArrayList<Button> tempButtonList = null; 
+	private static boolean isOptions = false; 
+	
+	private static MenuInputHandler input; 
+	private static Input keyPressHandler; 
 	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
+		gameWindow = window; 
 		menuCooldownTimer = System.currentTimeMillis() + MENU_COOLDOWN; 
 		enemyCooldownTimer = System.currentTimeMillis(); 
 		pauseTimer = System.currentTimeMillis(); 
 		playerList = new Player[4]; 
 		entityList = new ArrayList<Entity> (); 
 		projectileList = new ArrayList<Projectile> (); 
-		titleButtonList = new ArrayList<Entity> (); 
-		menuButtonList = new ArrayList<Entity> (); 
+		titleButtonList = new ArrayList<Button> (); 
+		menuButtonList = new ArrayList<Button> (); 
+		optionsButtonList = new ArrayList<Button> (); 
 		playerList[PRIMARY_PLAYER] = new Player(0, 0, 1, 10, 2, 500, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
-		new Input(window, false, keyStates); // Key callbacks set 
+		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
+		input = new MenuInputHandler(keyStates); 
+		initMenus(); 
+		GameSaver.loadGame(GameSaver.getExpectedSaveLocation()); 
 	} 
+	
+	// fullscreen toggle 
+	public static void toggleFullscreen () {
+		long monitor = GLFW.glfwGetPrimaryMonitor(); 
+		GLFWVidMode monitorMode = GLFW.glfwGetVideoMode(monitor); 
+		if (isFullscreen) { // sets windowed 
+			GLFW.glfwSetWindowMonitor(gameWindow, 0, (monitorMode.width() - 512) / 2, (monitorMode.height() - 288) / 2, 512, 288, monitorMode.refreshRate()); 
+			isFullscreen = false; 
+		}
+		else { // sets fullscreen 
+			GLFW.glfwSetWindowMonitor(gameWindow, monitor, 0, 0, monitorMode.width(), monitorMode.height(), monitorMode.refreshRate()); 
+			isFullscreen = true; 
+		}
+		GLFW.glfwSwapInterval(1); 
+	}
+	public static boolean getFullscreenState() {
+		return isFullscreen; 
+	}
+	
+	// sets button lists with buttons 
+	public static void initMenus () {
+		titleButtonList.add(new Button(-96, 0, "Play")); 
+		titleButtonList.add(new Button(-96, -48, "Settings")); 
+		titleButtonList.add(new Button(-96, -96, "Exit")); 
+		
+		menuButtonList.add(new Button(-96, 48, "Resume")); 
+		menuButtonList.add(new Button(-96, -16, "Settings")); 
+		menuButtonList.add(new Button(-96, -80, "Save and Exit")); 
+		
+		optionsButtonList.add(new Button(-96, 96, "Exit")); 
+		optionsButtonList.add(new Button(-96, 60, "Rebind Keys")); 
+		optionsButtonList.add(new Button(-96, 24, "Select = Attack")); 
+		optionsButtonList.add(new Button(-96, -12, "Fullscreen")); 
+	} 
+	
+	// is the options menu open? 
+	public static boolean getOptionState () {
+		return isOptions; 
+	}
+	// toggles the options menu 
+	public static void toggleOptions () {
+		if (!isOptions) {
+			if (gameState == 0) {
+				tempButtonList = titleButtonList; 
+				titleButtonList = optionsButtonList; 
+			}
+			else if (gameState == 1) {
+				tempButtonList = menuButtonList; 
+				menuButtonList = optionsButtonList;
+			}
+			isOptions = true; 
+		}
+		else {
+			if (gameState == 0) {
+				titleButtonList = tempButtonList; 
+			}
+			else if (gameState == 1) {
+				menuButtonList = tempButtonList; 
+			}
+			isOptions = false; 
+		}
+	}
+	
+	// gets the menu input handler 
+	public static MenuInputHandler getInput () { 
+		return input; 
+	}
+	// gets the overall input (key callback)  handler 
+	public static Input getKeyCallbacks () {
+		return keyPressHandler; 
+	}
+	
+	// sets keys 
+	public static void setKeysInit () { 
+		newKeysIndex = 0; 
+		rebinding = true; 
+	}
+	public static void setKeysPoll () { 
+		if (rebinding && getMenuCooldownState()) { 
+			boolean cancel = false; 
+			for (int i=0; i<newKeys.length; i++) {
+				cancel = (newKeys[i] == Input.getLastKey()); 
+				if (cancel) 
+					break; 
+			}
+			if (!cancel) {
+				newKeys[newKeysIndex] = Input.getLastKey(); 
+				newKeysIndex++; 
+			} 
+			if (newKeysIndex >= newKeys.length) { 
+				int[] keybinds = Input.getKeybinds(); 
+				for (int i=0; i<newKeys.length; i++) { 
+					keybinds[i] = newKeys[i]; 
+				}
+				rebinding = false; 
+			}
+		}
+	}
+	public static boolean isRebinding () {
+		return rebinding; 
+	}
 	
 	// gets/sets the main game state - important 
 	public static int getState () { 
 		return gameState; 
 	}
 	public static void setState (int state) { 
+		int lastState = gameState; 
 		gameState = state; 
+		if (state == 2)
+			startTime(); 
+		else 
+			stopTime(); 
+		if (state == 1 && lastState == 2) 
+			GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
 	}
 	
 	// Updates all entities and player movements 
@@ -98,6 +221,11 @@ public class GameLogic {
 		return coords; 
 	}
 		
+	// gets the main player 
+	public static Player getMainPlayer () { 
+		return playerList[PRIMARY_PLAYER]; 
+	}
+	
 	// Returns the referenced entity - referenced by index and which array to get from (true identifies the Player array) 
 	public static Entity getEntity (int index, boolean isPlayer) {
 		if (isPlayer)
@@ -132,7 +260,7 @@ public class GameLogic {
 			return -1; 
 	}
 	// returns the button referenced by index dependent on game state 
-	public static Entity getButton (int index) { 
+	public static Button getButton (int index) { 
 		if (gameState == 0)
 			return titleButtonList.get(index); 
 		else if (gameState == 1) 
@@ -167,6 +295,9 @@ public class GameLogic {
 					entity.healthModify(-1*p.getDamage());
 					projectileList.remove(i); 
 					i--; 
+					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER]) 
+						playerList[PRIMARY_PLAYER].scoreAdd(100); 
+					System.out.println(playerList[PRIMARY_PLAYER].getScore()); 
 				}
 			}
 		}
@@ -179,6 +310,7 @@ public class GameLogic {
 			if (entityList.get(i).getHealth() <= 0) {
 				entityList.remove(i); 
 				i--; 
+				playerList[PRIMARY_PLAYER].scoreAdd(500); 
 			}
 		}
 	}
@@ -188,17 +320,25 @@ public class GameLogic {
 		return move; 
 	}
 	
+	// returns window handle but actually accessible to things 
+	public static long getWindow () {
+		return gameWindow; 
+	}
+	
 	// important method, gets a game-specific time value 
 	public static long getTime () { 
 		return gameTime; 
 	}
 	// updates time 
 	public static void updateTime () { 
-		if (gameState != 2) {
-			pauseTime += (System.currentTimeMillis() - pauseTimer); 
-			pauseTimer = System.currentTimeMillis(); 
-		}
 		gameTime = System.currentTimeMillis() - pauseTime; 
 	}
+	public static void startTime () { // restarts the standard timer - game unpaused 
+		pauseTime += (System.currentTimeMillis() - pauseTimer); 
+	}
+	public static void stopTime () { // pauses standard timer - game paused 
+		pauseTimer = System.currentTimeMillis(); 
+	}
+	
 }
 

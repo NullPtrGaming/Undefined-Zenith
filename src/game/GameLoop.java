@@ -54,7 +54,7 @@ public class GameLoop {
 	// Method handling the main game loop itself, each frame with event handling 
 	public void loop () {
 		GL.createCapabilities(); 
-		glClearColor(1.0f, 0.4f, 0.0f, 0.0f); 
+		glClearColor(0, 0, 0, 0); 
 		glEnable(GL_TEXTURE_2D); 
 		glDisable(GL_DEPTH_TEST); 
 		glEnable(GL_BLEND);
@@ -66,17 +66,18 @@ public class GameLoop {
 			// to be continued... 
 			//FPSCounter.StartCounter(); 
 			
-			GameLogic.updateTime(); 
-			
 			render.render(); 
 			
 			glfwSwapBuffers(window); 
 			glfwPollEvents(); 
 			
+			GameLogic.updateTime(); 
+			
 			if (GameLogic.getState() == 2) 
 				GameLogic.updateEntities(); 
-			else 
+			else {
 				GameLogic.getEntity(GameLogic.PRIMARY_PLAYER, true).pollMovement(); 
+			}
 			
 			//FPSCounter.StopAndPost(); 
 		}
@@ -105,14 +106,18 @@ public class GameLoop {
 	
 	// loads textures using the TextureLoader 
 	public void loadTextures () { 
-		textureList[0] = TextureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
-		textureList[1] = TextureLoader.loadTexture("res/Enemies/Searchlight.png"); 
-		textureList[2] = TextureLoader.loadTexture("res/Projectiles/Friendly Projectile.png"); 
-		textureList[3] = TextureLoader.loadTexture("res/Background.png"); 
+		TextureLoader textureLoader = new TextureLoader(); 
+		textureLoader.loadIcon("res/Icon.png", window); // loads the game icon 
+		textureList[0] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
+		textureList[1] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
+		textureList[2] = textureLoader.loadTexture("res/Projectiles/Friendly Projectile.png"); 
+		textureList[3] = textureLoader.loadTexture("res/Background.png"); 
+		textureList[4] = textureLoader.loadTexture("res/e.png"); 
 	}
 	
 	// gets the window handle 
 	public long getWindow () {
 		return window; 
 	}
+	
 }
