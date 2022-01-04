@@ -17,7 +17,10 @@ public class Entity {
 	// attack types, for different Entities 
 	public static final int ATTACK_PHYSICAL = 0; 
 	public static final int ATTACK_PROJECTILE = 1; 
-		
+	
+	// known enemy positions 
+	private int lastPlayerX = 0; 
+	private int lastPlayerY = 0; 
 	
 	// position variables 
 	private int x; 
@@ -33,6 +36,7 @@ public class Entity {
 	private int attackType = ATTACK_PHYSICAL; 
 	
 	private long cooldownTimer; // for determining cooldown times 
+	private long moveCooldownTimer; 
 	
 	// collision box 
 	Rectangle2D collisionBox; 
@@ -49,6 +53,7 @@ public class Entity {
 		collisionBox = new Rectangle2D.Float((float)x/MAX_X, (float)y/MAX_Y, BOX_WIDTH, BOX_HEIGHT); 
 		setAttackType(type); 
 		cooldownTimer = GameLogic.getTime(); 
+		moveCooldownTimer = GameLogic.getTime(); 
 	}
 	
 	// returns position/status variables 
@@ -158,16 +163,41 @@ public class Entity {
 	}
 
 	public void pollMovement () { 
-		move(0, 0); 
+		if (GameLogic.getTime() - moveCooldownTimer >= cooldown) { 
+			moveCooldownTimer = GameLogic.getTime();
+			lastPlayerX = GameLogic.getMainPlayer().getX(); 
+			lastPlayerY = GameLogic.getMainPlayer().getY(); 
+		}
+		if (GameLogic.testEntityIntersect(this) == null) { 
+			if (lastPlayerX > x) {
+				if (lastPlayerY > y)
+					move(speed, speed); 
+				else 
+					move(speed, -speed); 
+			} 
+			else {
+				if (lastPlayerY > y)
+					move(-speed, speed); 
+				else 
+					move(-speed, -speed); 
+			} 
+		} 
+		else {
+			if (lastPlayerY > y) {
+				move(0, speed);  
+			} 
+			else {
+				move(0, -speed); 
+			} 
+		}
+		pollAttack(); 
 	}
 	
 	// generates projectiles and deals damage respectively 
 	public void pollAttack () {
 		if (GameLogic.getTime() - cooldownTimer >= cooldown) { 
 			cooldownTimer = GameLogic.getTime(); 
-			if (attackType == ATTACK_PHYSICAL) 
-				GameLogic.testEntityIntersect(this); 
-			else if (attackType == ATTACK_PROJECTILE) 
+			if (attackType == ATTACK_PROJECTILE) 
 				genProjectile(); 
 		}
 	}

@@ -14,7 +14,7 @@ public class GameSaver {
 	
 	// returns a string with the expected save location (cross platform) 
 	public static String getExpectedSaveLocation () {
-		return System.getProperty("user.home")+System.getProperty("file.separator")+"Saves"+System.getProperty("file.separator")+"UndefinedZenithSave.txt"; 
+		return System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenithSave.txt"; 
 	}
 	
 	// self-explanatory, saves game 
