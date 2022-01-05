@@ -78,6 +78,9 @@ public class Entity {
 	public int getCooldown () {
 		return cooldown; 
 	}
+	public long getCooldownTimer () { 
+		return cooldownTimer; 
+	}
 	
 	public void setX (int x) {
 		this.x = x; 
@@ -96,6 +99,10 @@ public class Entity {
 	// sets attack type through variables 
 	public void setAttackType (int type) {
 		attackType = type; 
+	}
+	// resets attack/action cooldown 
+	public void cooldownReset () {
+		cooldownTimer = GameLogic.getTime(); 
 	}
 	
 	// gets the Rectangle2D used for collision detection 
@@ -131,8 +138,20 @@ public class Entity {
 			this.y += y; 
 			updateCollisionBox(); 
 			Entity e = GameLogic.testEntityIntersect(this); 
+			if (e != null && this == GameLogic.getEntity(0, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
+				healthModify(-e.getDamage()); 
+				e.cooldownReset(); System.out.println(health); 
+			}
 			if (e != null) 
 				while (e.getCollisionBox().intersects(this.getCollisionBox())) { // in progress - rework involves better collisions teleporting to edges of colliding objects 
+					if (this != GameLogic.getEntity(0, true) && !this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) { 
+						if (lastPlayerY > y) {
+							this.y += speed; 
+						} 
+						else {
+							this.y -= speed; 
+						} 
+					}
 					if (x > 0) { 
 						this.x -= 1; 
 					} 
@@ -168,28 +187,19 @@ public class Entity {
 			lastPlayerX = GameLogic.getMainPlayer().getX(); 
 			lastPlayerY = GameLogic.getMainPlayer().getY(); 
 		}
-		if (GameLogic.testEntityIntersect(this) == null) { 
-			if (lastPlayerX > x) {
-				if (lastPlayerY > y)
-					move(speed, speed); 
-				else 
-					move(speed, -speed); 
-			} 
-			else {
-				if (lastPlayerY > y)
-					move(-speed, speed); 
-				else 
-					move(-speed, -speed); 
-			} 
+		
+		if (lastPlayerX > x) {
+			if (lastPlayerY > y)
+				move(speed, speed); 
+			else 
+				move(speed, -speed); 
 		} 
 		else {
-			if (lastPlayerY > y) {
-				move(0, speed);  
-			} 
-			else {
-				move(0, -speed); 
-			} 
-		}
+			if (lastPlayerY > y)
+				move(-speed, speed); 
+			else 
+				move(-speed, -speed); 
+		} 		
 		pollAttack(); 
 	}
 	
