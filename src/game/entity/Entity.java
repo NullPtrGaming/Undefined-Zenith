@@ -95,6 +95,7 @@ public class Entity {
 	// Changes health by the given value 
 	public void healthModify (int h) {
 		health += h;  
+		if (this == GameLogic.getEntity(0,  true)) System.out.println(health); 
 	}
 	// sets attack type through variables 
 	public void setAttackType (int type) {
@@ -133,16 +134,19 @@ public class Entity {
 	
 	// movement method, calls collision logic 
 	public void move (int x, int y) {
+		if (this != GameLogic.getEntity(0, true) && this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) {
+			if ((GameLogic.getTime() - this.getCooldownTimer() >= this.getCooldown())) {
+				GameLogic.getMainPlayer().healthModify(-this.getDamage());
+				this.cooldownReset();
+			}
+			return; 
+		} 
 		if (this.x <= MAX_X-16 && this.y <= MAX_Y-16 && this.x >= -1*MAX_X && this.y >= -1*MAX_Y) { 
 			this.x += x; 
 			this.y += y; 
 			updateCollisionBox(); 
 			Entity e = GameLogic.testEntityIntersect(this); 
-			if (e != null && this == GameLogic.getEntity(0, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
-				healthModify(-e.getDamage()); 
-				e.cooldownReset(); System.out.println(health); 
-			}
-			if (e != null) 
+			while (e != null) {
 				while (e.getCollisionBox().intersects(this.getCollisionBox())) { // in progress - rework involves better collisions teleporting to edges of colliding objects 
 					if (this != GameLogic.getEntity(0, true) && !this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) { 
 						if (lastPlayerY > y) {
@@ -152,6 +156,10 @@ public class Entity {
 							this.y -= speed; 
 						} 
 					}
+					else if (this == GameLogic.getEntity(0, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
+						healthModify(-e.getDamage()); 
+						e.cooldownReset(); 
+					} 
 					if (x > 0) { 
 						this.x -= 1; 
 					} 
@@ -168,6 +176,8 @@ public class Entity {
 					e.updateCollisionBox(); 
 				}
 			updateCollisionBox(); 
+			e = GameLogic.testEntityIntersect(this); 
+			}
 		} 
 		if (this.x > 240)
 			this.x = -256; 
@@ -216,6 +226,5 @@ public class Entity {
 	public void genProjectile () {
 		GameLogic.createProjectile(x+8, y+8, speed*3, direction, damage, false, this); 
 	}
-	
 }
 

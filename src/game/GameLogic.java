@@ -200,7 +200,7 @@ public class GameLogic {
 			int[] coords; 
 			for (int i=3; i>0; i--) {
 				coords = genCoordinates(); 
-				entityList.add(new Entity(coords[0], coords[1], 50, 10, 1, 1000, Entity.ATTACK_PHYSICAL, true)); 
+				entityList.add(new Entity(coords[0], coords[1], 50, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)); 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
 					return; 
 				else 
@@ -292,7 +292,7 @@ public class GameLogic {
 					i--; 
 				}
 				else if (!p.getOwner().equals(entity) && !p.equals(entity) && p.getCollisionBox().intersects(entity.getCollisionBox())) { // actually checks projectile collision 
-					entity.healthModify(-1*p.getDamage());
+					entity.healthModify(-1*p.getDamage()); 
 					projectileList.remove(i); 
 					i--; 
 					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER]) 
