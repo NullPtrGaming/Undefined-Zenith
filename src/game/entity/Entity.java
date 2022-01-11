@@ -193,10 +193,26 @@ public class Entity {
 
 	public void pollMovement () { 
 		if (GameLogic.getTime() - moveCooldownTimer >= cooldown) { 
-			moveCooldownTimer = GameLogic.getTime();
-			lastPlayerX = GameLogic.getMainPlayer().getX(); 
-			lastPlayerY = GameLogic.getMainPlayer().getY(); 
-		}
+			moveCooldownTimer = GameLogic.getTime(); 
+			if (Math.random() >= 0.5) {
+				lastPlayerX = GameLogic.getMainPlayer().getX(); 
+				lastPlayerY = GameLogic.getMainPlayer().getY(); 
+			}
+			else {
+				if (Math.random() >= 0.5) 
+					lastPlayerX = GameLogic.POSITION_NODE_ARRAY[0]; 
+				else 
+					lastPlayerX = -GameLogic.POSITION_NODE_ARRAY[0];
+				if (Math.random() <= 0.5) 
+					lastPlayerY = GameLogic.POSITION_NODE_ARRAY[1]; 
+				else 
+					lastPlayerY = -GameLogic.POSITION_NODE_ARRAY[1]; 
+			} 
+			if (Math.random() >= 0.9) { 
+				lastPlayerX = this.x; 
+				lastPlayerY = this.y; 
+			} 
+		} 
 		
 		if (lastPlayerX > x) {
 			if (lastPlayerY > y)

@@ -23,6 +23,9 @@ public class Player extends Entity {
 	// Overrides the entity movement, utilizes key states 
 	public void pollMovement () {
 		if (GameLogic.getState() > 1 && isPrimary) { 
+			if (getHealth() <= 0) { // death checking 
+				GameLogic.setState(1); 
+			} 
 			if (keyStates[Input.ATTACK]) 
 				pollAttack(); 
 			if (keyStates[Input.UP]) 

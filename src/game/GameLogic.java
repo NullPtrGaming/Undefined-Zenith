@@ -18,6 +18,7 @@ public class GameLogic {
 	public static final int MENU_COOLDOWN = 250; 
 	public static final int ENEMY_COOLDOWN = 5000; 
 	public static final int MAX_ENTITIES = 16; 
+	public static final int[] POSITION_NODE_ARRAY = {240, 110}; 
 	
 	private static int gameState = 0; // THE GAME'S MAIN STATE VARIABLE - 0=TITLE, 1=MENU, 2=RUNNING 
 	private static long gameTime; 
@@ -200,7 +201,7 @@ public class GameLogic {
 			int[] coords; 
 			for (int i=3; i>0; i--) {
 				coords = genCoordinates(); 
-				entityList.add(new Entity(coords[0], coords[1], 50, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)); 
+				entityList.add(new Entity(coords[0], coords[1], 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)); 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
 					return; 
 				else 
