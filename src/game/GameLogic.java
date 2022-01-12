@@ -40,8 +40,10 @@ public class GameLogic {
 	private static ArrayList<Button> titleButtonList; // Stores buttons for menus - alternate game states 
 	private static ArrayList<Button> menuButtonList; 
 	private static ArrayList<Button> optionsButtonList; 
+	private static ArrayList<Button> gameOverButtonList; 
 	private static ArrayList<Button> tempButtonList = null; 
 	private static boolean isOptions = false; 
+	private static boolean wasGameOver = false; 
 	
 	private static MenuInputHandler input; 
 	private static Input keyPressHandler; 
@@ -58,7 +60,8 @@ public class GameLogic {
 		titleButtonList = new ArrayList<Button> (); 
 		menuButtonList = new ArrayList<Button> (); 
 		optionsButtonList = new ArrayList<Button> (); 
-		playerList[PRIMARY_PLAYER] = new Player(0, 0, 1, 10, 2, 500, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+		gameOverButtonList = new ArrayList<Button> (); 
+		playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 500, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
 		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
 		initMenus(); 
@@ -97,6 +100,8 @@ public class GameLogic {
 		optionsButtonList.add(new Button(-96, 60, "Rebind Keys")); 
 		optionsButtonList.add(new Button(-96, 24, "Select = Attack")); 
 		optionsButtonList.add(new Button(-96, -12, "Fullscreen")); 
+		
+		gameOverButtonList.add(new Button(-96, 0, "Game Over")); 
 	} 
 	
 	// is the options menu open? 
@@ -125,6 +130,21 @@ public class GameLogic {
 			}
 			isOptions = false; 
 		}
+	}
+	
+	// handles the player's death/game reset 
+	public static void gameOver () {
+		tempButtonList = menuButtonList; 
+		menuButtonList = gameOverButtonList; 
+		wasGameOver = true; 
+	}
+	public static boolean getWasGameOver () {
+		return wasGameOver; 
+	}
+	public static void postGameOver () {
+		setState(0); 
+		menuButtonList = tempButtonList; 
+		wasGameOver = false; 
 	}
 	
 	// gets the menu input handler 
@@ -166,7 +186,7 @@ public class GameLogic {
 		return rebinding; 
 	}
 	
-	// gets/sets the main game state - important 
+	// gets/sets the main game state - important - 0=TITLE, 1=MENU, 2=RUNNING 
 	public static int getState () { 
 		return gameState; 
 	}
@@ -177,8 +197,14 @@ public class GameLogic {
 			startTime(); 
 		else 
 			stopTime(); 
-		if (state == 1 && lastState == 2) 
+		if (lastState == 2 || lastState == 1) // game saving automatic after pausing or unpausing game 
 			GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
+		if (state == 0) { // clears game upon exit to title 
+			entityList = new ArrayList<Entity> (); 
+			projectileList = new ArrayList<Projectile> (); 
+			if (wasGameOver) // only for death reset 
+				playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 500, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+		}
 	}
 	
 	// Updates all entities and player movements 

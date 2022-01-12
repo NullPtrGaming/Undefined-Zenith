@@ -49,7 +49,7 @@ public class MenuInputHandler {
 		 	}
 		 	break; 
 			}
-		else if (GameLogic.getState() == 1 && !GameLogic.getOptionState()) 
+		else if (GameLogic.getState() == 1 && !GameLogic.getOptionState() && !GameLogic.getWasGameOver()) 
 			switch (selectedButton) {
 		 	case 0: {
 		 		GameLogic.setState(2); 
@@ -88,6 +88,14 @@ public class MenuInputHandler {
 			case 3: {
 				GameLogic.toggleFullscreen(); 
 				selectedButton = 0; 
+			}
+			break; 
+			}
+		}
+		else if (GameLogic.getWasGameOver()) {
+			switch (selectedButton) {
+			case 0: {
+				GameLogic.postGameOver(); 
 			}
 			break; 
 			}

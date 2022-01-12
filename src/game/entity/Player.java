@@ -25,6 +25,7 @@ public class Player extends Entity {
 		if (GameLogic.getState() > 1 && isPrimary) { 
 			if (getHealth() <= 0) { // death checking 
 				GameLogic.setState(1); 
+				GameLogic.gameOver(); 
 			} 
 			if (keyStates[Input.ATTACK]) 
 				pollAttack(); 
