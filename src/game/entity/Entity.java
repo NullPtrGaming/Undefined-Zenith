@@ -231,11 +231,14 @@ public class Entity {
 	
 	// generates projectiles and deals damage respectively 
 	public void pollAttack () {
-		if (GameLogic.getTime() - cooldownTimer >= cooldown) { 
+		if (GameLogic.getTime() - cooldownTimer >= cooldown*2) { 
 			cooldownTimer = GameLogic.getTime(); 
 			if (attackType == ATTACK_PROJECTILE) 
 				genProjectile(); 
 		}
+	}
+	public int getAttackType () {
+		return attackType; 
 	}
 	
 	// Generates a Projectile at the location of the Entity in their direction 

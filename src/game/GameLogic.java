@@ -61,7 +61,7 @@ public class GameLogic {
 		menuButtonList = new ArrayList<Button> (); 
 		optionsButtonList = new ArrayList<Button> (); 
 		gameOverButtonList = new ArrayList<Button> (); 
-		playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 500, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+		playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
 		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
 		initMenus(); 
@@ -227,7 +227,10 @@ public class GameLogic {
 			int[] coords; 
 			for (int i=3; i>0; i--) {
 				coords = genCoordinates(); 
-				entityList.add(new Entity(coords[0], coords[1], 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)); 
+				if (Math.random() >= 0.4) 
+					entityList.add(new Entity(coords[0], coords[1], 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)); 
+				else 
+					entityList.add(new Entity(coords[0], coords[1], 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true)); 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
 					return; 
 				else 
