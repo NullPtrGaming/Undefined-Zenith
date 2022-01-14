@@ -60,6 +60,18 @@ public class Player extends Entity {
 		return score; 
 	}
 	
+	// set direction override 
+	public void setDirection (int x, int y) {
+		if (y > 0)
+			setDirection(Input.UP); 
+		else if (y < 0)
+			setDirection(Input.DOWN); 
+		if (x > 0) 
+			setDirection(Input.RIGHT); 
+		else if (x < 0) 
+			setDirection(Input.LEFT); 
+	}
+	
 	// accelerates - not use normal speed variable (testing) 
 	public void accelerate (boolean isNegative) {
 		if (isNegative) 

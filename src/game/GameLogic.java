@@ -81,6 +81,7 @@ public class GameLogic {
 			isFullscreen = true; 
 		}
 		GLFW.glfwSwapInterval(1); 
+		GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
 	}
 	public static boolean getFullscreenState() {
 		return isFullscreen; 

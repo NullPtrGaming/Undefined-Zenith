@@ -113,14 +113,18 @@ public class Entity {
 	
 	// sets the facing direction, used for texture rendering 
 	public void setDirection (int x, int y) {
-		if (y > 0)
-			direction = Input.UP; 
-		else if (y < 0)
-			direction = Input.DOWN; 
-		if (x > 0) 
-			direction = Input.RIGHT; 
-		else if (x < 0) 
-			direction = Input.LEFT; 
+			if (this.y - GameLogic.getMainPlayer().getY()*16 >= this.x - GameLogic.getMainPlayer().getX()*9 && Math.abs(this.y - GameLogic.getMainPlayer().getY()) > 5 && Math.abs(this.y - lastPlayerY) > 5) {
+				if (y > 0)
+					direction = Input.UP; 
+				else if (y < 0)
+					direction = Input.DOWN; 
+			} 
+			else if (Math.abs(this.x - GameLogic.getMainPlayer().getX()) > 5 && Math.abs(this.x - lastPlayerX) > 5) { 
+				if (x > 0) 
+					direction = Input.RIGHT; 
+				else if (x < 0) 
+					direction = Input.LEFT; 
+			}
 	}
 	// alternate form using an existing direction 
 	public void setDirection (int direction) {
