@@ -58,8 +58,8 @@ public class GameLoop {
 		glEnable(GL_TEXTURE_2D); 
 		glDisable(GL_DEPTH_TEST); 
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		loadTextures(); 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		Renderer render = new Renderer(window, textureList); 
 		
 		while ( !glfwWindowShouldClose(window) ) { // this is the loop 
@@ -108,13 +108,13 @@ public class GameLoop {
 	public void loadTextures () { 
 		TextureLoader textureLoader = new TextureLoader(); 
 		textureLoader.loadIcon("res/Icon.png", window); // loads the game icon 
-		textureList[0] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
-		textureList[1] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
+		textureList[0] = textureLoader.loadTexture("res/Background.png"); 
+		textureList[1] = textureLoader.loadTexture("res/e.png"); 
 		textureList[2] = textureLoader.loadTexture("res/Projectiles/Friendly Projectile.png"); 
-		textureList[3] = textureLoader.loadTexture("res/Background.png"); 
-		textureList[4] = textureLoader.loadTexture("res/e.png"); 
+		textureList[3] = textureLoader.loadTexture("res/Projectiles/Enemy Projectile.png"); 
+		textureList[4] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
 		textureList[5] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
-		textureList[6] = textureLoader.loadTexture("res/Projectiles/Enemy Projectile.png"); 
+		textureList[6] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
 	}
 	
 	// gets the window handle 

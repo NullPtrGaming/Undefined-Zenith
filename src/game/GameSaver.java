@@ -14,7 +14,11 @@ public class GameSaver {
 	
 	// returns a string with the expected save location (cross platform) 
 	public static String getExpectedSaveLocation () {
-		return System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenithSave.txt"; 
+		//File saveDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"AppData"+System.getProperty("file.separator")+"Roaming"+System.getProperty("file.separator")+"UndefinedZenith"); 
+		File saveDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"); 
+		saveDir.mkdir(); 
+		//return System.getProperty("user.home")+System.getProperty("file.separator")+"AppData"+System.getProperty("file.separator")+"Roaming"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"UndefinedZenithSave.txt"; 
+		return System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"UndefinedZenithSave.txt"; 
 	}
 	
 	// self-explanatory, saves game 

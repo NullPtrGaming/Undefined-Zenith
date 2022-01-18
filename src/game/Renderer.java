@@ -40,7 +40,7 @@ public class Renderer {
 		
 		if (GameLogic.getState() != 0) {
 			for (int i=0; i<4; i++) { 
-				glBindTexture(GL_TEXTURE_2D, textureList[i]); 
+				glBindTexture(GL_TEXTURE_2D, textureList[6]); 
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(i, true)); 
 				if (vertexArray != null) 
@@ -48,12 +48,12 @@ public class Renderer {
 				glEnd(); 
 			} 
 			
-			glBindTexture(GL_TEXTURE_2D, textureList[1]); 
+			glBindTexture(GL_TEXTURE_2D, textureList[5]); 
 			for (int j=0; j<GameLogic.numEntities(); j++) {
 				if (GameLogic.getEntity(j, false).getAttackType() == Entity.ATTACK_PHYSICAL) 
 					glBindTexture(GL_TEXTURE_2D, textureList[5]); 
 				else 
-					glBindTexture(GL_TEXTURE_2D, textureList[1]); 
+					glBindTexture(GL_TEXTURE_2D, textureList[4]); 
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(j, false)); 
 				if (vertexArray != null)  
@@ -63,7 +63,7 @@ public class Renderer {
 			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
 			for (int k=0; k<GameLogic.numProjectiles(); k++) { 
 				if (GameLogic.getProjectile(k).getOwner() != GameLogic.getEntity(0, true)) 
-					glBindTexture(GL_TEXTURE_2D, textureList[6]); 
+					glBindTexture(GL_TEXTURE_2D, textureList[3]); 
 				else 
 					glBindTexture(GL_TEXTURE_2D, textureList[2]); 
 				glBegin(GL_TRIANGLES); 
@@ -73,7 +73,7 @@ public class Renderer {
 				glEnd(); 
 			}
 		}
-			glBindTexture(GL_TEXTURE_2D, textureList[4]); 
+			glBindTexture(GL_TEXTURE_2D, textureList[1]); 
 			for (int i=0; i<GameLogic.numButtons(); i++) {
 				glBegin(GL_TRIANGLES); 
 				if (GameLogic.getInput().getSelection() == i && GameLogic.getButton(i) != null) {
@@ -187,7 +187,7 @@ public class Renderer {
 		
 		// specifically renders the background 
 		public void renderBackground () {
-			glBindTexture(GL_TEXTURE_2D, textureList[3]); 
+			glBindTexture(GL_TEXTURE_2D, textureList[0]); 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // background uses repeat filter 
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			
