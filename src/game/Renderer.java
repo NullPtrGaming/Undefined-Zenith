@@ -40,7 +40,7 @@ public class Renderer {
 		
 		if (GameLogic.getState() != 0) {
 			for (int i=0; i<4; i++) { 
-				glBindTexture(GL_TEXTURE_2D, textureList[6]); 
+				glBindTexture(GL_TEXTURE_2D, textureList[7]); 
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(i, true)); 
 				if (vertexArray != null) 
@@ -72,6 +72,7 @@ public class Renderer {
 					renderVertices(GameLogic.getProjectile(k).getDirection()); 
 				glEnd(); 
 			}
+			renderNumbers(); 
 		}
 			glBindTexture(GL_TEXTURE_2D, textureList[1]); 
 			for (int i=0; i<GameLogic.numButtons(); i++) {
@@ -85,7 +86,7 @@ public class Renderer {
 				if (vertexArray != null) 
 					renderVertices(1); 
 				glEnd(); 
-		} 
+			} 
 	} 
 	
 		// Returns an array of vertices for rendering a single tile entity 
@@ -208,6 +209,69 @@ public class Renderer {
 			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE); // switch back to standard filter 
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE); 
+		}
+		
+		// renders the score and health on the screen's corners (overlays everything else) 
+		public void renderNumbers () {
+			vertexArray = new float[4]; 
+			glBindTexture(GL_TEXTURE_2D, textureList[6]); 
+			int health = GameLogic.getMainPlayer().getHealth(); 
+			int score = GameLogic.getMainPlayer().getScore(); 
+			int x = -Entity.MAX_X; 
+			final int y = 140; 
+			glBegin(GL_TRIANGLES); 
+			vertexArray[0] = (float)x/(Entity.MAX_X); 
+			vertexArray[1] = (float)y/(Entity.MAX_Y); 
+			vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
+			vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
+			renderNumberVertices(11, true); 
+			while (health > 0) {
+				int tempDigit = health % 10; 
+				health /= 10; 
+				x += 6; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
+				renderNumberVertices(tempDigit, true); 
+			}
+			x += 6; 
+			vertexArray[0] = (float)x/(Entity.MAX_X); 
+			vertexArray[1] = (float)y/(Entity.MAX_Y); 
+			vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
+			vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
+			renderNumberVertices(11, false); 
+			while (score > 0) {
+				int tempDigit = score % 10; 
+				score /= 10; 
+				x += 6; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
+				renderNumberVertices(11, false); 
+			}
+			glEnd(); 
+		}
+		public void renderNumberVertices (int digit, boolean isHealth) { 
+			float imagePosition = (float)digit/11; 
+			float imageHeight; 
+			if (isHealth) 
+				imageHeight = 0; 
+			else 
+				imageHeight = 0.5f; 
+			glTexCoord2f(1, 0);
+			glVertex2f(vertexArray[2], vertexArray[1]);
+			glTexCoord2f(1, 1);
+			glVertex2f(vertexArray[2], vertexArray[3]);
+			glTexCoord2f(0, 1);
+			glVertex2f(vertexArray[0], vertexArray[3]);
+			glTexCoord2f(0, 1); 
+			glVertex2f(vertexArray[0], vertexArray[3]);
+			glTexCoord2f(0, 0);
+			glVertex2f(vertexArray[0], vertexArray[1]);
+			glTexCoord2f(1, 0);
+			glVertex2f(vertexArray[2], vertexArray[1]);
 		}
 		
 		// Returns the window's size in (width, height) format in a 2 position array 

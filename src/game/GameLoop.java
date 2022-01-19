@@ -114,7 +114,8 @@ public class GameLoop {
 		textureList[3] = textureLoader.loadTexture("res/Projectiles/Enemy Projectile.png"); 
 		textureList[4] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
 		textureList[5] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
-		textureList[6] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
+		textureList[6] = textureLoader.loadTexture("res/Numbers.png"); 
+		textureList[7] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
 	}
 	
 	// gets the window handle 
