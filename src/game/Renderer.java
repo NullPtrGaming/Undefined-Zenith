@@ -213,65 +213,74 @@ public class Renderer {
 		
 		// renders the score and health on the screen's corners (overlays everything else) 
 		public void renderNumbers () {
+			final float OFFSET_W = (float)1/32; 
+			final float OFFSET_H = (float)1/18; 
 			vertexArray = new float[4]; 
 			glBindTexture(GL_TEXTURE_2D, textureList[6]); 
 			int health = GameLogic.getMainPlayer().getHealth(); 
 			int score = GameLogic.getMainPlayer().getScore(); 
-			int x = -Entity.MAX_X; 
-			final int y = 140; 
-			glBegin(GL_TRIANGLES); 
-			vertexArray[0] = (float)x/(Entity.MAX_X); 
-			vertexArray[1] = (float)y/(Entity.MAX_Y); 
-			vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
-			vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
-			renderNumberVertices(11, true); 
+			int x = Entity.MAX_X; 
+			final int y = 132; 
 			while (health > 0) {
 				int tempDigit = health % 10; 
 				health /= 10; 
-				x += 6; 
+				x -= 8; 
 				vertexArray[0] = (float)x/(Entity.MAX_X); 
 				vertexArray[1] = (float)y/(Entity.MAX_Y); 
-				vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
-				vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 				renderNumberVertices(tempDigit, true); 
 			}
-			x += 6; 
+			x -= 8; 
 			vertexArray[0] = (float)x/(Entity.MAX_X); 
 			vertexArray[1] = (float)y/(Entity.MAX_Y); 
-			vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
-			vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
-			renderNumberVertices(11, false); 
+			vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+			vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+			renderNumberVertices(10, true); 
+			x -= 8; 
 			while (score > 0) {
 				int tempDigit = score % 10; 
 				score /= 10; 
-				x += 6; 
+				x -= 8; 
 				vertexArray[0] = (float)x/(Entity.MAX_X); 
 				vertexArray[1] = (float)y/(Entity.MAX_Y); 
-				vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
-				vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
-				renderNumberVertices(11, false); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+				renderNumberVertices(tempDigit, false); 
 			}
-			glEnd(); 
+			x -= 8; 
+			vertexArray[0] = (float)x/(Entity.MAX_X); 
+			vertexArray[1] = (float)y/(Entity.MAX_Y); 
+			vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+			vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+			renderNumberVertices(10, false); 
 		}
 		public void renderNumberVertices (int digit, boolean isHealth) { 
-			float imagePosition = (float)digit/11; 
-			float imageHeight; 
-			if (isHealth) 
-				imageHeight = 0; 
-			else 
-				imageHeight = 0.5f; 
-			glTexCoord2f(1, 0);
+			float[] textureArray = new float[4]; 
+			textureArray[0] = (float)digit/11; 
+			textureArray[1] = (float)(digit+1)/11; 
+			if (isHealth) {
+				textureArray[2] = 0.5f; 
+				textureArray[3] = 1f; 
+			}
+			else {
+				textureArray[2] = 0; 
+				textureArray[3] = 0.5f; 
+			}
+			glBegin(GL_TRIANGLES); 
+			glTexCoord2f(textureArray[1], textureArray[2]);
 			glVertex2f(vertexArray[2], vertexArray[1]);
-			glTexCoord2f(1, 1);
+			glTexCoord2f(textureArray[1], textureArray[3]);
 			glVertex2f(vertexArray[2], vertexArray[3]);
-			glTexCoord2f(0, 1);
+			glTexCoord2f(textureArray[0], textureArray[3]);
 			glVertex2f(vertexArray[0], vertexArray[3]);
-			glTexCoord2f(0, 1); 
+			glTexCoord2f(textureArray[0], textureArray[3]);
 			glVertex2f(vertexArray[0], vertexArray[3]);
-			glTexCoord2f(0, 0);
+			glTexCoord2f(textureArray[0], textureArray[2]);
 			glVertex2f(vertexArray[0], vertexArray[1]);
-			glTexCoord2f(1, 0);
+			glTexCoord2f(textureArray[1], textureArray[2]);
 			glVertex2f(vertexArray[2], vertexArray[1]);
+			glEnd(); 
 		}
 		
 		// Returns the window's size in (width, height) format in a 2 position array 
