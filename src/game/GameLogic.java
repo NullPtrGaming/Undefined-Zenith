@@ -328,7 +328,6 @@ public class GameLogic {
 					i--; 
 					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER]) 
 						playerList[PRIMARY_PLAYER].scoreAdd(100); 
-					System.out.println(playerList[PRIMARY_PLAYER].getScore()); 
 				}
 			}
 		}

@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL13;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
 import static org.lwjgl.opengl.GL11.*;
@@ -213,47 +215,69 @@ public class Renderer {
 		
 		// renders the score and health on the screen's corners (overlays everything else) 
 		public void renderNumbers () {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL13.GL_CLAMP_TO_BORDER); 
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL13.GL_CLAMP_TO_BORDER); 
 			final float OFFSET_W = (float)1/32; 
 			final float OFFSET_H = (float)1/18; 
+			final int NUMBER_OFFSET = 8; 
 			vertexArray = new float[4]; 
 			glBindTexture(GL_TEXTURE_2D, textureList[6]); 
 			int health = GameLogic.getMainPlayer().getHealth(); 
 			int score = GameLogic.getMainPlayer().getScore(); 
-			int x = Entity.MAX_X; 
+			int x = Entity.MAX_X - 4; 
 			final int y = 132; 
+			if (health == 0) {
+				x -= NUMBER_OFFSET; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+				renderNumberVertices(0, true); 
+			} 
 			while (health > 0) {
 				int tempDigit = health % 10; 
 				health /= 10; 
-				x -= 8; 
+				x -= NUMBER_OFFSET; 
 				vertexArray[0] = (float)x/(Entity.MAX_X); 
 				vertexArray[1] = (float)y/(Entity.MAX_Y); 
 				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
 				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 				renderNumberVertices(tempDigit, true); 
 			}
-			x -= 8; 
+			x -= NUMBER_OFFSET; 
 			vertexArray[0] = (float)x/(Entity.MAX_X); 
 			vertexArray[1] = (float)y/(Entity.MAX_Y); 
 			vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
 			vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 			renderNumberVertices(10, true); 
-			x -= 8; 
+			x -= NUMBER_OFFSET; 
+			if (score == 0) {
+				x -= NUMBER_OFFSET; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+				renderNumberVertices(0, false); 
+			}
 			while (score > 0) {
 				int tempDigit = score % 10; 
 				score /= 10; 
-				x -= 8; 
+				x -= NUMBER_OFFSET; 
 				vertexArray[0] = (float)x/(Entity.MAX_X); 
 				vertexArray[1] = (float)y/(Entity.MAX_Y); 
 				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
 				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 				renderNumberVertices(tempDigit, false); 
 			}
-			x -= 8; 
+			x -= NUMBER_OFFSET; 
 			vertexArray[0] = (float)x/(Entity.MAX_X); 
 			vertexArray[1] = (float)y/(Entity.MAX_Y); 
 			vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
 			vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 			renderNumberVertices(10, false); 
+			
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE); 
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE); 
 		}
 		public void renderNumberVertices (int digit, boolean isHealth) { 
 			float[] textureArray = new float[4]; 

@@ -95,7 +95,6 @@ public class Entity {
 	// Changes health by the given value 
 	public void healthModify (int h) {
 		health += h;  
-		if (this == GameLogic.getEntity(0,  true)) System.out.println(health); 
 	}
 	// sets attack type through variables 
 	public void setAttackType (int type) {
