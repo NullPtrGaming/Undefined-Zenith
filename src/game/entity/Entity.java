@@ -144,6 +144,12 @@ public class Entity {
 			}
 			return; 
 		} 
+		if (this != GameLogic.getEntity(0, true)) { 
+			if (Math.abs(this.x - lastPlayerX) <= 5) 
+				this.x -= x; 
+			if (Math.abs(this.y - lastPlayerY) <= 5) 
+				this.y -= y; 
+		} 
 		if (this.x <= MAX_X-16 && this.y <= MAX_Y-16 && this.x >= -1*MAX_X && this.y >= -1*MAX_Y) { 
 			this.x += x; 
 			this.y += y; 

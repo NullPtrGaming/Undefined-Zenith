@@ -23,6 +23,11 @@ public class Player extends Entity {
 	// Overrides the entity movement, utilizes key states 
 	public void pollMovement () {
 		if (GameLogic.getState() > 1 && isPrimary) { 
+			Entity e = GameLogic.testEntityIntersect(this); 
+			if (e != null && GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown()) { 
+				healthModify(-e.getDamage()); 
+				e.cooldownReset(); 
+			}
 			if (getHealth() <= 0) { // death checking 
 				GameLogic.setState(1); 
 				GameLogic.gameOver(); 
@@ -55,6 +60,7 @@ public class Player extends Entity {
 	// adds to score 
 	public void scoreAdd (int add) {
 		score += add; 
+		GameLogic.setHighScore(score); 
 	}
 	public int getScore () { 
 		return score; 

@@ -28,6 +28,7 @@ public class GameLogic {
 	private static long enemyCooldownTimer; 
 	private static long gameWindow; 
 	private static boolean isFullscreen = false; 
+	private static int highScore = 0; 
 	
 	private static Player[] playerList; // Stores all game players - referenced by indices 
 	private static ArrayList<Entity> entityList; 
@@ -148,6 +149,16 @@ public class GameLogic {
 		wasGameOver = false; 
 	}
 	
+	// gets high score 
+	public static int getHighScore () {
+		return highScore; 
+	}
+	// updates the high score if the given score is higher 
+	public static void setHighScore (int score) {
+		if (score > highScore) 
+			highScore = score; 
+	}
+	
 	// gets the menu input handler 
 	public static MenuInputHandler getInput () { 
 		return input; 
@@ -204,7 +215,7 @@ public class GameLogic {
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
 			if (wasGameOver) // only for death reset 
-				playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 500, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+				playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
 		}
 	}
 	
