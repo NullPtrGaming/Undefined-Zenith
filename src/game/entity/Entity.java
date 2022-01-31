@@ -5,7 +5,8 @@ package game.entity;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Float; 
 import game.GameLogic;
-import game.Input; 
+import game.Input;
+import game.TextureLoader; 
 
 public class Entity {
 	
@@ -17,6 +18,9 @@ public class Entity {
 	// attack types, for different Entities 
 	public static final int ATTACK_PHYSICAL = 0; 
 	public static final int ATTACK_PROJECTILE = 1; 
+	
+	// texture list 
+	private static int[] entityTextureList = new int[2]; 
 	
 	// known enemy positions 
 	private int lastPlayerX = 0; 
@@ -54,6 +58,15 @@ public class Entity {
 		setAttackType(type); 
 		cooldownTimer = GameLogic.getTime(); 
 		moveCooldownTimer = GameLogic.getTime(); 
+	}
+	
+	// class-based textures 
+	public static void loadTextures (TextureLoader textureLoader) {
+		entityTextureList[0] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
+		entityTextureList[1] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
+	}
+	public int[] getTextures () {
+		return entityTextureList; 
 	}
 	
 	// returns position/status variables 

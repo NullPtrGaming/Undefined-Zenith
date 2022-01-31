@@ -3,6 +3,7 @@ package game.entity;
 
 import java.awt.geom.Rectangle2D;
 
+import game.TextureLoader; 
 import game.GameLogic;
 import game.Input;
 
@@ -12,6 +13,8 @@ public class Projectile extends Entity {
 	
 	public static final float PROJ_BOX_WIDTH = (float)1/64; 
 	public static final float PROJ_BOX_HEIGHT = (float)1/36; 
+	
+	private static int[] projectileTextureList = new int[2]; 
 	
 	private boolean isPlayerFriendly; 
 	private Entity owner; 
@@ -23,6 +26,15 @@ public class Projectile extends Entity {
 		isPlayerFriendly = friendly; 
 		this.owner = owner; 
 		updateCollisionBox(); 
+	}
+	
+	// texture stuff 
+	public static void loadTextures (TextureLoader textureLoader) {
+		projectileTextureList[0] = textureLoader.loadTexture("res/Projectiles/Friendly Projectile.png"); 
+		projectileTextureList[1] = textureLoader.loadTexture("res/Projectiles/Enemy Projectile.png"); 
+	}
+	public int[] getTextures () {
+		return projectileTextureList; 
 	}
 	
 	// important so projectiles don't damage their creators 

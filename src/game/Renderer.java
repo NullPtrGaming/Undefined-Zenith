@@ -24,6 +24,9 @@ public class Renderer {
 	private long window; 
 	private float[] vertexArray; 
 	private int[] textureList; 
+	private int[] projectileTextureList; 
+	private int[] entityTextureList; 
+	private ArrayList<Entity> effectList = new ArrayList<Entity> (); 
 	
 	// Constructor, initializes important access/data 
 	public Renderer (long window, int[] textures) {

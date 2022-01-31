@@ -18,6 +18,7 @@ import org.lwjgl.system.MemoryStack;
 
 import game.entity.Entity;
 import game.entity.Player;
+import game.entity.Projectile;
 
 public class GameLoop {
 	
@@ -110,10 +111,8 @@ public class GameLoop {
 		textureLoader.loadIcon("res/Icon.png", window); // loads the game icon 
 		textureList[0] = textureLoader.loadTexture("res/Background.png"); 
 		textureList[1] = textureLoader.loadTexture("res/e.png"); 
-		textureList[2] = textureLoader.loadTexture("res/Projectiles/Friendly Projectile.png"); 
-		textureList[3] = textureLoader.loadTexture("res/Projectiles/Enemy Projectile.png"); 
-		textureList[4] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
-		textureList[5] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
+		Projectile.loadTextures(textureLoader); 
+		Entity.loadTextures(textureLoader); 
 		textureList[6] = textureLoader.loadTexture("res/Numbers.png"); 
 		textureList[7] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
 	}
