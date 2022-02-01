@@ -49,6 +49,8 @@ public class GameLogic {
 	private static MenuInputHandler input; 
 	private static Input keyPressHandler; 
 	
+	private static ArrayList<Effect> effectList = new ArrayList<Effect> (); 
+	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
 		gameWindow = window; 
@@ -68,6 +70,14 @@ public class GameLogic {
 		initMenus(); 
 		GameSaver.loadGame(GameSaver.getExpectedSaveLocation()); 
 	} 
+	
+	// gets effects 
+	public static ArrayList<Effect> getEffects () { 
+		return effectList; 
+	}
+	public static void newEffect (int x, int y, int type, int duration) {
+		effectList.add(new Effect(x, y, type, duration)); 
+	}
 	
 	// fullscreen toggle 
 	public static void toggleFullscreen () {
@@ -335,6 +345,7 @@ public class GameLogic {
 				}
 				else if (!p.getOwner().equals(entity) && !p.equals(entity) && p.getCollisionBox().intersects(entity.getCollisionBox())) { // actually checks projectile collision 
 					entity.healthModify(-1*p.getDamage()); 
+					GameLogic.newEffect(entity.getX(), entity.getY(), 0, 20);
 					projectileList.remove(i); 
 					i--; 
 					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER]) 

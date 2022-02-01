@@ -33,7 +33,7 @@ public class Projectile extends Entity {
 		projectileTextureList[0] = textureLoader.loadTexture("res/Projectiles/Friendly Projectile.png"); 
 		projectileTextureList[1] = textureLoader.loadTexture("res/Projectiles/Enemy Projectile.png"); 
 	}
-	public int[] getTextures () {
+	public static int[] getTextures () {
 		return projectileTextureList; 
 	}
 	

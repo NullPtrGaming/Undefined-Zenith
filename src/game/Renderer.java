@@ -15,7 +15,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
 import static org.lwjgl.opengl.GL11.*;
 
 import game.entity.Button;
+import game.entity.Effect;
 import game.entity.Entity;
+import game.entity.Player;
 import game.entity.Projectile; 
 
 public class Renderer { 
@@ -26,13 +28,20 @@ public class Renderer {
 	private int[] textureList; 
 	private int[] projectileTextureList; 
 	private int[] entityTextureList; 
-	private ArrayList<Entity> effectList = new ArrayList<Entity> (); 
+	private int[] playerTextureList; 
+	private int[] effectTextureList; 
+	private ArrayList<Effect> effectList; 
 	
 	// Constructor, initializes important access/data 
 	public Renderer (long window, int[] textures) {
 		this.window = window; 
 		dimensions = new int[2]; 
 		textureList = textures; 
+		projectileTextureList = Projectile.getTextures(); 
+		entityTextureList = Entity.getTextures(); 
+		playerTextureList = Player.getTextures(); 
+		effectTextureList = Effect.getTextures(); 
+		effectList = GameLogic.getEffects(); 
 	}
 	
 	// Rendering method, called every frame 
@@ -45,7 +54,7 @@ public class Renderer {
 		
 		if (GameLogic.getState() != 0) {
 			for (int i=0; i<4; i++) { 
-				glBindTexture(GL_TEXTURE_2D, textureList[7]); 
+				glBindTexture(GL_TEXTURE_2D, playerTextureList[0]); 
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(i, true)); 
 				if (vertexArray != null) 
@@ -56,9 +65,9 @@ public class Renderer {
 			glBindTexture(GL_TEXTURE_2D, textureList[5]); 
 			for (int j=0; j<GameLogic.numEntities(); j++) {
 				if (GameLogic.getEntity(j, false).getAttackType() == Entity.ATTACK_PHYSICAL) 
-					glBindTexture(GL_TEXTURE_2D, textureList[5]); 
+					glBindTexture(GL_TEXTURE_2D, entityTextureList[1]); 
 				else 
-					glBindTexture(GL_TEXTURE_2D, textureList[4]); 
+					glBindTexture(GL_TEXTURE_2D, entityTextureList[0]); 
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(j, false)); 
 				if (vertexArray != null)  
@@ -68,15 +77,16 @@ public class Renderer {
 			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
 			for (int k=0; k<GameLogic.numProjectiles(); k++) { 
 				if (GameLogic.getProjectile(k).getOwner() != GameLogic.getEntity(0, true)) 
-					glBindTexture(GL_TEXTURE_2D, textureList[3]); 
+					glBindTexture(GL_TEXTURE_2D, projectileTextureList[1]); 
 				else 
-					glBindTexture(GL_TEXTURE_2D, textureList[2]); 
+					glBindTexture(GL_TEXTURE_2D, projectileTextureList[0]); 
 				glBegin(GL_TRIANGLES); 
 				vertexArray = getVertexArray(GameLogic.getProjectile(k)); 
 				if (vertexArray != null) 
 					renderVertices(GameLogic.getProjectile(k).getDirection()); 
 				glEnd(); 
 			}
+			renderEffects(); 
 			renderNumbers(); 
 		}
 			glBindTexture(GL_TEXTURE_2D, textureList[1]); 
@@ -224,7 +234,7 @@ public class Renderer {
 			final float OFFSET_H = (float)1/18; 
 			final int NUMBER_OFFSET = 8; 
 			vertexArray = new float[4]; 
-			glBindTexture(GL_TEXTURE_2D, textureList[6]); 
+			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
 			int health = GameLogic.getMainPlayer().getHealth(); 
 			int score = GameLogic.getMainPlayer().getScore(); 
 			int x = Entity.MAX_X - 4; 
@@ -308,6 +318,36 @@ public class Renderer {
 			glTexCoord2f(textureArray[1], textureArray[2]);
 			glVertex2f(vertexArray[2], vertexArray[1]);
 			glEnd(); 
+		}
+		
+		// renders and polls Effects 
+		public void renderEffects () {
+			for (Effect e : effectList) {
+				glBindTexture(GL_TEXTURE_2D, effectTextureList[e.getType()]); 
+				vertexArray[0] = (float)e.getX()/Entity.MAX_X; 
+				vertexArray[1] = (float)e.getY()/Entity.MAX_Y;
+				vertexArray[2] = (float)e.getX()/Entity.MAX_X + Entity.BOX_WIDTH; 
+				vertexArray[3] = (float)e.getY()/Entity.MAX_Y + Entity.BOX_HEIGHT; 
+				glBegin(GL_TRIANGLES); 
+				glTexCoord2f(1, 0);
+				glVertex2f(vertexArray[2], vertexArray[1]);
+				glTexCoord2f(1, 1);
+				glVertex2f(vertexArray[2], vertexArray[3]);
+				glTexCoord2f(0, 1);
+				glVertex2f(vertexArray[0], vertexArray[3]);
+				glTexCoord2f(0, 1); 
+				glVertex2f(vertexArray[0], vertexArray[3]);
+				glTexCoord2f(0, 0);
+				glVertex2f(vertexArray[0], vertexArray[1]);
+				glTexCoord2f(1, 0);
+				glVertex2f(vertexArray[2], vertexArray[1]);
+				glEnd(); 
+				e.pollDuration(); 
+			}
+			for (int i=0; i<effectList.size(); i++) {
+				if (effectList.get(i).getDuration() <= 0) 
+					effectList.remove(i); 
+			}
 		}
 		
 		// Returns the window's size in (width, height) format in a 2 position array 

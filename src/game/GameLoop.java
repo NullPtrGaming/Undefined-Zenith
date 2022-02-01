@@ -111,10 +111,10 @@ public class GameLoop {
 		textureLoader.loadIcon("res/Icon.png", window); // loads the game icon 
 		textureList[0] = textureLoader.loadTexture("res/Background.png"); 
 		textureList[1] = textureLoader.loadTexture("res/e.png"); 
+		textureList[2] = textureLoader.loadTexture("res/Numbers.png"); 
 		Projectile.loadTextures(textureLoader); 
 		Entity.loadTextures(textureLoader); 
-		textureList[6] = textureLoader.loadTexture("res/Numbers.png"); 
-		textureList[7] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
+		Player.loadTextures(textureLoader); 
 	}
 	
 	// gets the window handle 

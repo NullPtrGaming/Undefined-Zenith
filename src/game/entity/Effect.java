@@ -1,9 +1,13 @@
 // Class for storing basic data about the location, lifespan, and type of special effects / particles 
 package game.entity;
 
+import game.TextureLoader;
+
 public class Effect {
 
 	public static final int EFFECT_EXPLOSION = 0; // particle/effect types, more to be added? 
+	
+	private static int[] effectTextureList = new int[2]; 
 	
 	private int x; 
 	private int y; 
@@ -28,5 +32,16 @@ public class Effect {
 	}
 	public int getDuration() {
 		return duration; 
+	}
+	public void pollDuration() {
+		duration--; 
+	}
+	
+	// textures 
+	public static void loadTextures (TextureLoader textureLoader) {
+		effectTextureList[0] = textureLoader.loadTexture("res/Explosion.png"); 
+	}
+	public static int[] getTextures () {
+		return effectTextureList; 
 	}
 }

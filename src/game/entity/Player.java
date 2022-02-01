@@ -12,12 +12,22 @@ public class Player extends Entity {
 	private int acceleration = 2; // currently testing 
 	private int tempSpeed = 0; 
 	
+	private static int[] playerTextureArray = new int[4]; 
+	
 	// Constructor, use Entity constructor but allows the Player to reference key states 
 	public Player (int x, int y, int health, int damage, int speed, int cooldown, int type, boolean rotatable, boolean isPrimary, boolean[] keyStates) {
 		super(x, y, health, damage, speed, cooldown, type, rotatable); 
 		this.keyStates = keyStates; 
 		this.isPrimary = isPrimary; 
 		score = 0; 
+	}
+	
+	// textures 
+	public static void loadTextures (TextureLoader textureLoader) {
+		playerTextureArray[0] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
+	}
+	public static int[] getTextures () {
+		return playerTextureArray; 
 	}
 	
 	// Overrides the entity movement, utilizes key states 

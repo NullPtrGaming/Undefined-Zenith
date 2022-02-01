@@ -65,7 +65,7 @@ public class Entity {
 		entityTextureList[0] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
 		entityTextureList[1] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
 	}
-	public int[] getTextures () {
+	public static int[] getTextures () {
 		return entityTextureList; 
 	}
 	
@@ -153,6 +153,7 @@ public class Entity {
 		if (this != GameLogic.getEntity(0, true) && this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) {
 			if ((GameLogic.getTime() - this.getCooldownTimer() >= this.getCooldown())) {
 				GameLogic.getMainPlayer().healthModify(-this.getDamage());
+				GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
 				this.cooldownReset();
 			}
 			return; 
@@ -180,6 +181,7 @@ public class Entity {
 					}
 					else if (this == GameLogic.getEntity(0, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
 						healthModify(-e.getDamage()); 
+						GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
 						e.cooldownReset(); 
 					} 
 					if (x > 0) { 
