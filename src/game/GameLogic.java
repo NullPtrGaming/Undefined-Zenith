@@ -50,6 +50,8 @@ public class GameLogic {
 	private static Input keyPressHandler; 
 	
 	private static ArrayList<Effect> effectList = new ArrayList<Effect> (); 
+	private static int[] shakeOffsetCoordinates = new int[2]; 
+	private static int shakeFrames = 0; 
 	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
@@ -346,6 +348,7 @@ public class GameLogic {
 				else if (!p.getOwner().equals(entity) && !p.equals(entity) && p.getCollisionBox().intersects(entity.getCollisionBox())) { // actually checks projectile collision 
 					entity.healthModify(-1*p.getDamage()); 
 					GameLogic.newEffect(entity.getX(), entity.getY(), 0, 20);
+					startShake(); 
 					projectileList.remove(i); 
 					i--; 
 					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER]) 
@@ -392,5 +395,32 @@ public class GameLogic {
 		pauseTimer = System.currentTimeMillis(); 
 	}
 	
+	// randomizes the values in the shake offset array in a small range 
+	public static void shakeScreen () {
+		shakeOffsetCoordinates[0] = (int)(Math.random()*3); 
+		if (Math.random() >= 0.5) 
+			shakeOffsetCoordinates[0] *= -1; 
+		shakeOffsetCoordinates[1] = (int)(Math.random()*3); 
+		if (Math.random() >= 0.5) 
+			shakeOffsetCoordinates[1] *= -1;
+	}
+	public static void startShake() { 
+		if (shakeFrames == 0) 
+			shakeFrames = 20; 
+	} 
+	public static void pollShake () {
+		shakeFrames--; 
+		if (shakeFrames <= 0) 
+			stopShake(); 
+		else 
+			shakeScreen(); 
+	}
+	public static void stopShake () {
+		shakeOffsetCoordinates[0] = 0; 
+		shakeOffsetCoordinates[1] = 0; 
+	}
+	public static int[] getShake () { // for renderer 
+		return shakeOffsetCoordinates; 
+	}
 }
 

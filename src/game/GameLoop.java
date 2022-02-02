@@ -16,6 +16,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
+import game.entity.Effect;
 import game.entity.Entity;
 import game.entity.Player;
 import game.entity.Projectile;
@@ -115,6 +116,7 @@ public class GameLoop {
 		Projectile.loadTextures(textureLoader); 
 		Entity.loadTextures(textureLoader); 
 		Player.loadTextures(textureLoader); 
+		Effect.loadTextures(textureLoader); 
 	}
 	
 	// gets the window handle 

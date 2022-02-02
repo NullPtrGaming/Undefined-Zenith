@@ -36,6 +36,8 @@ public class Player extends Entity {
 			Entity e = GameLogic.testEntityIntersect(this); 
 			if (e != null && GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown()) { 
 				healthModify(-e.getDamage()); 
+				GameLogic.newEffect(this.getX(), this.getY(), 0, 20); 
+				GameLogic.startShake(); 
 				e.cooldownReset(); 
 			}
 			if (getHealth() <= 0) { // death checking 

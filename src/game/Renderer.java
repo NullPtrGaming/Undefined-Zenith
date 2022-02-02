@@ -31,6 +31,7 @@ public class Renderer {
 	private int[] playerTextureList; 
 	private int[] effectTextureList; 
 	private ArrayList<Effect> effectList; 
+	private int[] shakeArray; 
 	
 	// Constructor, initializes important access/data 
 	public Renderer (long window, int[] textures) {
@@ -42,6 +43,7 @@ public class Renderer {
 		playerTextureList = Player.getTextures(); 
 		effectTextureList = Effect.getTextures(); 
 		effectList = GameLogic.getEffects(); 
+		shakeArray = GameLogic.getShake(); 
 	}
 	
 	// Rendering method, called every frame 
@@ -52,7 +54,9 @@ public class Renderer {
 		
 		renderBackground(); // outside of state check 
 		
-		if (GameLogic.getState() != 0) {
+		if (GameLogic.getState() != 0) { 
+			GameLogic.pollShake(); 
+			
 			for (int i=0; i<4; i++) { 
 				glBindTexture(GL_TEXTURE_2D, playerTextureList[0]); 
 				glBegin(GL_TRIANGLES);
@@ -114,16 +118,16 @@ public class Renderer {
 			getWindowSize(); 
 			
 			if (entity.getCooldown() == -1) {  
-				vertexArray[0] = (float)x/(Entity.MAX_X); 
-				vertexArray[1] = (float)y/(Entity.MAX_Y); 
-				vertexArray[2] = (float)x/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
-				vertexArray[3] = (float)y/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
+				vertexArray[0] = (float)(x+shakeArray[0])/(Entity.MAX_X); 
+				vertexArray[1] = (float)(y+shakeArray[1])/(Entity.MAX_Y); 
+				vertexArray[2] = (float)(x+shakeArray[0])/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
+				vertexArray[3] = (float)(y+shakeArray[1])/(Entity.MAX_Y) + Projectile.PROJ_BOX_HEIGHT; 
 			} 
 			else {
-				vertexArray[0] = (float)x/Entity.MAX_X; 
-				vertexArray[1] = (float)y/Entity.MAX_Y;
-				vertexArray[2] = (float)x/Entity.MAX_X + Entity.BOX_WIDTH; 
-				vertexArray[3] = (float)y/Entity.MAX_Y + Entity.BOX_HEIGHT;
+				vertexArray[0] = (float)(x+shakeArray[0])/Entity.MAX_X; 
+				vertexArray[1] = (float)(y+shakeArray[1])/Entity.MAX_Y; 
+				vertexArray[2] = (float)(x+shakeArray[0])/Entity.MAX_X + Entity.BOX_WIDTH; 
+				vertexArray[3] = (float)(y+shakeArray[1])/Entity.MAX_Y + Entity.BOX_HEIGHT;
 			}
 			
 			return vertexArray; 
@@ -324,6 +328,7 @@ public class Renderer {
 		public void renderEffects () {
 			for (Effect e : effectList) {
 				glBindTexture(GL_TEXTURE_2D, effectTextureList[e.getType()]); 
+				vertexArray = new float[4]; 
 				vertexArray[0] = (float)e.getX()/Entity.MAX_X; 
 				vertexArray[1] = (float)e.getY()/Entity.MAX_Y;
 				vertexArray[2] = (float)e.getX()/Entity.MAX_X + Entity.BOX_WIDTH; 
