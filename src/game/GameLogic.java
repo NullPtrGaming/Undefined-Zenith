@@ -52,6 +52,7 @@ public class GameLogic {
 	private static ArrayList<Effect> effectList = new ArrayList<Effect> (); 
 	private static int[] shakeOffsetCoordinates = new int[2]; 
 	private static int shakeFrames = 0; 
+	private static int maxShake; 
 	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
@@ -348,7 +349,7 @@ public class GameLogic {
 				else if (!p.getOwner().equals(entity) && !p.equals(entity) && p.getCollisionBox().intersects(entity.getCollisionBox())) { // actually checks projectile collision 
 					entity.healthModify(-1*p.getDamage()); 
 					GameLogic.newEffect(entity.getX(), entity.getY(), 0, 20);
-					startShake(); 
+					startShake(2); 
 					projectileList.remove(i); 
 					i--; 
 					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER]) 
@@ -366,6 +367,7 @@ public class GameLogic {
 				entityList.remove(i); 
 				i--; 
 				playerList[PRIMARY_PLAYER].scoreAdd(500); 
+				startShake(3); 
 			}
 		}
 	}
@@ -397,23 +399,24 @@ public class GameLogic {
 	
 	// randomizes the values in the shake offset array in a small range 
 	public static void shakeScreen () {
-		shakeOffsetCoordinates[0] = (int)(Math.random()*3); 
+		shakeOffsetCoordinates[0] = (int)(Math.random()*maxShake); 
 		if (Math.random() >= 0.5) 
 			shakeOffsetCoordinates[0] *= -1; 
-		shakeOffsetCoordinates[1] = (int)(Math.random()*3); 
+		shakeOffsetCoordinates[1] = (int)(Math.random()*maxShake); 
 		if (Math.random() >= 0.5) 
-			shakeOffsetCoordinates[1] *= -1;
+			shakeOffsetCoordinates[1] *= -1; 
 	}
-	public static void startShake() { 
-		if (shakeFrames == 0) 
-			shakeFrames = 20; 
+	public static void startShake(int max) { 
+		maxShake = max; 
+		shakeFrames = 20; 
 	} 
-	public static void pollShake () {
-		shakeFrames--; 
+	public static void pollShake () { 
 		if (shakeFrames <= 0) 
 			stopShake(); 
-		else 
+		else { 
 			shakeScreen(); 
+			shakeFrames--; 
+		}
 	}
 	public static void stopShake () {
 		shakeOffsetCoordinates[0] = 0; 

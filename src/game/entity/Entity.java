@@ -154,7 +154,7 @@ public class Entity {
 			if ((GameLogic.getTime() - this.getCooldownTimer() >= this.getCooldown())) {
 				GameLogic.getMainPlayer().healthModify(-this.getDamage());
 				GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
-				GameLogic.startShake(); 
+				GameLogic.startShake(3); 
 				this.cooldownReset(); 
 			}
 			return; 
@@ -183,7 +183,7 @@ public class Entity {
 					else if (this == GameLogic.getEntity(0, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
 						healthModify(-e.getDamage()); 
 						GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
-						GameLogic.startShake(); 
+						GameLogic.startShake(2); 
 						e.cooldownReset(); 
 					} 
 					if (x > 0) { 

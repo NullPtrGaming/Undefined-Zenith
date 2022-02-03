@@ -37,7 +37,7 @@ public class Player extends Entity {
 			if (e != null && GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown()) { 
 				healthModify(-e.getDamage()); 
 				GameLogic.newEffect(this.getX(), this.getY(), 0, 20); 
-				GameLogic.startShake(); 
+				GameLogic.startShake(3); 
 				e.cooldownReset(); 
 			}
 			if (getHealth() <= 0) { // death checking 
@@ -56,6 +56,8 @@ public class Player extends Entity {
 				move(getSpeed(), 0); 
 			if (keyStates[Input.ESCAPE] && GameLogic.getMenuCooldownState())
 				GameLogic.setState(1); 
+			if (!keyStates[Input.ESCAPE] && Math.random() >= 0.9) 
+				 genProjectileTrail(); 
 		}
 		else { 
 			if (!GameLogic.isRebinding() && GameLogic.getState() == 1 && keyStates[Input.ESCAPE] && GameLogic.getMenuCooldownState()) 
@@ -88,6 +90,21 @@ public class Player extends Entity {
 			setDirection(Input.RIGHT); 
 		else if (x < 0) 
 			setDirection(Input.LEFT); 
+	}
+	
+	// generates projectile trail 
+	public void genProjectileTrail() { 
+		int offsetX = 0; 
+		int offsetY = 0; 
+		if (getDirection() == Input.LEFT) 
+			offsetX = 16; 
+		else if (getDirection() == Input.RIGHT) 
+			offsetX = -16; 
+		else if (getDirection() == Input.UP) 
+			offsetY = -16; 
+		else 
+			offsetY = 16; 
+		GameLogic.newEffect(this.getX()+offsetX, this.getY()+offsetY, 1, 10); 
 	}
 	
 	// accelerates - not use normal speed variable (testing) 

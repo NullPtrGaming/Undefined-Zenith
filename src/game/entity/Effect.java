@@ -40,6 +40,7 @@ public class Effect {
 	// textures 
 	public static void loadTextures (TextureLoader textureLoader) {
 		effectTextureList[0] = textureLoader.loadTexture("res/Explosion.png"); 
+		effectTextureList[1] = textureLoader.loadTexture("res/Trail.png"); 
 	}
 	public static int[] getTextures () {
 		return effectTextureList; 
