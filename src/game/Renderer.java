@@ -30,11 +30,12 @@ public class Renderer {
 	private int[] entityTextureList; 
 	private int[] playerTextureList; 
 	private int[] effectTextureList; 
+	private int[] buttonTextureList; 
 	private ArrayList<Effect> effectList; 
 	private int[] shakeArray; 
 	
 	// Constructor, initializes important access/data 
-	public Renderer (long window, int[] textures) {
+	public Renderer (long window, int[] textures) { 
 		this.window = window; 
 		dimensions = new int[2]; 
 		textureList = textures; 
@@ -42,9 +43,10 @@ public class Renderer {
 		entityTextureList = Entity.getTextures(); 
 		playerTextureList = Player.getTextures(); 
 		effectTextureList = Effect.getTextures(); 
+		buttonTextureList = Button.getTextures(); 
 		effectList = GameLogic.getEffects(); 
 		shakeArray = GameLogic.getShake(); 
-	}
+	} 
 	
 	// Rendering method, called every frame 
 	public void render () { 
@@ -93,17 +95,17 @@ public class Renderer {
 			renderEffects(); 
 			renderNumbers(); 
 		}
-			glBindTexture(GL_TEXTURE_2D, textureList[1]); 
 			for (int i=0; i<GameLogic.numButtons(); i++) {
+				glBindTexture(GL_TEXTURE_2D, buttonTextureList[GameLogic.getButton(i).getTexture()]); 
 				glBegin(GL_TRIANGLES); 
 				if (GameLogic.getInput().getSelection() == i && GameLogic.getButton(i) != null) {
 					Button tempButton = GameLogic.getButton(i); 
-					vertexArray = vertexArrayButtons(new Button(tempButton.getX()-4, tempButton.getY()-4, tempButton.getWidth()+8, tempButton.getHeight()+8, null)); 
-					renderVertices(1); 
+					vertexArray = vertexArrayButtons(new Button(tempButton.getX()-4, tempButton.getY()-4, tempButton.getWidth()+8, tempButton.getHeight()+8, null, 0)); 
+					renderVertices(0); 
 				}
 				vertexArray = vertexArrayButtons(GameLogic.getButton(i)); 
 				if (vertexArray != null) 
-					renderVertices(1); 
+					renderVertices(0); 
 				glEnd(); 
 			} 
 	} 

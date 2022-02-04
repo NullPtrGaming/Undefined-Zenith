@@ -103,20 +103,20 @@ public class GameLogic {
 	
 	// sets button lists with buttons 
 	public static void initMenus () {
-		titleButtonList.add(new Button(-96, 0, "Play")); 
-		titleButtonList.add(new Button(-96, -48, "Settings")); 
-		titleButtonList.add(new Button(-96, -96, "Exit")); 
+		titleButtonList.add(new Button(-16, 0, "Play", 0)); 
+		titleButtonList.add(new Button(-16, -48, "Settings", 1)); 
+		titleButtonList.add(new Button(-16, -96, "Exit", 2)); 
 		
-		menuButtonList.add(new Button(-96, 48, "Resume")); 
-		menuButtonList.add(new Button(-96, -16, "Settings")); 
-		menuButtonList.add(new Button(-96, -80, "Save and Exit")); 
+		menuButtonList.add(new Button(-16, 48, "Resume", 0)); 
+		menuButtonList.add(new Button(-16, -16, "Settings", 1)); 
+		menuButtonList.add(new Button(-16, -80, "Save and Exit", 2)); 
 		
-		optionsButtonList.add(new Button(-96, 96, "Exit")); 
-		optionsButtonList.add(new Button(-96, 60, "Rebind Keys")); 
-		optionsButtonList.add(new Button(-96, 24, "Select = Attack")); 
-		optionsButtonList.add(new Button(-96, -12, "Fullscreen")); 
+		optionsButtonList.add(new Button(-16, 96, "Exit", 0)); 
+		optionsButtonList.add(new Button(-16, 60, "Rebind Keys", 0)); 
+		optionsButtonList.add(new Button(-16, 24, "Select = Attack", 0)); 
+		optionsButtonList.add(new Button(-16, -12, "Fullscreen", 0)); 
 		
-		gameOverButtonList.add(new Button(-96, 0, "Game Over")); 
+		gameOverButtonList.add(new Button(-16, 0, "Game Over", 2)); 
 	} 
 	
 	// is the options menu open? 
