@@ -97,12 +97,16 @@ public class Renderer {
 		}
 			for (int i=0; i<GameLogic.numButtons(); i++) {
 				glBindTexture(GL_TEXTURE_2D, buttonTextureList[GameLogic.getButton(i).getTexture()]); 
-				glBegin(GL_TRIANGLES); 
-				if (GameLogic.getInput().getSelection() == i && GameLogic.getButton(i) != null) {
+				if (GameLogic.getInput().getSelection() == i && GameLogic.getButton(i) != null) { 
+					glBindTexture(GL_TEXTURE_2D, buttonTextureList[0]); 
 					Button tempButton = GameLogic.getButton(i); 
-					vertexArray = vertexArrayButtons(new Button(tempButton.getX()-4, tempButton.getY()-4, tempButton.getWidth()+8, tempButton.getHeight()+8, null, 0)); 
+					vertexArray = vertexArrayButtons(new Button(tempButton.getX()-32, tempButton.getY(), tempButton.getWidth(), tempButton.getHeight(), null, 0)); 
+					glBegin(GL_TRIANGLES); 
 					renderVertices(0); 
+					glEnd(); 
 				}
+				glBindTexture(GL_TEXTURE_2D, buttonTextureList[GameLogic.getButton(i).getTexture()]); 
+				glBegin(GL_TRIANGLES); 
 				vertexArray = vertexArrayButtons(GameLogic.getButton(i)); 
 				if (vertexArray != null) 
 					renderVertices(0); 

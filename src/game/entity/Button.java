@@ -42,9 +42,13 @@ public class Button {
 	
 	// textures 
 	public static void loadTextures(TextureLoader textureLoader) {
-		buttonTextureList[0] = textureLoader.loadTexture("res/Play.png"); 
-		buttonTextureList[1] = textureLoader.loadTexture("res/Gear.png"); 
-		buttonTextureList[2] = textureLoader.loadTexture("res/X.png"); 
+		buttonTextureList[0] = textureLoader.loadTexture("res/Menus/Buttons/Arrow.png"); // reserved, for selection 
+		buttonTextureList[1] = textureLoader.loadTexture("res/Menus/Buttons/Play.png"); 
+		buttonTextureList[2] = textureLoader.loadTexture("res/Menus/Buttons/Gear.png"); 
+		buttonTextureList[3] = textureLoader.loadTexture("res/Menus/Buttons/X.png");  
+		buttonTextureList[4] = textureLoader.loadTexture("res/Menus/Buttons/Controller.png"); 
+		buttonTextureList[5] = textureLoader.loadTexture("res/Menus/Buttons/Fullscreen.png"); 
+		buttonTextureList[6] = textureLoader.loadTexture("res/Menus/Buttons/SelectAttack.png"); 
 	}
 	public static int[] getTextures () {
 		return buttonTextureList; 
