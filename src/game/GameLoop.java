@@ -20,6 +20,7 @@ import game.entity.Button;
 import game.entity.Effect;
 import game.entity.Entity;
 import game.entity.Player;
+import game.entity.PowerUp;
 import game.entity.Projectile;
 
 public class GameLoop {
@@ -119,6 +120,7 @@ public class GameLoop {
 		Player.loadTextures(textureLoader); 
 		Effect.loadTextures(textureLoader); 
 		Button.loadTextures(textureLoader); 
+		PowerUp.loadTextures(textureLoader); 
 	}
 	
 	// gets the window handle 

@@ -33,6 +33,7 @@ public class GameLogic {
 	private static Player[] playerList; // Stores all game players - referenced by indices 
 	private static ArrayList<Entity> entityList; 
 	private static ArrayList<Projectile> projectileList; 
+	private static ArrayList<PowerUp> powerUpList; 
 	private static boolean[] keyStates = new boolean[7]; 
 	private static int[] newKeys = new int[7]; 
 	private static int newKeysIndex = 0; 
@@ -67,6 +68,7 @@ public class GameLogic {
 		menuButtonList = new ArrayList<Button> (); 
 		optionsButtonList = new ArrayList<Button> (); 
 		gameOverButtonList = new ArrayList<Button> (); 
+		powerUpList = new ArrayList<PowerUp> (); 
 		playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
 		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
@@ -80,6 +82,28 @@ public class GameLogic {
 	}
 	public static void newEffect (int x, int y, int type, int duration) {
 		effectList.add(new Effect(x, y, type, duration)); 
+	}
+	
+	// power-ups 
+	public static void newPowerUp (int x, int y) {
+		int type = (int)(Math.random()*2); 
+		powerUpList.add(new PowerUp(x, y, type)); 
+	}
+	public static PowerUp getPowerUp (int index) {
+		return powerUpList.get(index); 
+	}
+	public static int numPowerUps () {
+		return powerUpList.size(); 
+	} 
+	
+	public static void pollPowerUps () {
+		for (int i=0; i<numPowerUps(); i++) {
+			if (powerUpList.get(i).getCollisionBox().intersects(getMainPlayer().getCollisionBox())) {
+				powerUpList.get(i).doAction(); 
+				powerUpList.remove(i); 
+				i--; 
+			}
+		}
 	}
 	
 	// fullscreen toggle 
@@ -241,6 +265,7 @@ public class GameLogic {
 		for (Projectile p : projectileList) {
 			p.pollMovement(); 
 		}
+		pollPowerUps(); 
 		removeDeadEntities(); 
 		newEntity(); 
 	}
@@ -361,9 +386,11 @@ public class GameLogic {
 	}
 	
 	// removes Entities that have non-positive health values from the list (they are dead) 
-	public static void removeDeadEntities () {
+	public static void removeDeadEntities () { 
 		for (int i=0; i<entityList.size(); i++) {
 			if (entityList.get(i).getHealth() <= 0) {
+				if (Math.random() >= 0.95) 
+					newPowerUp(entityList.get(i).getX(), entityList.get(i).getY()); 
 				entityList.remove(i); 
 				i--; 
 				playerList[PRIMARY_PLAYER].scoreAdd(500); 

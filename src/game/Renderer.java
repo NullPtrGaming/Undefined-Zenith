@@ -18,6 +18,7 @@ import game.entity.Button;
 import game.entity.Effect;
 import game.entity.Entity;
 import game.entity.Player;
+import game.entity.PowerUp;
 import game.entity.Projectile; 
 
 public class Renderer { 
@@ -31,6 +32,7 @@ public class Renderer {
 	private int[] playerTextureList; 
 	private int[] effectTextureList; 
 	private int[] buttonTextureList; 
+	private int[] powerUpTextureList; 
 	private ArrayList<Effect> effectList; 
 	private int[] shakeArray; 
 	
@@ -44,6 +46,7 @@ public class Renderer {
 		playerTextureList = Player.getTextures(); 
 		effectTextureList = Effect.getTextures(); 
 		buttonTextureList = Button.getTextures(); 
+		powerUpTextureList = PowerUp.getTextures(); 
 		effectList = GameLogic.getEffects(); 
 		shakeArray = GameLogic.getShake(); 
 	} 
@@ -58,6 +61,19 @@ public class Renderer {
 		
 		if (GameLogic.getState() != 0) { 
 			GameLogic.pollShake(); 
+			
+			for (int i=0; i<GameLogic.numPowerUps(); i++) {
+				PowerUp p = GameLogic.getPowerUp(i); 
+				glBindTexture(GL_TEXTURE_2D, p.getType()); 
+				glBegin(GL_TRIANGLES); 
+				vertexArray = new float[4]; 
+				vertexArray[0] = (float)p.getX()+shakeArray[0]/Entity.MAX_X; 
+				vertexArray[1] = (float)p.getY()+shakeArray[1]/Entity.MAX_Y; 
+				vertexArray[2] = (float)p.getX()+shakeArray[0]/Entity.MAX_X + Entity.BOX_WIDTH; 
+				vertexArray[3] = (float)p.getY()+shakeArray[1]/Entity.MAX_Y + Entity.BOX_HEIGHT; 
+				renderVertices(0); 
+				glEnd(); 
+			}
 			
 			for (int i=0; i<4; i++) { 
 				glBindTexture(GL_TEXTURE_2D, playerTextureList[0]); 
