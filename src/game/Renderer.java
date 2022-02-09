@@ -64,13 +64,12 @@ public class Renderer {
 			
 			for (int i=0; i<GameLogic.numPowerUps(); i++) {
 				PowerUp p = GameLogic.getPowerUp(i); 
-				glBindTexture(GL_TEXTURE_2D, p.getType()); 
+				glBindTexture(GL_TEXTURE_2D, powerUpTextureList[p.getType()]); 
 				glBegin(GL_TRIANGLES); 
-				vertexArray = new float[4]; 
-				vertexArray[0] = (float)p.getX()+shakeArray[0]/Entity.MAX_X; 
-				vertexArray[1] = (float)p.getY()+shakeArray[1]/Entity.MAX_Y; 
-				vertexArray[2] = (float)p.getX()+shakeArray[0]/Entity.MAX_X + Entity.BOX_WIDTH; 
-				vertexArray[3] = (float)p.getY()+shakeArray[1]/Entity.MAX_Y + Entity.BOX_HEIGHT; 
+				vertexArray[0] = (float)(p.getX()+shakeArray[0])/Entity.MAX_X; 
+				vertexArray[1] = (float)(p.getY()+shakeArray[1])/Entity.MAX_Y; 
+				vertexArray[2] = (float)(p.getX()+shakeArray[0])/Entity.MAX_X + Entity.BOX_WIDTH; 
+				vertexArray[3] = (float)(p.getY()+shakeArray[1])/Entity.MAX_Y + Entity.BOX_HEIGHT; 
 				renderVertices(0); 
 				glEnd(); 
 			}
@@ -108,6 +107,7 @@ public class Renderer {
 					renderVertices(GameLogic.getProjectile(k).getDirection()); 
 				glEnd(); 
 			}
+			
 			renderEffects(); 
 			renderNumbers(); 
 		}
@@ -139,7 +139,7 @@ public class Renderer {
 			int x = entity.getX(), y = entity.getY(); 
 			getWindowSize(); 
 			
-			if (entity.getCooldown() == -1) {  
+			if (entity.getCooldown() == -1) { 
 				vertexArray[0] = (float)(x+shakeArray[0])/(Entity.MAX_X); 
 				vertexArray[1] = (float)(y+shakeArray[1])/(Entity.MAX_Y); 
 				vertexArray[2] = (float)(x+shakeArray[0])/(Entity.MAX_X) + Projectile.PROJ_BOX_WIDTH; 
@@ -167,7 +167,7 @@ public class Renderer {
 			return vertexArray; 
 		}
 		
-		// OpenGL side of render code 
+		// OpenGL side of render code - must be between begin and end calls 
 		public void renderVertices (int direction) { 
 			if (direction == 3) {
 				glTexCoord2f(1, 0);

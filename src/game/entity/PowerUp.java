@@ -51,7 +51,7 @@ public class PowerUp {
 	public void doAction () {
 		switch (type) {
 		case 0: {
-			GameLogic.getMainPlayer().healthModify(5); 
+			GameLogic.getMainPlayer().healthModify(10); 
 		}
 		break; 
 		}
