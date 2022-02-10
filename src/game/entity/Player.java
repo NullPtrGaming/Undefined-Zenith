@@ -8,6 +8,9 @@ public class Player extends Entity {
 	private boolean[] keyStates; 
 	private boolean isPrimary = false; 
 	private int score; 
+	private int originalCooldown; 
+	private long powerUpTimer = 0; 
+	private int powerUpDuration = 0; 
 	
 	private int acceleration = 2; // currently testing 
 	private int tempSpeed = 0; 
@@ -19,6 +22,7 @@ public class Player extends Entity {
 		super(x, y, health, damage, speed, cooldown, type, rotatable); 
 		this.keyStates = keyStates; 
 		this.isPrimary = isPrimary; 
+		this.originalCooldown = getCooldown(); 
 		score = 0; 
 	}
 	
@@ -40,6 +44,7 @@ public class Player extends Entity {
 				GameLogic.startShake(3); 
 				e.cooldownReset(); 
 			}
+			rapidFirePoll(); 
 			if (getHealth() <= 0) { // death checking 
 				GameLogic.setState(1); 
 				GameLogic.gameOver(); 
@@ -106,6 +111,18 @@ public class Player extends Entity {
 			offsetY = 16; 
 		GameLogic.newEffect(this.getX()+offsetX, this.getY()+offsetY, 1, 10); 
 	}
+	
+	// power-up - changes the fire rate for a period of time 
+	public void rapidFireStart (int modifier, int duration) {
+		powerUpTimer = GameLogic.getTime(); 
+		powerUpDuration = duration; 
+		setCooldown(getCooldown()/modifier); 
+	}
+	public void rapidFirePoll () {
+		if (getCooldown() != originalCooldown && GameLogic.getTime() - powerUpTimer >= powerUpDuration) {
+			setCooldown(originalCooldown); 
+		} 
+	} 
 	
 	// accelerates - not use normal speed variable (testing) 
 	public void accelerate (boolean isNegative) {

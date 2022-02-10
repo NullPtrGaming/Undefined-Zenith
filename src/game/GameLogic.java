@@ -100,6 +100,7 @@ public class GameLogic {
 		for (int i=0; i<numPowerUps(); i++) {
 			if (powerUpList.get(i).getCollisionBox().intersects(getMainPlayer().getCollisionBox())) {
 				powerUpList.get(i).doAction(); 
+				newEffect(powerUpList.get(i).getX(), powerUpList.get(i).getY(), 1, 20); 
 				powerUpList.remove(i); 
 				i--; 
 			}

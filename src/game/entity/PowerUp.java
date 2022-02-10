@@ -54,6 +54,9 @@ public class PowerUp {
 			GameLogic.getMainPlayer().healthModify(10); 
 		}
 		break; 
+		case 1: {
+			GameLogic.getMainPlayer().rapidFireStart(2, 10000); 
+		}
 		}
 	}
 	

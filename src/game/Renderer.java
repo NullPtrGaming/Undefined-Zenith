@@ -111,6 +111,19 @@ public class Renderer {
 			renderEffects(); 
 			renderNumbers(); 
 		}
+		
+		if (GameLogic.getState() == 0) { 
+			glBindTexture(GL_TEXTURE_2D, textureList[3]); 
+			glBegin(GL_TRIANGLES); 
+			vertexArray = new float[4]; 
+			vertexArray[0] = (float)(176)/Entity.MAX_X; 
+			vertexArray[1] = (float)(8)/Entity.MAX_Y; 
+			vertexArray[2] = (float)(176)/Entity.MAX_X + 0.625f; 
+			vertexArray[3] = (float)(8)/Entity.MAX_Y + 0.5f; 
+			renderVertices(0); 
+			glEnd(); 
+		} 
+		
 			for (int i=0; i<GameLogic.numButtons(); i++) {
 				glBindTexture(GL_TEXTURE_2D, buttonTextureList[GameLogic.getButton(i).getTexture()]); 
 				if (GameLogic.getInput().getSelection() == i && GameLogic.getButton(i) != null) { 

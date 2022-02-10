@@ -117,6 +117,9 @@ public class Entity {
 	public void cooldownReset () {
 		cooldownTimer = GameLogic.getTime(); 
 	}
+	public void setCooldown (int cooldown) {
+		this.cooldown = cooldown; 
+	}
 	
 	// gets the Rectangle2D used for collision detection 
 	public Rectangle2D getCollisionBox () {
