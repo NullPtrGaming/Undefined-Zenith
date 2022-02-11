@@ -112,14 +112,14 @@ public class Renderer {
 			renderNumbers(); 
 		}
 		
-		if (GameLogic.getState() == 0) { 
+		if (GameLogic.getState() == 0 && !GameLogic.getOptionState()) { 
 			glBindTexture(GL_TEXTURE_2D, textureList[3]); 
 			glBegin(GL_TRIANGLES); 
 			vertexArray = new float[4]; 
-			vertexArray[0] = (float)(176)/Entity.MAX_X; 
-			vertexArray[1] = (float)(8)/Entity.MAX_Y; 
-			vertexArray[2] = (float)(176)/Entity.MAX_X + 0.625f; 
-			vertexArray[3] = (float)(8)/Entity.MAX_Y + 0.5f; 
+			vertexArray[0] = (float)(-80)/Entity.MAX_X; 
+			vertexArray[1] = (float)(40)/Entity.MAX_Y; 
+			vertexArray[2] = (float)(-80)/Entity.MAX_X + 0.625f; 
+			vertexArray[3] = (float)(40)/Entity.MAX_Y + 0.5f; 
 			renderVertices(0); 
 			glEnd(); 
 		} 
@@ -387,8 +387,8 @@ public class Renderer {
 			for (int i=0; i<effectList.size(); i++) {
 				if (effectList.get(i).getDuration() <= 0) 
 					effectList.remove(i); 
-			}
-		}
+			} 
+		} 
 		
 		// Returns the window's size in (width, height) format in a 2 position array 
 		public int[] getWindowSize () {  
@@ -403,5 +403,4 @@ public class Renderer {
 				glViewport((dimensions[0]-dimensions[1]*16/9)/2, 0, dimensions[1] * 16 / 9, dimensions[1]);
 			return dimensions; 
 		}
-
 }

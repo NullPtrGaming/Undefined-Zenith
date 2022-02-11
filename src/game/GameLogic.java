@@ -54,6 +54,7 @@ public class GameLogic {
 	private static int[] shakeOffsetCoordinates = new int[2]; 
 	private static int shakeFrames = 0; 
 	private static int maxShake; 
+	private static int damageFrames = 0; 
 	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
@@ -452,6 +453,14 @@ public class GameLogic {
 	}
 	public static int[] getShake () { // for renderer 
 		return shakeOffsetCoordinates; 
+	}
+	
+	// adds damage (red screen) frames 
+	public static void addDamageFrames (int f) { 
+		damageFrames += f; 
+	}
+	public static int getDamageFrames () {
+		return damageFrames; 
 	}
 }
 

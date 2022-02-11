@@ -116,6 +116,7 @@ public class GameLoop {
 		textureList[1] = textureLoader.loadTexture("res/e.png"); 
 		textureList[2] = textureLoader.loadTexture("res/Numbers.png"); 
 		textureList[3] = textureLoader.loadTexture("res/Menus/Buttons/Title.png"); 
+		textureList[4] = textureLoader.loadTexture("res/DamageOverlay.png"); 
 		Projectile.loadTextures(textureLoader); 
 		Entity.loadTextures(textureLoader); 
 		Player.loadTextures(textureLoader); 
