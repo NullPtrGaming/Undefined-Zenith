@@ -141,6 +141,20 @@ public class Renderer {
 					renderVertices(0); 
 				glEnd(); 
 			} 
+			if (GameLogic.isRebinding()) {
+				vertexArray = new float[4]; 
+				vertexArray[0] = (float)-16/Entity.MAX_X; 
+				vertexArray[1] = (float)60/Entity.MAX_Y;
+				vertexArray[2] = (float)-16/Entity.MAX_X + (float)Button.STANDARD_BUTTON_WIDTH/256; 
+				vertexArray[3] = (float)60/Entity.MAX_Y + (float)Button.STANDARD_BUTTON_HEIGHT/144; 
+				if (GameLogic.wasRebindSuccess()) 
+					glBindTexture(GL_TEXTURE_2D, textureList[5]); 
+				else 
+					glBindTexture(GL_TEXTURE_2D, textureList[6]); 
+				glBegin(GL_TRIANGLES); 
+				renderVertices(0); 
+				glEnd(); 
+			}
 	} 
 	
 		// Returns an array of vertices for rendering a single tile entity 

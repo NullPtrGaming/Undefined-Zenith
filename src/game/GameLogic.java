@@ -4,6 +4,7 @@ package game;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*; 
@@ -38,6 +39,7 @@ public class GameLogic {
 	private static int[] newKeys = new int[7]; 
 	private static int newKeysIndex = 0; 
 	private static boolean rebinding = false; 
+	private static boolean rebindSuccess = false; 
 	
 	private static ArrayList<Button> titleButtonList; // Stores buttons for menus - alternate game states 
 	private static ArrayList<Button> menuButtonList; 
@@ -70,12 +72,25 @@ public class GameLogic {
 		optionsButtonList = new ArrayList<Button> (); 
 		gameOverButtonList = new ArrayList<Button> (); 
 		powerUpList = new ArrayList<PowerUp> (); 
-		playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+		playerList[PRIMARY_PLAYER] = loadPlayer(); 
 		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
 		initMenus(); 
 		GameSaver.loadGame(GameSaver.getExpectedSaveLocation()); 
 	} 
+	
+	// loads a Player for starting the game 
+	public static Player loadPlayer () {
+		Player player; 
+		//Scanner scan = new Scanner(); 
+		int health; 
+		int damage; 
+		int speed; 
+		int cooldown; 
+		int type; 
+		player = new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+		return player; 
+	}
 	
 	// gets effects 
 	public static ArrayList<Effect> getEffects () { 
@@ -217,12 +232,15 @@ public class GameLogic {
 			boolean cancel = false; 
 			for (int i=0; i<newKeys.length; i++) {
 				cancel = (newKeys[i] == Input.getLastKey()); 
-				if (cancel) 
+				if (cancel) {
+					rebindSuccess = false; 
 					break; 
+				} 
 			}
 			if (!cancel) {
 				newKeys[newKeysIndex] = Input.getLastKey(); 
 				newKeysIndex++; 
+				rebindSuccess = true; 
 			} 
 			if (newKeysIndex >= newKeys.length) { 
 				int[] keybinds = Input.getKeybinds(); 
@@ -236,6 +254,9 @@ public class GameLogic {
 	public static boolean isRebinding () {
 		return rebinding; 
 	}
+	public static boolean wasRebindSuccess () { 
+		return rebindSuccess; 
+	} 
 	
 	// gets/sets the main game state - important - 0=TITLE, 1=MENU, 2=RUNNING 
 	public static int getState () { 

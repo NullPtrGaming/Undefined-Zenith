@@ -19,7 +19,7 @@ public class Input {
 	public static final int SELECT = 5; // for menu navigation 
 	public static final int ESCAPE = 6; 
 	
-	private static int[] keybinds = {GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_LEFT_CONTROL, GLFW_KEY_ENTER, GLFW_KEY_ESCAPE}; 
+	private static int[] keybinds = {GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_ESCAPE}; 
 	// array for storing different bindings for different keys 
 	
 	private static int lastKey; 
