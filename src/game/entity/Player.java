@@ -1,6 +1,8 @@
 // Represents a main (user-controlled) player of the game 
 package game.entity;
 
+import java.util.ArrayList;
+
 import game.*; 
 
 public class Player extends Entity {
@@ -9,20 +11,24 @@ public class Player extends Entity {
 	private boolean isPrimary = false; 
 	private int score; 
 	private int originalCooldown; 
+	private int originalHealth; 
 	private long powerUpTimer = 0; 
 	private int powerUpDuration = 0; 
+	private int texture = 0; 
 	
 	private int acceleration = 2; // currently testing 
 	private int tempSpeed = 0; 
 	
 	private static int[] playerTextureArray = new int[4]; 
+	private static ArrayList<Integer> playerTypeTextureList = new ArrayList<Integer> (); 
 	
 	// Constructor, use Entity constructor but allows the Player to reference key states 
-	public Player (int x, int y, int health, int damage, int speed, int cooldown, int type, boolean rotatable, boolean isPrimary, boolean[] keyStates) {
+	public Player (int x, int y, int health, int damage, int speed, int cooldown, int type, int texture, boolean rotatable, boolean isPrimary, boolean[] keyStates) {
 		super(x, y, health, damage, speed, cooldown, type, rotatable); 
 		this.keyStates = keyStates; 
 		this.isPrimary = isPrimary; 
 		this.originalCooldown = getCooldown(); 
+		this.originalHealth = getHealth(); 
 		score = 0; 
 	}
 	
@@ -123,6 +129,19 @@ public class Player extends Entity {
 			setCooldown(originalCooldown); 
 		} 
 	} 
+	
+	// sets primary player status (for switching) 
+	public void makePrimary (boolean primary) {
+		isPrimary = primary; 
+	}
+	
+	public int getOriginalHealth () {
+		return originalHealth; 
+	}
+	
+	public int getTexture () {
+		return texture; 
+	}
 	
 	// accelerates - not use normal speed variable (testing) 
 	public void accelerate (boolean isNegative) {

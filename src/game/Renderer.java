@@ -75,7 +75,7 @@ public class Renderer {
 			}
 			
 			for (int i=0; i<4; i++) { 
-				glBindTexture(GL_TEXTURE_2D, playerTextureList[0]); 
+				glBindTexture(GL_TEXTURE_2D, GameLogic.getMainPlayer().getTexture()); 
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(i, true)); 
 				if (vertexArray != null) 

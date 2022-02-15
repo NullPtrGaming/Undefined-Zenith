@@ -2,6 +2,9 @@
 
 package game;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -35,6 +38,7 @@ public class GameLogic {
 	private static ArrayList<Entity> entityList; 
 	private static ArrayList<Projectile> projectileList; 
 	private static ArrayList<PowerUp> powerUpList; 
+	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static boolean[] keyStates = new boolean[7]; 
 	private static int[] newKeys = new int[7]; 
 	private static int newKeysIndex = 0; 
@@ -72,6 +76,7 @@ public class GameLogic {
 		optionsButtonList = new ArrayList<Button> (); 
 		gameOverButtonList = new ArrayList<Button> (); 
 		powerUpList = new ArrayList<PowerUp> (); 
+		playerTypeList = new ArrayList<Player> (); 
 		playerList[PRIMARY_PLAYER] = loadPlayer(); 
 		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
@@ -81,14 +86,27 @@ public class GameLogic {
 	
 	// loads a Player for starting the game 
 	public static Player loadPlayer () {
+		playerTypeList.add(new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, Player.getTextures()[0], true, true, keyStates)); 
+		playerTypeList.add(new Player(0, 0, 70, 5, 2, 200, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
 		Player player; 
-		//Scanner scan = new Scanner(); 
-		int health; 
-		int damage; 
-		int speed; 
-		int cooldown; 
-		int type; 
-		player = new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+		File playerDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"Players"); 
+		File listDir[] = playerDir.listFiles(); 
+		if (listDir != null) 
+			for (int i=0; i<listDir.length; i++) {
+				try {
+					Scanner scan = new Scanner(listDir[i]);
+				} catch (IOException e) {
+					continue; 
+				} 
+				int health = 0; 
+				int damage = 0; 
+				int speed = 0; 
+				int cooldown = 0; 
+				int type = 0; 
+				int texture = 0; 
+				playerTypeList.add(new Player(0, 0, health, damage, speed, cooldown, type, texture, true, false, keyStates)); 
+			} 
+		player = playerTypeList.get(0); 
 		return player; 
 	}
 	
@@ -274,9 +292,12 @@ public class GameLogic {
 		if (state == 0) { // clears game upon exit to title 
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
-			if (wasGameOver) // only for death reset 
-				playerList[PRIMARY_PLAYER] = new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, true, true, keyStates); 
+			if (wasGameOver) {// only for death reset 
+				Player player = playerList[PRIMARY_PLAYER]; 
+				playerList[PRIMARY_PLAYER] = new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, true, keyStates); 
+			} 
 		}
+		
 	}
 	
 	// Updates all entities and player movements 

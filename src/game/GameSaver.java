@@ -17,6 +17,8 @@ public class GameSaver {
 		//File saveDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"AppData"+System.getProperty("file.separator")+"Roaming"+System.getProperty("file.separator")+"UndefinedZenith"); 
 		File saveDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"); 
 		saveDir.mkdir(); 
+		File playerDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"Players"); 
+		playerDir.mkdir(); 
 		//return System.getProperty("user.home")+System.getProperty("file.separator")+"AppData"+System.getProperty("file.separator")+"Roaming"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"UndefinedZenithSave.txt"; 
 		return System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"UndefinedZenithSave.txt"; 
 	}
