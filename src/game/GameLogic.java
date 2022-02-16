@@ -3,11 +3,16 @@
 package game;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*; 
@@ -39,6 +44,7 @@ public class GameLogic {
 	private static ArrayList<Projectile> projectileList; 
 	private static ArrayList<PowerUp> powerUpList; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
+	private static int currentPlayerIndex = 0; 
 	private static boolean[] keyStates = new boolean[7]; 
 	private static int[] newKeys = new int[7]; 
 	private static int newKeysIndex = 0; 
@@ -93,21 +99,41 @@ public class GameLogic {
 		File listDir[] = playerDir.listFiles(); 
 		if (listDir != null) 
 			for (int i=0; i<listDir.length; i++) {
+				int[] stats = new int[5]; 
+				int texture = 0; 
 				try {
-					Scanner scan = new Scanner(listDir[i]);
+					InputStream is = new FileInputStream(listDir[i]); // initial loading 
+					ZipFile file = new ZipFile(listDir[i]); 
+					ZipInputStream z = new ZipInputStream(is); 
+					
+					ZipEntry ze = z.getNextEntry(); // the text file (Player.txt) 
+					InputStream internalIS = file.getInputStream(ze); 
+					Scanner scan = new Scanner(internalIS); 
+					for (int j=0; j<5; j++) {
+						while (!scan.hasNextInt()) 
+							scan.next(); 
+						stats[j] = scan.nextInt(); 
+					} 
+					
+					ze = z.getNextEntry(); // the image (Spaceship.png) 
+					internalIS = file.getInputStream(ze); 
+					TextureLoader tl = new TextureLoader(); 
+					texture = tl.loadTexture(internalIS); 
 				} catch (IOException e) {
 					continue; 
-				} 
-				int health = 0; 
-				int damage = 0; 
-				int speed = 0; 
-				int cooldown = 0; 
-				int type = 0; 
-				int texture = 0; 
-				playerTypeList.add(new Player(0, 0, health, damage, speed, cooldown, type, texture, true, false, keyStates)); 
+				}  
+				playerTypeList.add(new Player(0, 0, stats[0], stats[1], stats[2], stats[3], stats[4], texture, true, false, keyStates)); 
 			} 
 		player = playerTypeList.get(0); 
 		return player; 
+	}
+	
+	// switches loaded player 
+	public void setMainPlayer (int index) {
+		playerTypeList.get(currentPlayerIndex).makePrimary(false); 
+		playerTypeList.get(index).makePrimary(true); 
+		playerList[0] = playerTypeList.get(index); 
+		currentPlayerIndex = index; 
 	}
 	
 	// gets effects 

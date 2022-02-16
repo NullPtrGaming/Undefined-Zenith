@@ -29,6 +29,7 @@ public class Player extends Entity {
 		this.isPrimary = isPrimary; 
 		this.originalCooldown = getCooldown(); 
 		this.originalHealth = getHealth(); 
+		this.texture = texture; 
 		score = 0; 
 	}
 	

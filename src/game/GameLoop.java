@@ -51,7 +51,6 @@ public class GameLoop {
 		centerWindow(); 
 		glfwMakeContextCurrent(window); 
 		glfwSwapInterval(1); 
-		GameLogic.gameInit(window); 
 		glfwShowWindow(window); // At this point, we are visible 
 	}
 	
@@ -63,6 +62,7 @@ public class GameLoop {
 		glDisable(GL_DEPTH_TEST); 
 		glEnable(GL_BLEND);
 		loadTextures(); 
+		GameLogic.gameInit(window); 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		Renderer render = new Renderer(window, textureList); 
 		
