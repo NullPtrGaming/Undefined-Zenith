@@ -135,6 +135,8 @@ public class Renderer {
 					glEnd(); 
 				}
 				glBindTexture(GL_TEXTURE_2D, buttonTextureList[GameLogic.getButton(i).getTexture()]); 
+				if (GameLogic.getButton(i).getTexture() == 7) 
+					glBindTexture(GL_TEXTURE_2D, GameLogic.getMainPlayer().getTexture()); 
 				glBegin(GL_TRIANGLES); 
 				vertexArray = vertexArrayButtons(GameLogic.getButton(i)); 
 				if (vertexArray != null) 

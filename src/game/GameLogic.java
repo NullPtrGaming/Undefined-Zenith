@@ -129,11 +129,17 @@ public class GameLogic {
 	}
 	
 	// switches loaded player 
-	public void setMainPlayer (int index) {
+	public static void setMainPlayer (int index) {
 		playerTypeList.get(currentPlayerIndex).makePrimary(false); 
 		playerTypeList.get(index).makePrimary(true); 
 		playerList[0] = playerTypeList.get(index); 
 		currentPlayerIndex = index; 
+	}
+	public static int getPlayerIndex () {
+		return currentPlayerIndex; 
+	}
+	public static int numCharacters () {
+		return playerTypeList.size(); 
 	}
 	
 	// gets effects 
@@ -200,6 +206,7 @@ public class GameLogic {
 		optionsButtonList.add(new Button(-16, 60, "Rebind Keys", 4)); 
 		optionsButtonList.add(new Button(-16, 24, "Select = Attack", 6)); 
 		optionsButtonList.add(new Button(-16, -12, "Fullscreen", 5)); 
+		optionsButtonList.add(new Button(-16, -48, "Switch Character", 7)); 
 		
 		gameOverButtonList.add(new Button(-16, 0, "Game Over", 3)); 
 	} 
@@ -452,6 +459,15 @@ public class GameLogic {
 				}
 			}
 		}
+		return null; 
+	}
+	
+	public static Entity testPhysicalAttackIntersect () { // physical attack 
+		for (Entity e : entityList) {
+			if (e.getCollisionBox().intersects(getMainPlayer().getAttackCollisions())) {
+				return e; 
+			}
+		} 
 		return null; 
 	}
 	

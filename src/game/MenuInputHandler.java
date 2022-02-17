@@ -9,6 +9,7 @@ public class MenuInputHandler {
 	private boolean[] keyStates; 
 	
 	private int selectedButton = 0; 
+	private int currentCharacter; 
 	
 	// constructor, sets keystates 
 	public MenuInputHandler (boolean keyStates[]) {
@@ -89,6 +90,17 @@ public class MenuInputHandler {
 				GameLogic.toggleFullscreen(); 
 				selectedButton = 0; 
 			}
+			break; 
+			case 4: {
+				currentCharacter = GameLogic.getPlayerIndex(); 
+				if (currentCharacter < GameLogic.numCharacters()-1) {
+					currentCharacter++;  
+				} 
+				else {
+					currentCharacter = 0; 
+				}
+				GameLogic.setMainPlayer(currentCharacter); 
+			} 
 			break; 
 			}
 		}

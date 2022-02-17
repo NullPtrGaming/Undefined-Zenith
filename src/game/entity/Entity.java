@@ -123,6 +123,9 @@ public class Entity {
 	public void setCooldown (int cooldown) {
 		this.cooldown = cooldown; 
 	}
+	public void setCooldownTimer (long time) {
+		cooldownTimer = time; 
+	}
 	
 	// gets the Rectangle2D used for collision detection 
 	public Rectangle2D getCollisionBox () {

@@ -1,6 +1,8 @@
 // Represents a main (user-controlled) player of the game 
 package game.entity;
 
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Float;
 import java.util.ArrayList;
 
 import game.*; 
@@ -19,6 +21,8 @@ public class Player extends Entity {
 	private int acceleration = 2; // currently testing 
 	private int tempSpeed = 0; 
 	
+	private Rectangle2D attackCollisionBox; // only for physical attack 
+	
 	private static int[] playerTextureArray = new int[4]; 
 	private static ArrayList<Integer> playerTypeTextureList = new ArrayList<Integer> (); 
 	
@@ -31,11 +35,13 @@ public class Player extends Entity {
 		this.originalHealth = getHealth(); 
 		this.texture = texture; 
 		score = 0; 
+		attackCollisionBox = new Rectangle2D.Float (); 
 	}
 	
 	// textures 
 	public static void loadTextures (TextureLoader textureLoader) {
 		playerTextureArray[0] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
+		playerTextureArray[1] = textureLoader.loadTexture("res/Characters/Iona/Iona Spaceship.png"); 
 	}
 	public static int[] getTextures () {
 		return playerTextureArray; 
@@ -129,6 +135,26 @@ public class Player extends Entity {
 		if (getCooldown() != originalCooldown && GameLogic.getTime() - powerUpTimer >= powerUpDuration) {
 			setCooldown(originalCooldown); 
 		} 
+	} 
+	
+	public void setAttackCollisions () { // sets attack collision rectangle, only used for physical attack 
+		attackCollisionBox.setRect((getX()-16)/MAX_X, (getY()-16)/MAX_Y, 48/MAX_X, 48/MAX_Y); 
+	}
+	public Rectangle2D getAttackCollisions () {
+		return attackCollisionBox; 
+	}
+	
+	public void pollAttackPhysical () { 
+		if (GameLogic.getTime() - getCooldownTimer() >= getCooldown()*2) {
+			setCooldownTimer(GameLogic.getTime()); 
+			setAttackCollisions(); 
+			Entity e = GameLogic.testPhysicalAttackIntersect(); 
+			while (e != null) {
+				e.healthModify(getDamage()); 
+				GameLogic.newEffect(e.getX(), e.getY(), 0, 20); 
+				e = GameLogic.testPhysicalAttackIntersect(); 
+			}
+		}
 	} 
 	
 	// sets primary player status (for switching) 
