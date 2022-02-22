@@ -45,6 +45,13 @@ public class GameLogic {
 	private static ArrayList<PowerUp> powerUpList; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
+	private static Entity[] physicalEnemyTypeList = {
+			new Entity(0, 0, 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)
+	}; 
+	private static Entity[] projEnemyTypeList = {
+			new Entity(0, 0, 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true)
+	}; 
+	
 	private static boolean[] keyStates = new boolean[7]; 
 	private static int[] newKeys = new int[7]; 
 	private static int newKeysIndex = 0; 
@@ -185,7 +192,7 @@ public class GameLogic {
 			GLFW.glfwSetWindowMonitor(gameWindow, monitor, 0, 0, monitorMode.width(), monitorMode.height(), monitorMode.refreshRate()); 
 			isFullscreen = true; 
 		}
-		GLFW.glfwSwapInterval(1); 
+		GLFW.glfwSwapInterval(monitorMode.refreshRate()/60); 
 		GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
 	}
 	public static boolean getFullscreenState() {
@@ -354,8 +361,13 @@ public class GameLogic {
 			int[] coords; 
 			for (int i=3; i>0; i--) {
 				coords = genCoordinates(); 
-				if (Math.random() >= 0.4) 
-					entityList.add(new Entity(coords[0], coords[1], 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)); 
+				Entity e; 
+				if (Math.random() >= 0.4) { 
+					e = physicalEnemyTypeList[0]; 
+					e.setX(coords[0]); 
+					e.setY(coords[1]); 
+					entityList.add(e); 
+				} 
 				else 
 					entityList.add(new Entity(coords[0], coords[1], 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true)); 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 

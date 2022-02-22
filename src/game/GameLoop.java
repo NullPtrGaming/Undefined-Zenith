@@ -11,6 +11,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -50,7 +51,9 @@ public class GameLoop {
 			throw new RuntimeException("Failed to create the GLFW window");
 		centerWindow(); 
 		glfwMakeContextCurrent(window); 
-		glfwSwapInterval(1); 
+		long monitor = GLFW.glfwGetPrimaryMonitor(); 
+		GLFWVidMode monitorMode = GLFW.glfwGetVideoMode(monitor);
+		glfwSwapInterval(monitorMode.refreshRate()/60); 
 		glfwShowWindow(window); // At this point, we are visible 
 	}
 	

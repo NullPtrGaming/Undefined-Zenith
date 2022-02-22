@@ -280,5 +280,10 @@ public class Entity {
 	public void genProjectile () {
 		GameLogic.createProjectile(x+8, y+8, speed*3, direction, damage, false, this); 
 	}
+	
+	// returns a copy of the entity with same stats but "brand new" 
+	public Entity copy () {
+		return new Entity(0, 0, health, damage, speed, cooldown, attackType, rotatable); 
+	}
 }
 
