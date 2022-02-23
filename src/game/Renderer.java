@@ -85,10 +85,7 @@ public class Renderer {
 			
 			glBindTexture(GL_TEXTURE_2D, textureList[5]); 
 			for (int j=0; j<GameLogic.numEntities(); j++) {
-				if (GameLogic.getEntity(j, false).getAttackType() == Entity.ATTACK_PHYSICAL) 
-					glBindTexture(GL_TEXTURE_2D, entityTextureList[1]); 
-				else 
-					glBindTexture(GL_TEXTURE_2D, entityTextureList[0]); 
+				glBindTexture(GL_TEXTURE_2D, entityTextureList[GameLogic.getEntity(j, false).getTexture()]); 
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(j, false)); 
 				if (vertexArray != null)  

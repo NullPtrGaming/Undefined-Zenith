@@ -21,7 +21,7 @@ public class Projectile extends Entity {
 	
 	// constructor, sets projectile-specific data 
 	public Projectile (int x, int y, int speed, int direction, int damage, boolean friendly, Entity owner) {
-		super(x, y, 1, damage, speed, -1, Entity.ATTACK_PHYSICAL, true); 
+		super(x, y, 1, damage, speed, -1, Entity.ATTACK_PHYSICAL, true, 0); 
 		setDirection(direction); 
 		isPlayerFriendly = friendly; 
 		this.owner = owner; 

@@ -28,7 +28,7 @@ public class Player extends Entity {
 	
 	// Constructor, use Entity constructor but allows the Player to reference key states 
 	public Player (int x, int y, int health, int damage, int speed, int cooldown, int type, int texture, boolean rotatable, boolean isPrimary, boolean[] keyStates) {
-		super(x, y, health, damage, speed, cooldown, type, rotatable); 
+		super(x, y, health, damage, speed, cooldown, type, rotatable, texture); 
 		this.keyStates = keyStates; 
 		this.isPrimary = isPrimary; 
 		this.originalCooldown = getCooldown(); 

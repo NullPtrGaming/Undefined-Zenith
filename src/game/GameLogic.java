@@ -46,10 +46,12 @@ public class GameLogic {
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
 	private static Entity[] physicalEnemyTypeList = {
-			new Entity(0, 0, 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true)
+			new Entity(0, 0, 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
+			new Entity(0, 0, 10, 10, 2, 500, Entity.ATTACK_PHYSICAL, true, 1) // faster 
 	}; 
 	private static Entity[] projEnemyTypeList = {
-			new Entity(0, 0, 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true)
+			new Entity(0, 0, 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true, 0), 
+			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 0) // fires faster 
 	}; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
@@ -363,13 +365,17 @@ public class GameLogic {
 				coords = genCoordinates(); 
 				Entity e; 
 				if (Math.random() >= 0.4) { 
-					e = physicalEnemyTypeList[0]; 
+					e = physicalEnemyTypeList[(int)(Math.random()*physicalEnemyTypeList.length)].copy(); 
 					e.setX(coords[0]); 
 					e.setY(coords[1]); 
 					entityList.add(e); 
 				} 
-				else 
-					entityList.add(new Entity(coords[0], coords[1], 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true)); 
+				else { 
+					e = projEnemyTypeList[(int)(Math.random()*projEnemyTypeList.length)].copy(); 
+					e.setX(coords[0]); 
+					e.setY(coords[1]); 
+					entityList.add(e); 
+				} 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
 					return; 
 				else 

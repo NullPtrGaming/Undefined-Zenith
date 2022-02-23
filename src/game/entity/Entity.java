@@ -21,6 +21,7 @@ public class Entity {
 	
 	// texture list 
 	private static int[] entityTextureList = new int[2]; 
+	private int texture; 
 	
 	// known enemy positions 
 	private int lastPlayerX = 0; 
@@ -46,7 +47,7 @@ public class Entity {
 	Rectangle2D collisionBox; 
 	
 	// Constructor, initializes basic entity values 
-	public Entity (int x, int y, int health, int damage, int speed, int cooldown, int type, boolean rotatable) {
+	public Entity (int x, int y, int health, int damage, int speed, int cooldown, int type, boolean rotatable, int texture) {
 		this.x = x; 
 		this.y = y; 
 		this.health = health;  
@@ -54,6 +55,7 @@ public class Entity {
 		this.speed = speed; 
 		this.cooldown = cooldown; 
 		this.rotatable = rotatable; 
+		this.texture = texture; 
 		collisionBox = new Rectangle2D.Float((float)x/MAX_X, (float)y/MAX_Y, BOX_WIDTH, BOX_HEIGHT); 
 		setAttackType(type); 
 		cooldownTimer = GameLogic.getTime(); 
@@ -67,6 +69,11 @@ public class Entity {
 	}
 	public static int[] getTextures () {
 		return entityTextureList; 
+	}
+	
+	// return specific texture for Entity 
+	public int getTexture () {
+		return texture; 
 	}
 	
 	// returns position/status variables 
@@ -283,7 +290,7 @@ public class Entity {
 	
 	// returns a copy of the entity with same stats but "brand new" 
 	public Entity copy () {
-		return new Entity(0, 0, health, damage, speed, cooldown, attackType, rotatable); 
+		return new Entity(0, 0, health, damage, speed, cooldown, attackType, rotatable, texture); 
 	}
 }
 

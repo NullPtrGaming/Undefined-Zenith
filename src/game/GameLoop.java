@@ -86,6 +86,12 @@ public class GameLoop {
 				GameLogic.getEntity(GameLogic.PRIMARY_PLAYER, true).pollMovement(); 
 			}
 			
+			//try { // testing 
+			//	Thread.sleep(1000/60);
+			//} catch (InterruptedException e) {
+			//	continue; 
+			//} 
+			
 			//FPSCounter.StopAndPost(); 
 		}
 	}
