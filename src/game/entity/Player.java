@@ -62,8 +62,12 @@ public class Player extends Entity {
 				GameLogic.setState(1); 
 				GameLogic.gameOver(); 
 			} 
-			if (keyStates[Input.ATTACK]) 
-				pollAttack(); 
+			if (keyStates[Input.ATTACK]) {
+				if (getAttackType() == Entity.ATTACK_PROJECTILE)
+					pollAttack(); 
+				else 
+					pollAttackPhysical(); 
+			}
 			if (keyStates[Input.UP]) 
 				move(0, getSpeed()); 
 			if (keyStates[Input.DOWN]) 
@@ -138,16 +142,16 @@ public class Player extends Entity {
 	} 
 	
 	public void setAttackCollisions () { // sets attack collision rectangle, only used for physical attack 
-		attackCollisionBox.setRect((getX()-16)/MAX_X, (getY()-16)/MAX_Y, 48/MAX_X, 48/MAX_Y); 
+		attackCollisionBox.setRect(((float)getX()-24)/MAX_X, ((float)getY()-24)/MAX_Y, (float)64/MAX_X, (float)64/MAX_Y); 
 	}
 	public Rectangle2D getAttackCollisions () {
 		return attackCollisionBox; 
 	}
 	
 	public void pollAttackPhysical () { 
+		setAttackCollisions(); 
 		if (GameLogic.getTime() - getCooldownTimer() >= getCooldown()*2) {
 			setCooldownTimer(GameLogic.getTime()); 
-			setAttackCollisions(); 
 			Entity e = GameLogic.testPhysicalAttackIntersect(); 
 			while (e != null) {
 				e.healthModify(getDamage()); 

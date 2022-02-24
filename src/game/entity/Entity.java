@@ -20,7 +20,7 @@ public class Entity {
 	public static final int ATTACK_PROJECTILE = 1; 
 	
 	// texture list 
-	private static int[] entityTextureList = new int[2]; 
+	private static int[] entityTextureList = new int[4]; 
 	private int texture; 
 	
 	// known enemy positions 
@@ -66,6 +66,8 @@ public class Entity {
 	public static void loadTextures (TextureLoader textureLoader) {
 		entityTextureList[0] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
 		entityTextureList[1] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
+		entityTextureList[2] = textureLoader.loadTexture("res/Enemies/Alien Fast.png"); 
+		entityTextureList[3] = textureLoader.loadTexture("res/Enemies/Searchlight Angry.png"); 
 	}
 	public static int[] getTextures () {
 		return entityTextureList; 

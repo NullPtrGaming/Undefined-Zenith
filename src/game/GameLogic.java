@@ -47,11 +47,11 @@ public class GameLogic {
 	private static int currentPlayerIndex = 0; 
 	private static Entity[] physicalEnemyTypeList = {
 			new Entity(0, 0, 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
-			new Entity(0, 0, 10, 10, 2, 500, Entity.ATTACK_PHYSICAL, true, 1) // faster 
+			new Entity(0, 0, 10, 10, 2, 300, Entity.ATTACK_PHYSICAL, true, 2) // moves faster 
 	}; 
 	private static Entity[] projEnemyTypeList = {
 			new Entity(0, 0, 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true, 0), 
-			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 0) // fires faster 
+			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
 	}; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
@@ -102,7 +102,7 @@ public class GameLogic {
 	// loads a Player for starting the game 
 	public static Player loadPlayer () {
 		playerTypeList.add(new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, Player.getTextures()[0], true, true, keyStates)); 
-		playerTypeList.add(new Player(0, 0, 70, 5, 2, 200, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
+		playerTypeList.add(new Player(0, 0, 70, 5, 2, 100, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
 		Player player; 
 		File playerDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"Players"); 
 		File listDir[] = playerDir.listFiles(); 
