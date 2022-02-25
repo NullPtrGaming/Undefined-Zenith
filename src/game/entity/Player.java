@@ -152,11 +152,10 @@ public class Player extends Entity {
 		setAttackCollisions(); 
 		if (GameLogic.getTime() - getCooldownTimer() >= getCooldown()*2) {
 			setCooldownTimer(GameLogic.getTime()); 
-			Entity e = GameLogic.testPhysicalAttackIntersect(); 
-			while (e != null) {
-				e.healthModify(getDamage()); 
+			ArrayList<Entity> hitEnemies = GameLogic.testPhysicalAttackIntersect(); 
+			for (Entity e : hitEnemies) {
+				e.healthModify(-this.getDamage()); 
 				GameLogic.newEffect(e.getX(), e.getY(), 0, 20); 
-				e = GameLogic.testPhysicalAttackIntersect(); 
 			}
 		}
 	} 

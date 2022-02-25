@@ -35,6 +35,7 @@ public class GameSaver {
 				saveWriter.write(Input.getKeybinds()[i] + " "); // saves key binds 
 			saveWriter.write("\nFullscreen: " + GameLogic.getFullscreenState()); // saves fullscreen state 
 			saveWriter.write("\nPosition: " + GameLogic.getMainPlayer().getX() + " " + GameLogic.getMainPlayer().getY() + " " + GameLogic.getMainPlayer().getDirection()); // saves player position (might not be a thing) 
+			saveWriter.write("\nCharacter: " + GameLogic.getPlayerIndex()); 
 			
 			saveWriter.write("\n"); // extra new line in save file because why not? 
 			saveWriter.close(); // testing 
@@ -57,6 +58,7 @@ public class GameSaver {
 			saveWriter.write("\nFullscreen: " + GameLogic.getFullscreenState()); // saves fullscreen state 
 			saveWriter.write("\nPosition: " + GameLogic.getMainPlayer().getX() + " " + GameLogic.getMainPlayer().getY() + " " + GameLogic.getMainPlayer().getDirection()); // saves player position (might not be a thing) 
 			saveWriter.write("\nHigh Score: " + GameLogic.getHighScore()); 
+			saveWriter.write("\nCharacter: " + GameLogic.getPlayerIndex()); 
 			
 			saveWriter.write("\n"); // extra new line in save file because why not? 
 			saveWriter.close(); // testing 
@@ -87,6 +89,13 @@ public class GameSaver {
 				saveReader.next();
 			GameLogic.getMainPlayer().move(saveReader.nextInt(), saveReader.nextInt()); // loads player position 
 			GameLogic.getMainPlayer().setDirection(saveReader.nextInt()); // loads player direction (again this might be disabled later) 
+			try {
+				GameLogic.setMainPlayer(saveReader.nextInt()); 
+			} 
+			catch (Exception e) {
+				GameLogic.setMainPlayer(0); 
+			}
+			
 			saveReader.close(); 
 		} 
 		catch (Exception e) { 
@@ -116,6 +125,15 @@ public class GameSaver {
 			while (!saveReader.hasNextInt()) 
 				saveReader.next(); 
 			GameLogic.setHighScore(saveReader.nextInt()); 
+			while (!saveReader.hasNextInt()) 
+				saveReader.next(); 
+			try {
+				GameLogic.setMainPlayer(saveReader.nextInt()); 
+			} 
+			catch (Exception e) {
+				GameLogic.setMainPlayer(0); 
+			}
+			
 			saveReader.close(); 
 		} 
 		catch (Exception e) { 

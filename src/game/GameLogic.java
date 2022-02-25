@@ -480,13 +480,14 @@ public class GameLogic {
 		return null; 
 	}
 	
-	public static Entity testPhysicalAttackIntersect () { // physical attack 
+	public static ArrayList<Entity> testPhysicalAttackIntersect () { // physical attack 
+		ArrayList<Entity> hitEnemies = new ArrayList<Entity> (); 
 		for (Entity e : entityList) {
 			if (e.getCollisionBox().intersects(getMainPlayer().getAttackCollisions())) {
-				return e; 
+				hitEnemies.add(e); 
 			}
 		} 
-		return null; 
+		return hitEnemies; 
 	}
 	
 	// removes Entities that have non-positive health values from the list (they are dead) 
