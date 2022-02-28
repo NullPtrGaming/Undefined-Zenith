@@ -23,6 +23,7 @@ public class Input {
 	// array for storing different bindings for different keys 
 	
 	private static int lastKey; 
+	private static boolean lastAttackKeyState; 
 	
 	// Constructor, sets up GLFW key callback 
 	public Input (long w, boolean isWASD, boolean[] keyStates) {
@@ -44,6 +45,7 @@ public class Input {
 			if (key == keybinds[ESCAPE]) 
 				keyStates[ESCAPE] = (glfwGetKey(window, keybinds[ESCAPE]) == GLFW_PRESS);
 			lastKey = key; 
+			lastAttackKeyState = keyStates[ATTACK]; 
 			GameLogic.setKeysPoll(); 
 			});
 	}
@@ -56,6 +58,10 @@ public class Input {
 	// returns the last pressed key 
 	public static int getLastKey () {
 		return lastKey; 
+	}
+	// resets the attack indicator if the key is released 
+	public static void resetAttackStatePoll () { 
+		GameLogic.displayPhysicalAttack(lastAttackKeyState); 
 	}
 }
 

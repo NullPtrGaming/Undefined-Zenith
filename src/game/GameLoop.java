@@ -128,6 +128,7 @@ public class GameLoop {
 		textureList[4] = textureLoader.loadTexture("res/DamageOverlay.png"); 
 		textureList[5] = textureLoader.loadTexture("res/Check.png"); 
 		textureList[6] = textureLoader.loadTexture("res/X.png"); 
+		textureList[7] = textureLoader.loadTexture("res/Projectiles/Physical Attack.png"); 
 		Projectile.loadTextures(textureLoader); 
 		Entity.loadTextures(textureLoader); 
 		Player.loadTextures(textureLoader); 

@@ -76,6 +76,7 @@ public class GameLogic {
 	private static int shakeFrames = 0; 
 	private static int maxShake; 
 	private static int damageFrames = 0; 
+	private static boolean physicalAttackState = false; 
 	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
@@ -102,7 +103,7 @@ public class GameLogic {
 	// loads a Player for starting the game 
 	public static Player loadPlayer () {
 		playerTypeList.add(new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, Player.getTextures()[0], true, true, keyStates)); 
-		playerTypeList.add(new Player(0, 0, 70, 5, 2, 100, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
+		playerTypeList.add(new Player(0, 0, 70, 5, 2, 250, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
 		Player player; 
 		File playerDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"Players"); 
 		File listDir[] = playerDir.listFiles(); 
@@ -488,6 +489,12 @@ public class GameLogic {
 			}
 		} 
 		return hitEnemies; 
+	}
+	public static void displayPhysicalAttack (boolean value) { // displays the physical attack bubble thing 
+		physicalAttackState = value; 
+	}
+	public static boolean getPhysicalAttackState () {
+		return physicalAttackState; 
 	}
 	
 	// removes Entities that have non-positive health values from the list (they are dead) 

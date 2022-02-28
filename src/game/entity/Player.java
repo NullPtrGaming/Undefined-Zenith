@@ -65,8 +65,9 @@ public class Player extends Entity {
 			if (keyStates[Input.ATTACK]) {
 				if (getAttackType() == Entity.ATTACK_PROJECTILE)
 					pollAttack(); 
-				else 
+				else { 
 					pollAttackPhysical(); 
+				}
 			}
 			if (keyStates[Input.UP]) 
 				move(0, getSpeed()); 
@@ -80,6 +81,8 @@ public class Player extends Entity {
 				GameLogic.setState(1); 
 			if (!keyStates[Input.ESCAPE] && Math.random() >= 0.9) 
 				 genProjectileTrail(); 
+			if (this.getAttackType() == Entity.ATTACK_PHYSICAL) 
+				Input.resetAttackStatePoll(); 
 		}
 		else { 
 			if (!GameLogic.isRebinding() && GameLogic.getState() == 1 && keyStates[Input.ESCAPE] && GameLogic.getMenuCooldownState()) 
@@ -156,6 +159,7 @@ public class Player extends Entity {
 			for (Entity e : hitEnemies) {
 				e.healthModify(-this.getDamage()); 
 				GameLogic.newEffect(e.getX(), e.getY(), 0, 20); 
+				GameLogic.startShake(2); 
 			}
 		}
 	} 
