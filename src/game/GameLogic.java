@@ -43,6 +43,10 @@ public class GameLogic {
 	private static ArrayList<Entity> entityList; 
 	private static ArrayList<Projectile> projectileList; 
 	private static ArrayList<PowerUp> powerUpList; 
+	private static Boss currentBoss = null; 
+	private static boolean isBoss = false; 
+	private static int bossCounter = 24; // counts enemies before boss generation 
+	private static int bossCounterTemp = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
 	private static Entity[] physicalEnemyTypeList = {
@@ -52,6 +56,9 @@ public class GameLogic {
 	private static Entity[] projEnemyTypeList = {
 			new Entity(0, 0, 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true, 0), 
 			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
+	}; 
+	private static Boss[] bossTypeList = {
+			new Boss(0, 0, 4000, 10, 1, 250, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0) 
 	}; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
@@ -333,6 +340,7 @@ public class GameLogic {
 		if (lastState == 2 || lastState == 1) // game saving automatic after pausing or unpausing game 
 			GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
 		if (state == 0) { // clears game upon exit to title 
+			currentBoss = null; 
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
 			if (wasGameOver) {// only for death reset 
@@ -359,7 +367,7 @@ public class GameLogic {
 	
 	// Enemy generator method - operates on cooldown system 
 	public static void newEntity () {
-		if (entityList.size() <= MAX_ENTITIES && gameTime - enemyCooldownTimer >= ENEMY_COOLDOWN) {
+		if (!isBoss && entityList.size() <= MAX_ENTITIES && gameTime - enemyCooldownTimer >= ENEMY_COOLDOWN) {
 			enemyCooldownTimer = gameTime; 
 			int[] coords; 
 			for (int i=3; i>0; i--) {
@@ -444,6 +452,23 @@ public class GameLogic {
 		else 
 			return null; 
 	}
+	
+	// generates boss 
+	public static void genBoss () {
+		
+	}
+	// gets current boss 
+	public static Boss getBoss () {
+		return currentBoss; 
+	}
+	// gets current boss state 
+	public static boolean isBoss () {
+		return isBoss; 
+	}
+	public static void setBossState () { 
+		isBoss = (currentBoss != null); 
+	} 
+	
 	// returns true if the game can enter a menu state (must have cooldown to prevent spamming) 
 	public static boolean getMenuCooldownState () {
 		if (menuCooldownTimer - System.currentTimeMillis() <= 0) {
@@ -507,6 +532,13 @@ public class GameLogic {
 				i--; 
 				playerList[PRIMARY_PLAYER].scoreAdd(500); 
 				startShake(3); 
+				if (bossCounterTemp < bossCounter) {
+					bossCounterTemp++; 
+				} 
+				else {
+					bossCounterTemp = 0; 
+					genBoss(); 
+				}
 			}
 		}
 	}

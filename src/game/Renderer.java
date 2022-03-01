@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL13;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
 import static org.lwjgl.opengl.GL11.*;
 
+import game.entity.Boss;
 import game.entity.Button;
 import game.entity.Effect;
 import game.entity.Entity;
@@ -33,6 +34,7 @@ public class Renderer {
 	private int[] effectTextureList; 
 	private int[] buttonTextureList; 
 	private int[] powerUpTextureList; 
+	private int[] bossTextureList; 
 	private ArrayList<Effect> effectList; 
 	private int[] shakeArray; 
 	
@@ -47,6 +49,7 @@ public class Renderer {
 		effectTextureList = Effect.getTextures(); 
 		buttonTextureList = Button.getTextures(); 
 		powerUpTextureList = PowerUp.getTextures(); 
+		bossTextureList = Boss.getTextures(); 
 		effectList = GameLogic.getEffects(); 
 		shakeArray = GameLogic.getShake(); 
 	} 
@@ -62,6 +65,7 @@ public class Renderer {
 		if (GameLogic.getState() != 0) { 
 			GameLogic.pollShake(); 
 			
+			// power ups 
 			for (int i=0; i<GameLogic.numPowerUps(); i++) {
 				PowerUp p = GameLogic.getPowerUp(i); 
 				glBindTexture(GL_TEXTURE_2D, powerUpTextureList[p.getType()]); 
@@ -74,6 +78,7 @@ public class Renderer {
 				glEnd(); 
 			}
 			
+			// players 
 			for (int i=0; i<4; i++) { 
 				glBindTexture(GL_TEXTURE_2D, GameLogic.getMainPlayer().getTexture()); 
 				glBegin(GL_TRIANGLES);
@@ -83,6 +88,20 @@ public class Renderer {
 				glEnd(); 
 			} 
 			
+			// boss 
+			if (GameLogic.isBoss()) {
+				glBindTexture(GL_TEXTURE_2D, bossTextureList[GameLogic.getBoss().getTexture()]); 
+				glBegin(GL_TRIANGLES); 
+				vertexArray = new float[4]; 
+				vertexArray[0] = (float)(GameLogic.getBoss().getX())/Entity.MAX_X; 
+				vertexArray[1] = (float)(GameLogic.getBoss().getY())/Entity.MAX_Y; 
+				vertexArray[2] = (float)(GameLogic.getBoss().getX())/Entity.MAX_X + GameLogic.getBoss().getW(); 
+				vertexArray[3] = (float)(GameLogic.getBoss().getY())/Entity.MAX_Y + GameLogic.getBoss().getH(); 
+				renderVertices(GameLogic.getBoss().getDirection()); 
+				glEnd(); 
+			}
+			
+			// entities 
 			glBindTexture(GL_TEXTURE_2D, textureList[5]); 
 			for (int j=0; j<GameLogic.numEntities(); j++) {
 				glBindTexture(GL_TEXTURE_2D, entityTextureList[GameLogic.getEntity(j, false).getTexture()]); 
@@ -92,6 +111,7 @@ public class Renderer {
 					renderVertices(GameLogic.getEntity(j, false).getDirection()); 
 				glEnd(); 
 			}
+			// projectiles 
 			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
 			for (int k=0; k<GameLogic.numProjectiles(); k++) { 
 				if (GameLogic.getProjectile(k).getOwner() != GameLogic.getEntity(0, true)) 
@@ -104,6 +124,7 @@ public class Renderer {
 					renderVertices(GameLogic.getProjectile(k).getDirection()); 
 				glEnd(); 
 			}
+			// physical attack forcefield 
 			if (GameLogic.getPhysicalAttackState()) {
 				glBindTexture(GL_TEXTURE_2D, textureList[7]); 
 				glBegin(GL_TRIANGLES); 
