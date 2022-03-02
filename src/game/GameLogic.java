@@ -45,7 +45,7 @@ public class GameLogic {
 	private static ArrayList<PowerUp> powerUpList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
-	private static int bossCounter = 24; // counts enemies before boss generation 
+	private static int bossCounter = 4; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
@@ -58,7 +58,8 @@ public class GameLogic {
 			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
 	}; 
 	private static Boss[] bossTypeList = {
-			new Boss(0, 0, 4000, 10, 1, 250, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0) 
+			new Boss(-16, 16, 4000, 10, 1, 250, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
+			new Boss(-16, 16, 3000, 15, 1, 400, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
 	}; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
@@ -357,6 +358,8 @@ public class GameLogic {
 		for (Entity e : entityList) {
 			e.pollMovement(); 
 		}
+		if (currentBoss != null) 
+			currentBoss.pollMovement(); 
 		for (Projectile p : projectileList) {
 			p.pollMovement(); 
 		}
@@ -455,7 +458,10 @@ public class GameLogic {
 	
 	// generates boss 
 	public static void genBoss () {
-		
+		for (int i=0; i<entityList.size(); i++) // removes normal enemies before fight 
+			entityList.remove(i); 
+		currentBoss = bossTypeList[(int)(Math.random()*bossTypeList.length)].copy(); 
+		setBossState(); 
 	}
 	// gets current boss 
 	public static Boss getBoss () {

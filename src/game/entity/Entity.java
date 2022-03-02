@@ -187,6 +187,23 @@ public class Entity {
 			this.x += x; 
 			this.y += y; 
 			updateCollisionBox(); 
+			if (this == GameLogic.getEntity(0, true) && GameLogic.isBoss()) {
+				while (getCollisionBox().intersects(GameLogic.getBoss().getCollisionBox())) {
+					if (x > 0) { 
+						this.x -= 1; 
+					} 
+					else if (x < 0){
+						this.x += 1; 
+					}
+					if (y > 0) { 
+						this.y -= 1; 
+					}
+					else if (y < 0){
+						this.y += 1; 
+					}
+					updateCollisionBox(); 
+				}
+			}
 			Entity e = GameLogic.testEntityIntersect(this); 
 			while (e != null) {
 				while (e.getCollisionBox().intersects(this.getCollisionBox())) { // in progress - rework involves better collisions teleporting to edges of colliding objects 

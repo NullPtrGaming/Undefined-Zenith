@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
+import game.entity.Boss;
 import game.entity.Button;
 import game.entity.Effect;
 import game.entity.Entity;
@@ -135,6 +136,7 @@ public class GameLoop {
 		Effect.loadTextures(textureLoader); 
 		Button.loadTextures(textureLoader); 
 		PowerUp.loadTextures(textureLoader); 
+		Boss.loadTextures(textureLoader); 
 	}
 	
 	// gets the window handle 

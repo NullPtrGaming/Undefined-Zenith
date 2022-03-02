@@ -41,10 +41,17 @@ public class Boss extends Entity {
 		return h; 
 	}
 	
+	public void pollMovement () {
+		
+	}
 	public void pollAttack () { // actual attack method 
 		
 	}
 	public void specialAttack () {
 		
+	}
+	
+	public Boss copy () { 
+		return new Boss(getX(), getY(), getHealth(), getDamage(), getSpeed(), getCooldown(), getAttackType(), true, getTexture(), w, h, attackPattern); 
 	}
 }
