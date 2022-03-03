@@ -2,6 +2,8 @@
 
 package game.entity;
 
+import java.awt.geom.Rectangle2D;
+
 import game.GameLogic;
 import game.TextureLoader;
 
@@ -15,6 +17,7 @@ public class Boss extends Entity {
 	private int attackPattern; 
 	private int spCooldown; 
 	private long spCooldownTimer; 
+	private Rectangle2D collisionBox = new Rectangle2D.Float(); 
 	
 	private static int[] bossTextureList = new int[4]; 
 	
@@ -25,6 +28,7 @@ public class Boss extends Entity {
 		this.attackPattern = ap; 
 		spCooldown = cooldown * 4; 
 		spCooldownTimer = GameLogic.getTime(); 
+		updateCollisionBox(); 
 	}
 	
 	public static void loadTextures (TextureLoader tl) {
@@ -42,13 +46,38 @@ public class Boss extends Entity {
 	}
 	
 	public void pollMovement () {
-		
+		for (int i=0; i<GameLogic.numProjectiles(); i++) {
+			if (GameLogic.getProjectile(i).getOwner() == GameLogic.getEntity(0, true) && collisionBox.intersects(GameLogic.getProjectile(i).getCollisionBox())) {
+				healthModify(-GameLogic.getProjectile(i).getDamage()); 
+				GameLogic.newEffect(GameLogic.getProjectile(i).getX(), GameLogic.getProjectile(i).getY(), 0, 20); 
+				GameLogic.startShake(2); 
+				GameLogic.removeProjectile(i); 
+			}
+		}
+		if (GameLogic.getMainPlayer().getAttackType() == ATTACK_PHYSICAL && GameLogic.getMainPlayer().getAttackCollisions().intersects(collisionBox)) { 
+			healthModify(-GameLogic.getMainPlayer().getDamage()); 
+			GameLogic.newEffect(getX(), getY(), 0, 20); 
+			GameLogic.startShake(2); 
+		} 
+		if (isCooldown()) {
+			pollAttack(); 
+			setCooldownTimer(GameLogic.getTime()); 
+		}
 	}
 	public void pollAttack () { // actual attack method 
-		
+		for (int i=0; i<4; i++) {
+			GameLogic.createProjectile(getX()+16, getY()+16, GameLogic.getMainPlayer().getSpeed()*3, i, getDamage(), false, this); 
+		}
 	}
 	public void specialAttack () {
 		
+	}
+	
+	public void updateCollisionBox () { // overrides to Entity collisions 
+		collisionBox.setRect((float)getX()/MAX_X, (float)getY()/MAX_Y, (float)32/MAX_X, (float)32/MAX_Y); 
+	}
+	public Rectangle2D getCollisionBox() {
+		return collisionBox; 
 	}
 	
 	public Boss copy () { 

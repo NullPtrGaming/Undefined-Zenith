@@ -135,6 +135,9 @@ public class Entity {
 	public void setCooldownTimer (long time) {
 		cooldownTimer = time; 
 	}
+	public boolean isCooldown () { 
+		return (GameLogic.getTime() - cooldownTimer >= cooldown*2); 
+	} 
 	
 	// gets the Rectangle2D used for collision detection 
 	public Rectangle2D getCollisionBox () {
@@ -187,7 +190,12 @@ public class Entity {
 			this.x += x; 
 			this.y += y; 
 			updateCollisionBox(); 
-			if (this == GameLogic.getEntity(0, true) && GameLogic.isBoss()) {
+			if (this == GameLogic.getEntity(0, true) && GameLogic.isBoss() && getCollisionBox().intersects(GameLogic.getBoss().getCollisionBox())) {
+				if (GameLogic.getBoss().isCooldown()) { 
+					GameLogic.getMainPlayer().healthModify(-GameLogic.getBoss().getDamage()); 
+					GameLogic.newEffect(x, y, 0, 20); 
+					GameLogic.startShake(2); 
+				} 
 				while (getCollisionBox().intersects(GameLogic.getBoss().getCollisionBox())) {
 					if (x > 0) { 
 						this.x -= 1; 

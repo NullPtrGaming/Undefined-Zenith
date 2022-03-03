@@ -93,10 +93,10 @@ public class Renderer {
 				glBindTexture(GL_TEXTURE_2D, bossTextureList[GameLogic.getBoss().getTexture()]); 
 				glBegin(GL_TRIANGLES); 
 				vertexArray = new float[4]; 
-				vertexArray[0] = (float)(GameLogic.getBoss().getX())/Entity.MAX_X; 
-				vertexArray[1] = (float)(GameLogic.getBoss().getY())/Entity.MAX_Y; 
-				vertexArray[2] = (float)(GameLogic.getBoss().getX())/Entity.MAX_X + GameLogic.getBoss().getW(); 
-				vertexArray[3] = (float)(GameLogic.getBoss().getY())/Entity.MAX_Y + GameLogic.getBoss().getH(); 
+				vertexArray[0] = (float)(GameLogic.getBoss().getX()+shakeArray[0])/Entity.MAX_X; 
+				vertexArray[1] = (float)(GameLogic.getBoss().getY()+shakeArray[1])/Entity.MAX_Y; 
+				vertexArray[2] = (float)(GameLogic.getBoss().getX()+shakeArray[0])/Entity.MAX_X + GameLogic.getBoss().getW(); 
+				vertexArray[3] = (float)(GameLogic.getBoss().getY()+shakeArray[1])/Entity.MAX_Y + GameLogic.getBoss().getH(); 
 				renderVertices(GameLogic.getBoss().getDirection()); 
 				glEnd(); 
 			}

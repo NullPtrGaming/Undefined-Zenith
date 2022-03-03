@@ -45,7 +45,7 @@ public class GameLogic {
 	private static ArrayList<PowerUp> powerUpList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
-	private static int bossCounter = 4; // counts enemies before boss generation // temporarily small for testing 
+	private static int bossCounter = 2; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
@@ -422,6 +422,9 @@ public class GameLogic {
 	// Gets the referenced Projectile 
 	public static Projectile getProjectile (int index) {
 		return projectileList.get(index); 
+	}
+	public static void removeProjectile (int index) {
+		projectileList.remove(index); 
 	}
 	
 	// Adds a new projectile to the projectile list 
