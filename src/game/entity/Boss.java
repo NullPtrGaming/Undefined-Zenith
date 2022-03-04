@@ -11,12 +11,16 @@ public class Boss extends Entity {
 	
 	public static final float DEFAULT_BOSS_W = (float)32/256; 
 	public static final float DEFAULT_BOSS_H = (float)32/144; 
+	public static final int[] BOSS_NODES = {
+		-16, 16, 200, 110 	
+	}; 
 	
 	private float w; 
 	private float h; 
 	private int attackPattern; 
 	private int spCooldown; 
 	private long spCooldownTimer; 
+	private int moveCooldown; 
 	private Rectangle2D collisionBox = new Rectangle2D.Float(); 
 	
 	private static int[] bossTextureList = new int[4]; 
@@ -28,6 +32,7 @@ public class Boss extends Entity {
 		this.attackPattern = ap; 
 		spCooldown = cooldown * 4; 
 		spCooldownTimer = GameLogic.getTime(); 
+		moveCooldown = cooldown*128; 
 		updateCollisionBox(); 
 	}
 	
@@ -63,12 +68,60 @@ public class Boss extends Entity {
 			pollAttack(); 
 			setCooldownTimer(GameLogic.getTime()); 
 		}
+		move(); 
+		updateCollisionBox(); 
 	}
 	public void pollAttack () { // actual attack method 
 		for (int i=0; i<4; i++) {
 			GameLogic.createProjectile(getX()+16, getY()+16, GameLogic.getMainPlayer().getSpeed()*3, i, getDamage(), false, this); 
 		}
 	}
+	
+	public void move() { 
+		if (GameLogic.getTime() - getMoveCooldown() >= getCooldown()) { 
+			setMoveCooldown(GameLogic.getTime());  
+			if (Math.random() >= 0.9) {
+				int[] coords = {GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY()}; 
+				setTargetCoords(coords); 
+			}
+			else {
+				double targetNode = Math.random(); 
+				if (targetNode <= 0.2) {
+					int[] coords = {BOSS_NODES[0], BOSS_NODES[1]}; 
+					setTargetCoords(coords); 
+				}
+				else if (targetNode <= 0.4) {
+					int[] coords = {BOSS_NODES[2], BOSS_NODES[3]}; 
+					setTargetCoords(coords); 
+				}
+				else if (targetNode <= 0.6) {
+					int[] coords = {-BOSS_NODES[2], -BOSS_NODES[3]}; 
+					setTargetCoords(coords); 
+				}
+				else if (targetNode <= 0.8) {
+					int[] coords = {-BOSS_NODES[2], BOSS_NODES[3]}; 
+					setTargetCoords(coords); 
+				}
+				else {
+					int[] coords = {BOSS_NODES[2], -BOSS_NODES[3]}; 
+					setTargetCoords(coords); 
+				}
+			} 
+		} 
+		if (getTargetCoords()[0] > getX()) {
+			if (getTargetCoords()[1] > getY()) 
+				move(getSpeed(), getSpeed()); 
+			else 
+				move(getSpeed(), -getSpeed()); 
+		} 
+		else {
+			if (getTargetCoords()[1] > getY()) 
+				move(-getSpeed(), getSpeed()); 
+			else 
+				move(-getSpeed(), -getSpeed()); 
+		} 
+	} 
+	
 	public void specialAttack () {
 		
 	}

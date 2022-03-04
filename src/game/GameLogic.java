@@ -58,8 +58,8 @@ public class GameLogic {
 			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
 	}; 
 	private static Boss[] bossTypeList = {
-			new Boss(-16, 16, 4000, 10, 1, 250, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
-			new Boss(-16, 16, 3000, 15, 1, 400, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
+			new Boss(-16, 16, 1000, 10, 1, 250, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
+			new Boss(-16, 16, 750, 15, 1, 400, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
 	}; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
@@ -342,6 +342,7 @@ public class GameLogic {
 			GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
 		if (state == 0) { // clears game upon exit to title 
 			currentBoss = null; 
+			setBossState(); 
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
 			if (wasGameOver) {// only for death reset 
@@ -543,6 +544,10 @@ public class GameLogic {
 				startShake(3); 
 				if (bossCounterTemp < bossCounter) {
 					bossCounterTemp++; 
+				} 
+				else if (isBoss() && currentBoss.getHealth() <= 0) { 
+					currentBoss = null; 
+					setBossState(); 
 				} 
 				else {
 					bossCounterTemp = 0; 

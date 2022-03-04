@@ -297,6 +297,21 @@ public class Entity {
 		} 		
 		pollAttack(); 
 	}
+	public long getMoveCooldown () {
+		return moveCooldownTimer; 
+	}
+	public void setMoveCooldown (long time) {
+		moveCooldownTimer = time; 
+	}
+	
+	public int[] getTargetCoords () {
+		int[] coords = {lastPlayerX, lastPlayerY}; 
+		return coords; 
+	}
+	public void setTargetCoords (int[] coords) {
+		lastPlayerX = coords[0]; 
+		lastPlayerY = coords[1]; 
+	}
 	
 	// generates projectiles and deals damage respectively 
 	public void pollAttack () {
