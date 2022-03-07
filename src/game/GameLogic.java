@@ -17,6 +17,8 @@ import java.util.zip.ZipInputStream;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*; 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL10.*; 
 
 import game.entity.*; 
 
@@ -45,7 +47,7 @@ public class GameLogic {
 	private static ArrayList<PowerUp> powerUpList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
-	private static int bossCounter = 2; // counts enemies before boss generation // temporarily small for testing 
+	private static int bossCounter = 16; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
@@ -58,8 +60,8 @@ public class GameLogic {
 			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
 	}; 
 	private static Boss[] bossTypeList = {
-			new Boss(-16, 16, 1000, 10, 1, 250, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
-			new Boss(-16, 16, 750, 15, 1, 400, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
+			new Boss(-16, 16, 500, 10, 1, 750, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
+			new Boss(-16, 16, 400, 15, 1, 1200, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
 	}; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
@@ -85,6 +87,8 @@ public class GameLogic {
 	private static int maxShake; 
 	private static int damageFrames = 0; 
 	private static boolean physicalAttackState = false; 
+	
+	private static int[] soundList = new int[8]; 
 	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
@@ -166,6 +170,30 @@ public class GameLogic {
 	}
 	public static void newEffect (int x, int y, int type, int duration) {
 		effectList.add(new Effect(x, y, type, duration)); 
+	}
+	
+	// gets a specific sound id 
+	public static int getSound (int index) {
+		return soundList[index]; 
+	}
+	public static void playSound (int index) {
+		AL10.alSourcePlay(soundList[index]); 
+	}
+	public static void stopSound (int index) {
+		AL10.alSourceStop(soundList[index]); 
+	}
+	public static void loadSounds() {
+		File soundDir = new File("res/Audio"); 
+		File listAudio[] = soundDir.listFiles(); 
+		if (listAudio != null) {
+			for (int i=0; i<listAudio.length; i++) {
+				int buffer = AL10.alGenBuffers(); 
+				// load audio files 
+				
+				soundList[i] = AL10.alGenSources(); 
+				AL10.alSourcei(soundList[i], AL10.AL_BUFFER, buffer); 
+			}
+		}
 	}
 	
 	// power-ups 
@@ -347,6 +375,7 @@ public class GameLogic {
 			projectileList = new ArrayList<Projectile> (); 
 			if (wasGameOver) {// only for death reset 
 				Player player = playerList[PRIMARY_PLAYER]; 
+				bossCounterTemp = 0; 
 				playerList[PRIMARY_PLAYER] = new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, true, keyStates); 
 			} 
 		}
@@ -546,6 +575,7 @@ public class GameLogic {
 					bossCounterTemp++; 
 				} 
 				else if (isBoss() && currentBoss.getHealth() <= 0) { 
+					newPowerUp(currentBoss.getX()+8, currentBoss.getY()+8); 
 					currentBoss = null; 
 					setBossState(); 
 				} 

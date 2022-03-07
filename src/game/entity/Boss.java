@@ -32,7 +32,7 @@ public class Boss extends Entity {
 		this.attackPattern = ap; 
 		spCooldown = cooldown * 4; 
 		spCooldownTimer = GameLogic.getTime(); 
-		moveCooldown = cooldown*128; 
+		moveCooldown = (int)(cooldown*3.5); 
 		updateCollisionBox(); 
 	}
 	
@@ -78,7 +78,7 @@ public class Boss extends Entity {
 	}
 	
 	public void move() { 
-		if (GameLogic.getTime() - getMoveCooldown() >= getCooldown()) { 
+		if (GameLogic.getTime() - getMoveCooldown() >= moveCooldown) { 
 			setMoveCooldown(GameLogic.getTime());  
 			if (Math.random() >= 0.9) {
 				int[] coords = {GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY()}; 
