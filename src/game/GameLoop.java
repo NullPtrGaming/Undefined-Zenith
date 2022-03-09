@@ -8,12 +8,14 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.openal.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
@@ -61,11 +63,17 @@ public class GameLoop {
 	// Method handling the main game loop itself, each frame with event handling 
 	public void loop () {
 		GL.createCapabilities(); 
+		long device = ALC10.alcOpenDevice((ByteBuffer) null);
+		ALCCapabilities deviceCaps = ALC.createCapabilities(device);
+		long context = ALC10.alcCreateContext(device, (IntBuffer) null);
+		ALC10.alcMakeContextCurrent(context);
+		AL.createCapabilities(deviceCaps);
 		glClearColor(0, 0, 0, 0); 
 		glEnable(GL_TEXTURE_2D); 
 		glDisable(GL_DEPTH_TEST); 
 		glEnable(GL_BLEND);
 		loadTextures(); 
+		GameLogic.loadSounds(); 
 		GameLogic.gameInit(window); 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		Renderer render = new Renderer(window, textureList); 
@@ -95,6 +103,7 @@ public class GameLoop {
 			
 			//FPSCounter.StopAndPost(); 
 		}
+		ALC10.alcCloseDevice(device); 
 	}
 	
 	// Self-explanatory method - centers window on the monitor 

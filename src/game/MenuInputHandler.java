@@ -47,6 +47,7 @@ public class MenuInputHandler {
 		 	break; 
 		 	case 2: {
 		 		glfwSetWindowShouldClose(GameLogic.getWindow(), true); 
+		 		
 		 	}
 		 	break; 
 			}

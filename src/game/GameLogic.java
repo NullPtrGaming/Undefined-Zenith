@@ -8,6 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
@@ -17,6 +21,8 @@ import java.util.zip.ZipInputStream;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*; 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.stb.STBVorbis;
+import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL10.*; 
 
@@ -47,7 +53,7 @@ public class GameLogic {
 	private static ArrayList<PowerUp> powerUpList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
-	private static int bossCounter = 16; // counts enemies before boss generation // temporarily small for testing 
+	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
@@ -189,7 +195,13 @@ public class GameLogic {
 			for (int i=0; i<listAudio.length; i++) {
 				int buffer = AL10.alGenBuffers(); 
 				// load audio files 
-				
+				try (STBVorbisInfo info = STBVorbisInfo.malloc()) { 
+		            // Copy to buffer
+					ShortBuffer pcm = AudioLoader.readVorbis(listAudio[i].getPath(), (int)Files.size(Paths.get(listAudio[i].toURI())), info); 
+		            AL10.alBufferData(buffer, info.channels() == 1 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_STEREO16, pcm, info.sample_rate());
+				} catch (Exception e) {
+					continue; 
+				} 
 				soundList[i] = AL10.alGenSources(); 
 				AL10.alSourcei(soundList[i], AL10.AL_BUFFER, buffer); 
 			}
@@ -362,8 +374,10 @@ public class GameLogic {
 	public static void setState (int state) { 
 		int lastState = gameState; 
 		gameState = state; 
-		if (state == 2)
+		if (state == 2) {
 			startTime(); 
+			AL10.alSourcePlay(soundList[1]); 
+		} 
 		else 
 			stopTime(); 
 		if (lastState == 2 || lastState == 1) // game saving automatic after pausing or unpausing game 
@@ -378,8 +392,8 @@ public class GameLogic {
 				bossCounterTemp = 0; 
 				playerList[PRIMARY_PLAYER] = new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, true, keyStates); 
 			} 
+			AL10.alSourcePlay(soundList[0]); 
 		}
-		
 	}
 	
 	// Updates all entities and player movements 
