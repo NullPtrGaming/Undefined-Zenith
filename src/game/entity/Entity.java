@@ -120,6 +120,8 @@ public class Entity {
 		if (this == GameLogic.getEntity(0, true) && h < 0) {
 			//GameLogic.addDamageFrames(20); 
 		}
+		if (h <= 0) 
+			GameLogic.playSound(4); 
 	}
 	// sets attack type through variables 
 	public void setAttackType (int type) {
@@ -317,8 +319,10 @@ public class Entity {
 	public void pollAttack () {
 		if (GameLogic.getTime() - cooldownTimer >= cooldown*2) { 
 			cooldownTimer = GameLogic.getTime(); 
-			if (attackType == ATTACK_PROJECTILE) 
+			if (attackType == ATTACK_PROJECTILE) { 
 				genProjectile(); 
+				GameLogic.playSound(3); 
+			}
 		}
 	}
 	public int getAttackType () {

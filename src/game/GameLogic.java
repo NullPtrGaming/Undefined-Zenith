@@ -116,6 +116,7 @@ public class GameLogic {
 		input = new MenuInputHandler(keyStates); 
 		initMenus(); 
 		GameSaver.loadGame(GameSaver.getExpectedSaveLocation()); 
+		setState(0); 
 	} 
 	
 	// loads a Player for starting the game 
@@ -188,6 +189,11 @@ public class GameLogic {
 	public static void stopSound (int index) {
 		AL10.alSourceStop(soundList[index]); 
 	}
+	public static void playMusic (int index) { // specifically for music switching, stops all other musics 
+		for (int i=0; i<3; i++) 
+			stopSound(i); 
+		playSound(index); 
+	}
 	public static void loadSounds() {
 		File soundDir = new File("res/Audio"); 
 		File listAudio[] = soundDir.listFiles(); 
@@ -204,6 +210,8 @@ public class GameLogic {
 				} 
 				soundList[i] = AL10.alGenSources(); 
 				AL10.alSourcei(soundList[i], AL10.AL_BUFFER, buffer); 
+				if (i <= 2) 
+					AL10.alSourcei(soundList[i], AL10.AL_LOOPING, AL10.AL_TRUE); 
 			}
 		}
 	}
@@ -376,7 +384,7 @@ public class GameLogic {
 		gameState = state; 
 		if (state == 2) {
 			startTime(); 
-			AL10.alSourcePlay(soundList[1]); 
+			playMusic(2); 
 		} 
 		else 
 			stopTime(); 
@@ -392,7 +400,7 @@ public class GameLogic {
 				bossCounterTemp = 0; 
 				playerList[PRIMARY_PLAYER] = new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, true, keyStates); 
 			} 
-			AL10.alSourcePlay(soundList[0]); 
+			playMusic(0); 
 		}
 	}
 	
@@ -520,6 +528,10 @@ public class GameLogic {
 	}
 	public static void setBossState () { 
 		isBoss = (currentBoss != null); 
+		if (isBoss) 
+			playMusic(1); 
+		else 
+			playMusic(2); 
 	} 
 	
 	// returns true if the game can enter a menu state (must have cooldown to prevent spamming) 

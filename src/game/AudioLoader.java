@@ -25,7 +25,7 @@ public class AudioLoader {
 	public static ShortBuffer readVorbis(String resource, int bufferSize, STBVorbisInfo info) throws Exception {
 	    try (MemoryStack stack = MemoryStack.stackPush()) {
 	        
-	    	ByteBuffer vorbis = ioResourceToByteBuffer(resource, bufferSize);
+	    	ByteBuffer vorbis = ioResourceToByteBuffer(resource, bufferSize); 
 	        IntBuffer error = stack.mallocInt(1);
 	        long decoder = STBVorbis.stb_vorbis_open_memory(vorbis, error, null);
 
