@@ -53,7 +53,7 @@ public class GameLogic {
 	private static ArrayList<PowerUp> powerUpList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
-	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
+	private static int bossCounter = 1; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
@@ -80,8 +80,11 @@ public class GameLogic {
 	private static ArrayList<Button> menuButtonList; 
 	private static ArrayList<Button> optionsButtonList; 
 	private static ArrayList<Button> gameOverButtonList; 
+	private static ArrayList<Button> rebindButtonList; 
 	private static ArrayList<Button> tempButtonList = null; 
+	private static ArrayList<Button> tempButtonList2 = null; // for setting the options menu to the rebind menu 
 	private static boolean isOptions = false; 
+	private static boolean isRebindMenu = false; 
 	private static boolean wasGameOver = false; 
 	
 	private static MenuInputHandler input; 
@@ -109,6 +112,7 @@ public class GameLogic {
 		menuButtonList = new ArrayList<Button> (); 
 		optionsButtonList = new ArrayList<Button> (); 
 		gameOverButtonList = new ArrayList<Button> (); 
+		rebindButtonList = new ArrayList<Button> (); 
 		powerUpList = new ArrayList<PowerUp> (); 
 		playerTypeList = new ArrayList<Player> (); 
 		playerList[PRIMARY_PLAYER] = loadPlayer(); 
@@ -275,6 +279,10 @@ public class GameLogic {
 		optionsButtonList.add(new Button(-16, -48, "Switch Character", 7)); 
 		
 		gameOverButtonList.add(new Button(-16, 0, "Game Over", 3)); 
+		
+		for (int i=1; i<8; i++) 
+			rebindButtonList.add(new Button(-16, 108-(36*(i-1)), "", 4)); 
+		rebindButtonList.add(new Button(-16, -144, "Exit", 1)); 
 	} 
 	
 	// is the options menu open? 
@@ -302,6 +310,28 @@ public class GameLogic {
 				menuButtonList = tempButtonList; 
 			}
 			isOptions = false; 
+		}
+	}
+	// toggles rebind menu 
+	public static void toggleRebindMenu () {
+		if (!isRebindMenu) {
+			if (gameState == 0) {
+				tempButtonList2 = titleButtonList; 
+				titleButtonList = rebindButtonList; 
+			}
+			else {
+				tempButtonList2 = menuButtonList; 
+				menuButtonList = rebindButtonList; 
+			}
+			isRebindMenu = true; 
+		}
+		else {
+			if (gameState == 0) {
+				titleButtonList = tempButtonList2; 
+			}
+			else if (gameState == 1) {
+				menuButtonList = tempButtonList2; 
+			}
 		}
 	}
 	
@@ -368,6 +398,19 @@ public class GameLogic {
 			}
 		}
 	}
+	// directly changes a key 
+	public static boolean rebindKey (int index, int key) {
+		int[] keybinds = Input.getKeybinds(); 
+		boolean cancel = false; 
+		for (int i=0; i<keybinds.length; i++) {
+			if (keybinds[i] == key) 
+				cancel = true; 
+		}
+		if (!cancel) 
+			keybinds[index] = key; 
+		return !cancel; 
+	}
+	
 	public static boolean isRebinding () {
 		return rebinding; 
 	}

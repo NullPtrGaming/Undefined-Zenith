@@ -77,7 +77,8 @@ public class MenuInputHandler {
 			}
 			break; 
 			case 1: {
-				GameLogic.setKeysInit(); 
+				//GameLogic.setKeysInit(); 
+				GameLogic.toggleRebindMenu(); 
 				GameSaver.saveGame(); 
 			}
 			break; 
