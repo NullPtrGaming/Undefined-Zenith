@@ -141,7 +141,7 @@ public class Renderer {
 			renderNumbers(); 
 		}
 		
-		if (GameLogic.getState() == 0 && !GameLogic.getOptionState()) { 
+		if (GameLogic.getState() == 0 && GameLogic.getMenuIndex() == 0) { 
 			glBindTexture(GL_TEXTURE_2D, textureList[3]); 
 			glBegin(GL_TRIANGLES); 
 			vertexArray = new float[4]; 

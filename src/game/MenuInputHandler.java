@@ -33,7 +33,7 @@ public class MenuInputHandler {
 	}
 	// calls other methods based on the selected button 
 	public void select () {
-		if (GameLogic.getState() == 0 && !GameLogic.getOptionState()) 
+		if (GameLogic.getState() == 0 && GameLogic.getMenuIndex() == 0) 
 			switch (selectedButton) {
 		 	case 0: {
 		 		GameLogic.setState(2); 
@@ -41,7 +41,7 @@ public class MenuInputHandler {
 		 	}
 		 	break; 
 		 	case 1: {
-		 		GameLogic.toggleOptions(); 
+		 		GameLogic.setMenu(2); 
 		 		selectedButton = 0; 
 		 	}
 		 	break; 
@@ -51,7 +51,7 @@ public class MenuInputHandler {
 		 	}
 		 	break; 
 			}
-		else if (GameLogic.getState() == 1 && !GameLogic.getOptionState() && !GameLogic.getWasGameOver()) 
+		else if (GameLogic.getState() == 1 && GameLogic.getMenuIndex() == 1) 
 			switch (selectedButton) {
 		 	case 0: {
 		 		GameLogic.setState(2); 
@@ -59,7 +59,7 @@ public class MenuInputHandler {
 		 	}
 		 	break; 
 		 	case 1: {
-		 		GameLogic.toggleOptions(); 
+		 		GameLogic.setMenu(2); 
 		 		selectedButton = 0; 
 		 	}
 		 	break; 
@@ -69,16 +69,16 @@ public class MenuInputHandler {
 		 	}
 		 	break; 
 			}
-		else if (GameLogic.getOptionState()) {
+		else if (GameLogic.getMenuIndex() == 2) {
 			switch (selectedButton) {
 			case 0: {
-				GameLogic.toggleOptions(); 
+				GameLogic.setMenu(GameLogic.getState()); 
 				selectedButton = 0; 
 			}
 			break; 
 			case 1: {
 				//GameLogic.setKeysInit(); 
-				GameLogic.toggleRebindMenu(); 
+				GameLogic.setMenu(3); 
 				GameSaver.saveGame(); 
 			}
 			break; 
@@ -114,6 +114,24 @@ public class MenuInputHandler {
 			break; 
 			}
 		}
+		else if (GameLogic.getMenuIndex() == 3) {
+			switch (selectedButton) {
+			case 7: { 
+				GameLogic.setMenu(2); 
+				selectedButton = 0; 
+			} 
+				break; 
+			default: {
+				if (GameLogic.isRebinding()) {
+					GameLogic.rebindKey(selectedButton, Input.getLastKey()); 
+				}
+				else {
+					GameLogic.setKeysPoll(); 
+				}
+			}
+			break; 
+			}
+		} 
 		for (int i=0; i<keyStates.length; i++) 
 			keyStates[i] = false; 
 	}

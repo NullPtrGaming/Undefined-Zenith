@@ -53,7 +53,7 @@ public class GameLogic {
 	private static ArrayList<PowerUp> powerUpList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
-	private static int bossCounter = 1; // counts enemies before boss generation // temporarily small for testing 
+	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
 	private static int currentPlayerIndex = 0; 
@@ -81,10 +81,8 @@ public class GameLogic {
 	private static ArrayList<Button> optionsButtonList; 
 	private static ArrayList<Button> gameOverButtonList; 
 	private static ArrayList<Button> rebindButtonList; 
-	private static ArrayList<Button> tempButtonList = null; 
-	private static ArrayList<Button> tempButtonList2 = null; // for setting the options menu to the rebind menu 
-	private static boolean isOptions = false; 
-	private static boolean isRebindMenu = false; 
+	private static ArrayList<Button> currentButtonList; 
+	private static int menuIndex = 0; 
 	private static boolean wasGameOver = false; 
 	
 	private static MenuInputHandler input; 
@@ -283,62 +281,38 @@ public class GameLogic {
 		for (int i=1; i<8; i++) 
 			rebindButtonList.add(new Button(-16, 108-(36*(i-1)), "", 4)); 
 		rebindButtonList.add(new Button(-16, -144, "Exit", 1)); 
+		
+		currentButtonList = titleButtonList; 
 	} 
 	
-	// is the options menu open? 
-	public static boolean getOptionState () {
-		return isOptions; 
-	}
-	// toggles the options menu 
-	public static void toggleOptions () {
-		if (!isOptions) {
-			if (gameState == 0) {
-				tempButtonList = titleButtonList; 
-				titleButtonList = optionsButtonList; 
-			}
-			else if (gameState == 1) {
-				tempButtonList = menuButtonList; 
-				menuButtonList = optionsButtonList;
-			}
-			isOptions = true; 
-		}
-		else {
-			if (gameState == 0) {
-				titleButtonList = tempButtonList; 
-			}
-			else if (gameState == 1) {
-				menuButtonList = tempButtonList; 
-			}
-			isOptions = false; 
+	// 0=title 1=pause 2=options 3=rebind 4=game over 
+	public static void setMenu (int index) { 
+		menuIndex = index; 
+		switch (index) {
+		case 0: 
+			currentButtonList = titleButtonList; 
+			break; 
+		case 1: 
+			currentButtonList = menuButtonList; 
+			break; 
+		case 2: 
+			currentButtonList = optionsButtonList; 
+			break; 
+		case 3: 
+			currentButtonList = rebindButtonList; 
+			break; 
+		case 4: 
+			currentButtonList = gameOverButtonList; 
+			break; 
 		}
 	}
-	// toggles rebind menu 
-	public static void toggleRebindMenu () {
-		if (!isRebindMenu) {
-			if (gameState == 0) {
-				tempButtonList2 = titleButtonList; 
-				titleButtonList = rebindButtonList; 
-			}
-			else {
-				tempButtonList2 = menuButtonList; 
-				menuButtonList = rebindButtonList; 
-			}
-			isRebindMenu = true; 
-		}
-		else {
-			if (gameState == 0) {
-				titleButtonList = tempButtonList2; 
-			}
-			else if (gameState == 1) {
-				menuButtonList = tempButtonList2; 
-			}
-		}
+	public static int getMenuIndex () {
+		return menuIndex; 
 	}
-	
+		
 	// handles the player's death/game reset 
 	public static void gameOver () {
-		tempButtonList = menuButtonList; 
-		menuButtonList = gameOverButtonList; 
+		setMenu(4); 
 		wasGameOver = true; 
 	}
 	public static boolean getWasGameOver () {
@@ -346,7 +320,7 @@ public class GameLogic {
 	}
 	public static void postGameOver () {
 		setState(0); 
-		menuButtonList = tempButtonList; 
+		setMenu(0); 
 		wasGameOver = false; 
 	}
 	
@@ -438,6 +412,7 @@ public class GameLogic {
 			setBossState(); 
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
+			setMenu(0); 
 			if (wasGameOver) {// only for death reset 
 				Player player = playerList[PRIMARY_PLAYER]; 
 				bossCounterTemp = 0; 
@@ -445,6 +420,8 @@ public class GameLogic {
 			} 
 			playMusic(0); 
 		}
+		else if (state == 1) 
+			setMenu(1); 
 	}
 	
 	// Updates all entities and player movements 
@@ -537,19 +514,15 @@ public class GameLogic {
 	}
 	// returns the number of buttons (dependent on menu state) 
 	public static int numButtons () { 
-		if (gameState == 0)
-			return titleButtonList.size(); 
-		else if (gameState == 1)
-			return menuButtonList.size(); 
+		if (gameState == 0 || gameState == 1)
+			return currentButtonList.size(); 
 		else 
 			return -1; 
 	}
 	// returns the button referenced by index dependent on game state 
 	public static Button getButton (int index) { 
-		if (gameState == 0)
-			return titleButtonList.get(index); 
-		else if (gameState == 1) 
-			return menuButtonList.get(index); 
+		if (gameState == 0 || gameState == 1) 
+			return currentButtonList.get(index); 
 		else 
 			return null; 
 	}
