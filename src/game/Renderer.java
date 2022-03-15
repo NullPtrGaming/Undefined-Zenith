@@ -163,21 +163,59 @@ public class Renderer {
 					renderVertices(0); 
 					glEnd(); 
 				}
+				int tempDirection = 0; 
 				glBindTexture(GL_TEXTURE_2D, buttonTextureList[GameLogic.getButton(i).getTexture()]); 
 				if (GameLogic.getButton(i).getTexture() == 7) 
 					glBindTexture(GL_TEXTURE_2D, GameLogic.getMainPlayer().getTexture()); 
+				if (GameLogic.getMenuIndex() == 3) { // cases for the rebinding menu - weird workarounds 
+					switch (i) {
+					case 0: {
+						tempDirection = 2; 
+						glBindTexture(GL_TEXTURE_2D, buttonTextureList[0]);
+					}
+					break; 
+					case 1: {
+						tempDirection = 3; 
+						glBindTexture(GL_TEXTURE_2D, buttonTextureList[0]);
+					}
+					break; 
+					case 2: {
+						tempDirection = 1; 
+						glBindTexture(GL_TEXTURE_2D, buttonTextureList[0]);
+					}
+					break; 
+					case 3: {
+						tempDirection = 0; 
+						glBindTexture(GL_TEXTURE_2D, buttonTextureList[0]);
+					}
+					break; 
+					case 4: {
+						glBindTexture(GL_TEXTURE_2D, effectTextureList[0]); 
+					}
+					break; 
+					case 5: {
+						glBindTexture(GL_TEXTURE_2D, textureList[5]); 
+					}
+					break; 
+					case 6: {
+						glBindTexture(GL_TEXTURE_2D, buttonTextureList[2]); 
+					}
+					break; 
+					}
+					
+				}
 				glBegin(GL_TRIANGLES); 
 				vertexArray = vertexArrayButtons(GameLogic.getButton(i)); 
 				if (vertexArray != null) 
-					renderVertices(0); 
+					renderVertices(tempDirection); 
 				glEnd(); 
 			} 
-			if (GameLogic.isRebinding()) {
+			if (GameLogic.getMenuIndex() == 3) {
 				vertexArray = new float[4]; 
-				vertexArray[0] = (float)-16/Entity.MAX_X; 
-				vertexArray[1] = (float)60/Entity.MAX_Y;
-				vertexArray[2] = (float)-16/Entity.MAX_X + (float)Button.STANDARD_BUTTON_WIDTH/256; 
-				vertexArray[3] = (float)60/Entity.MAX_Y + (float)Button.STANDARD_BUTTON_HEIGHT/144; 
+				vertexArray[0] = (float)-128/Entity.MAX_X; 
+				vertexArray[1] = (float)108/Entity.MAX_Y; 
+				vertexArray[2] = (float)-128/Entity.MAX_X + (float)Button.STANDARD_BUTTON_WIDTH/256; 
+				vertexArray[3] = (float)108/Entity.MAX_Y + (float)Button.STANDARD_BUTTON_HEIGHT/144; 
 				if (GameLogic.wasRebindSuccess()) 
 					glBindTexture(GL_TEXTURE_2D, textureList[5]); 
 				else 

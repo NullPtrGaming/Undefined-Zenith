@@ -74,6 +74,7 @@ public class GameLogic {
 	private static int[] newKeys = new int[7]; 
 	private static int newKeysIndex = 0; 
 	private static boolean rebinding = false; 
+	private static int reboundButton = -1; 
 	private static boolean rebindSuccess = false; 
 	
 	private static ArrayList<Button> titleButtonList; // Stores buttons for menus - alternate game states 
@@ -344,33 +345,14 @@ public class GameLogic {
 	}
 	
 	// sets keys 
-	public static void setKeysInit () { 
-		newKeysIndex = 0; 
-		rebinding = true; 
-	}
 	public static void setKeysPoll () { 
-		if (rebinding && getMenuCooldownState()) { 
-			boolean cancel = false; 
-			for (int i=0; i<newKeys.length; i++) {
-				cancel = (newKeys[i] == Input.getLastKey()); 
-				if (cancel) {
-					rebindSuccess = false; 
-					break; 
-				} 
-			}
-			if (!cancel) {
-				newKeys[newKeysIndex] = Input.getLastKey(); 
-				newKeysIndex++; 
-				rebindSuccess = true; 
-			} 
-			if (newKeysIndex >= newKeys.length) { 
-				int[] keybinds = Input.getKeybinds(); 
-				for (int i=0; i<newKeys.length; i++) { 
-					keybinds[i] = newKeys[i]; 
-				}
-				rebinding = false; 
-			}
+		if (rebinding && getMenuCooldownState()) {
+			rebindSuccess = rebindKey(reboundButton, Input.getLastKey()); 
 		}
+	}
+	public static void setKeys (int selected) {
+		rebinding = true; 
+		reboundButton = selected; 
 	}
 	// directly changes a key 
 	public static boolean rebindKey (int index, int key) {
@@ -382,6 +364,7 @@ public class GameLogic {
 		}
 		if (!cancel) 
 			keybinds[index] = key; 
+		rebinding = false; 
 		return !cancel; 
 	}
 	

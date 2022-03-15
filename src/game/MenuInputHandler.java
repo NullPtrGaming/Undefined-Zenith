@@ -122,11 +122,8 @@ public class MenuInputHandler {
 			} 
 				break; 
 			default: {
-				if (GameLogic.isRebinding()) {
-					GameLogic.rebindKey(selectedButton, Input.getLastKey()); 
-				}
-				else {
-					GameLogic.setKeysPoll(); 
+				if (!GameLogic.isRebinding()) {
+					GameLogic.setKeys(selectedButton); 
 				}
 			}
 			break; 
@@ -134,5 +131,6 @@ public class MenuInputHandler {
 		} 
 		for (int i=0; i<keyStates.length; i++) 
 			keyStates[i] = false; 
+		selectedButton = 0; 
 	}
 }

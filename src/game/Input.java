@@ -39,8 +39,6 @@ public class Input {
 			if (key == keybinds[RIGHT])
 				keyStates[RIGHT] = (glfwGetKey(window, keybinds[RIGHT]) == GLFW_PRESS); 
 			if (key == keybinds[SELECT]) 
-				keyStates[SELECT] = (glfwGetKey(window, keybinds[SELECT]) == GLFW_PRESS); 
-			if (key == keybinds[SELECT]) 
 				keyStates[SELECT] = (glfwGetKey(window, keybinds[SELECT]) == GLFW_PRESS);
 			if (key == keybinds[ESCAPE]) 
 				keyStates[ESCAPE] = (glfwGetKey(window, keybinds[ESCAPE]) == GLFW_PRESS);
