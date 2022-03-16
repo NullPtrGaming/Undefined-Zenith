@@ -77,6 +77,7 @@ public class GameLoop {
 		GameLogic.gameInit(window); 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		Renderer render = new Renderer(window, textureList); 
+		Sync sync = new Sync(); 
 		
 		while ( !glfwWindowShouldClose(window) ) { // this is the loop 
 			// to be continued... 
@@ -95,11 +96,7 @@ public class GameLoop {
 				GameLogic.getEntity(GameLogic.PRIMARY_PLAYER, true).pollMovement(); 
 			}
 			
-			//try { // testing 
-			//	Thread.sleep(1000/60);
-			//} catch (InterruptedException e) {
-			//	continue; 
-			//} 
+			sync.sync(60); 
 			
 			//FPSCounter.StopAndPost(); 
 		}

@@ -486,4 +486,8 @@ public class Renderer {
 				glViewport((dimensions[0]-dimensions[1]*16/9)/2, 0, dimensions[1] * 16 / 9, dimensions[1]);
 			return dimensions; 
 		}
+		
+		public long getWindow () {
+			return window; 
+		}
 }
