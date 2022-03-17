@@ -118,7 +118,7 @@ public class Entity {
 	public void healthModify (int h) {
 		health += h;  
 		if (this == GameLogic.getEntity(0, true) && h < 0) {
-			//GameLogic.addDamageFrames(20); 
+			GameLogic.addDamageFrames(20); 
 		}
 		if (h <= 0) 
 			GameLogic.playSound(4); 

@@ -71,7 +71,7 @@ public class GameLoop {
 		glClearColor(0, 0, 0, 0); 
 		glEnable(GL_TEXTURE_2D); 
 		glDisable(GL_DEPTH_TEST); 
-		glEnable(GL_BLEND);
+		glEnable(GL_BLEND); 
 		loadTextures(); 
 		GameLogic.loadSounds(); 
 		GameLogic.gameInit(window); 

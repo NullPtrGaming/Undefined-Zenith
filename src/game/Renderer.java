@@ -224,6 +224,25 @@ public class Renderer {
 				renderVertices(0); 
 				glEnd(); 
 			}
+			
+			if (GameLogic.getDamageFrames() > 0) {
+				GameLogic.addDamageFrames(-1); 
+				glBindTexture(GL_TEXTURE_2D, textureList[4]); 
+				glBegin(GL_TRIANGLES); 
+				glTexCoord2f(18, 0);
+				glVertex2f(-1f, -1f);
+				glTexCoord2f(18, 32);
+				glVertex2f(1f, -1f);
+				glTexCoord2f(0, 32);
+				glVertex2f(1f, 1f);
+				glTexCoord2f(0, 32); 
+				glVertex2f(1f, 1f);
+				glTexCoord2f(0, 0);
+				glVertex2f(-1f, 1f);
+				glTexCoord2f(18, 0);
+				glVertex2f(-1f, -1f); 
+				glEnd(); 
+			}
 	} 
 	
 		// Returns an array of vertices for rendering a single tile entity 

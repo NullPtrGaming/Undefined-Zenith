@@ -55,7 +55,7 @@ public class GameLogic {
 	private static boolean isBoss = false; 
 	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
-	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players 
+	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players (characters) 
 	private static int currentPlayerIndex = 0; 
 	private static Entity[] physicalEnemyTypeList = {
 			new Entity(0, 0, 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
@@ -66,8 +66,8 @@ public class GameLogic {
 			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
 	}; 
 	private static Boss[] bossTypeList = {
-			new Boss(-16, 16, 500, 10, 1, 750, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
-			new Boss(-16, 16, 400, 15, 1, 1200, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
+			new Boss(-16, 16, 300, 10, 1, 750, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
+			new Boss(-16, 16, 250, 15, 1, 1200, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
 	}; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
@@ -599,17 +599,17 @@ public class GameLogic {
 				if (bossCounterTemp < bossCounter) {
 					bossCounterTemp++; 
 				} 
-				else if (isBoss() && currentBoss.getHealth() <= 0) { 
-					newPowerUp(currentBoss.getX()+8, currentBoss.getY()+8); 
-					currentBoss = null; 
-					setBossState(); 
-				} 
 				else {
 					bossCounterTemp = 0; 
 					genBoss(); 
 				}
 			}
 		}
+		if (isBoss() && currentBoss.getHealth() <= 0) { 
+			newPowerUp(currentBoss.getX()+8, currentBoss.getY()+8); 
+			currentBoss = null; 
+			setBossState(); 
+		} 
 	}
 	
 	// Sets up screen for a new area - returns true if successful 
