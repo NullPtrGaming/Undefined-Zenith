@@ -207,7 +207,7 @@ public class GameLogic {
 				try (STBVorbisInfo info = STBVorbisInfo.malloc()) { 
 		            // Copy to buffer
 					ShortBuffer pcm = AudioLoader.readVorbis(listAudio[i].getPath(), (int)Files.size(Paths.get(listAudio[i].toURI())), info); 
-		            AL10.alBufferData(buffer, info.channels() == 1 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_STEREO16, pcm, info.sample_rate());
+		            AL10.alBufferData(buffer, info.channels() == 1 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_STEREO16, pcm, info.sample_rate()); 
 				} catch (Exception e) {
 					continue; 
 				} 
@@ -215,6 +215,7 @@ public class GameLogic {
 				AL10.alSourcei(soundList[i], AL10.AL_BUFFER, buffer); 
 				if (i <= 2) 
 					AL10.alSourcei(soundList[i], AL10.AL_LOOPING, AL10.AL_TRUE); 
+				alGetSourcef(soundList[i], AL_SEC_OFFSET); 
 			}
 		}
 	}
