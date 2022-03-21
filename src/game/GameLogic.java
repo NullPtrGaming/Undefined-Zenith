@@ -24,7 +24,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL10.*; 
+import org.lwjgl.openal.AL10.*;
+import org.lwjgl.openal.EXTOffset;
 
 import game.entity.*; 
 
@@ -215,7 +216,6 @@ public class GameLogic {
 				AL10.alSourcei(soundList[i], AL10.AL_BUFFER, buffer); 
 				if (i <= 2) 
 					AL10.alSourcei(soundList[i], AL10.AL_LOOPING, AL10.AL_TRUE); 
-				alGetSourcef(soundList[i], AL_SEC_OFFSET); 
 			}
 		}
 	}

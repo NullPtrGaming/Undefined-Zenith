@@ -35,9 +35,10 @@ public class AudioLoader {
 
 	        int lengthSamples = STBVorbis.stb_vorbis_stream_length_in_samples(decoder);
 
-	        ShortBuffer pcm = MemoryUtil.memAllocShort(lengthSamples);
+	        ShortBuffer pcm = MemoryUtil.memAllocShort(lengthSamples*2);
 
 	        pcm.limit(STBVorbis.stb_vorbis_get_samples_short_interleaved(decoder, channels, pcm) * channels);
+	        
 	        STBVorbis.stb_vorbis_close(decoder);
 
 	        return pcm;
