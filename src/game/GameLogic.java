@@ -56,20 +56,26 @@ public class GameLogic {
 	private static boolean isBoss = false; 
 	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
+	private static int deadEnemyCount = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players (characters) 
 	private static int currentPlayerIndex = 0; 
 	private static Entity[] physicalEnemyTypeList = {
-			new Entity(0, 0, 30, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
-			new Entity(0, 0, 10, 10, 2, 300, Entity.ATTACK_PHYSICAL, true, 2) // moves faster 
+			new Entity(0, 0, 25, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
+			new Entity(0, 0, 5, 10, 2, 300, Entity.ATTACK_PHYSICAL, true, 2) // moves faster 
 	}; 
 	private static Entity[] projEnemyTypeList = {
-			new Entity(0, 0, 20, 10, 1, 500, Entity.ATTACK_PROJECTILE, true, 0), 
-			new Entity(0, 0, 10, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
+			new Entity(0, 0, 15, 10, 1, 500, Entity.ATTACK_PROJECTILE, true, 0), 
+			new Entity(0, 0, 5, 10, 1, 200, Entity.ATTACK_PROJECTILE, true, 3) // fires faster 
 	}; 
 	private static Boss[] bossTypeList = {
 			new Boss(-16, 16, 300, 10, 1, 750, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
 			new Boss(-16, 16, 250, 15, 1, 1200, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
 	}; 
+	
+	private static int tempScore = 0; 
+	private static double enemyHealthMod = 1; 
+	private static double enemyDamageMod = 1; 
+	private static double enemyGenMod = 1; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
 	private static int[] newKeys = new int[7]; 
@@ -335,6 +341,9 @@ public class GameLogic {
 		if (score > highScore) 
 			highScore = score; 
 	}
+	public static void addTempScore (int add) {
+		tempScore += add; 
+	}
 	
 	// gets the menu input handler 
 	public static MenuInputHandler getInput () { 
@@ -397,9 +406,11 @@ public class GameLogic {
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
 			setMenu(0); 
+			tempScore = 0; 
+			deadEnemyCount = 0; 
+			bossCounterTemp = 0; 
 			if (wasGameOver) {// only for death reset 
 				Player player = playerList[PRIMARY_PLAYER]; 
-				bossCounterTemp = 0; 
 				playerList[PRIMARY_PLAYER] = new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, true, keyStates); 
 			} 
 			playMusic(0); 
@@ -421,12 +432,27 @@ public class GameLogic {
 		}
 		pollPowerUps(); 
 		removeDeadEntities(); 
+		updateDifficulty(); 
 		newEntity(); 
+	}
+	
+	// updates the game's difficulty modifiers 
+	public static void updateDifficulty () {
+		double mod = 1; 
+		try {
+			mod = 4/(1+(Math.pow(Math.E, -0.15*(double)tempScore/10000))) - 1; 
+		}
+		catch (Exception e) {
+			return; 
+		}
+		enemyHealthMod = mod; 
+		enemyDamageMod = mod; 
+		enemyGenMod = mod; 
 	}
 	
 	// Enemy generator method - operates on cooldown system 
 	public static void newEntity () {
-		if (!isBoss && entityList.size() <= MAX_ENTITIES && gameTime - enemyCooldownTimer >= ENEMY_COOLDOWN) {
+		if (!isBoss && entityList.size() <= MAX_ENTITIES && gameTime - enemyCooldownTimer >= (ENEMY_COOLDOWN/enemyGenMod)) {
 			enemyCooldownTimer = gameTime; 
 			int[] coords; 
 			for (int i=3; i>0; i--) {
@@ -436,12 +462,14 @@ public class GameLogic {
 					e = physicalEnemyTypeList[(int)(Math.random()*physicalEnemyTypeList.length)].copy(); 
 					e.setX(coords[0]); 
 					e.setY(coords[1]); 
+					e.setHealth((int)(e.getHealth()*enemyHealthMod)); 
 					entityList.add(e); 
 				} 
 				else { 
 					e = projEnemyTypeList[(int)(Math.random()*projEnemyTypeList.length)].copy(); 
 					e.setX(coords[0]); 
 					e.setY(coords[1]); 
+					e.setHealth((int)(e.getHealth()*enemyHealthMod)); 
 					entityList.add(e); 
 				} 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
@@ -513,8 +541,7 @@ public class GameLogic {
 	
 	// generates boss 
 	public static void genBoss () {
-		for (int i=0; i<entityList.size(); i++) // removes normal enemies before fight 
-			entityList.remove(i); 
+		entityList = new ArrayList<Entity> (); 
 		currentBoss = bossTypeList[(int)(Math.random()*bossTypeList.length)].copy(); 
 		setBossState(); 
 	}
@@ -597,6 +624,7 @@ public class GameLogic {
 				i--; 
 				playerList[PRIMARY_PLAYER].scoreAdd(500); 
 				startShake(3); 
+				deadEnemyCount++; 
 				if (bossCounterTemp < bossCounter) {
 					bossCounterTemp++; 
 				} 

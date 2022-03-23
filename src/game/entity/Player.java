@@ -50,7 +50,7 @@ public class Player extends Entity {
 	// Overrides the entity movement, utilizes key states 
 	public void pollMovement () {
 		if (GameLogic.getState() > 1 && isPrimary) { 
-			Entity e = GameLogic.testEntityIntersect(this); 
+			Entity e = GameLogic.testEntityIntersect(this); // this is the cause of the startup death bug 
 			if (e != null && GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown()) { 
 				healthModify(-e.getDamage()); 
 				GameLogic.newEffect(this.getX(), this.getY(), 0, 20); 
@@ -100,6 +100,7 @@ public class Player extends Entity {
 	public void scoreAdd (int add) {
 		score += add; 
 		GameLogic.setHighScore(score); 
+		GameLogic.addTempScore(add); 
 	}
 	public int getScore () { 
 		return score; 

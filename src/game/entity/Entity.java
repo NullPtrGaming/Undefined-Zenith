@@ -56,10 +56,11 @@ public class Entity {
 		this.cooldown = cooldown; 
 		this.rotatable = rotatable; 
 		this.texture = texture; 
-		collisionBox = new Rectangle2D.Float((float)x/MAX_X, (float)y/MAX_Y, BOX_WIDTH, BOX_HEIGHT); 
+		collisionBox = new Rectangle2D.Float(); 
 		setAttackType(type); 
 		cooldownTimer = GameLogic.getTime(); 
 		moveCooldownTimer = GameLogic.getTime(); 
+		updateCollisionBox(); 
 	}
 	
 	// class-based textures 
@@ -122,6 +123,10 @@ public class Entity {
 		}
 		if (h <= 0) 
 			GameLogic.playSound(4); 
+	}
+	// health setting method, only to be used for initialization 
+	public void setHealth (int h) {
+		health = h; 
 	}
 	// sets attack type through variables 
 	public void setAttackType (int type) {
