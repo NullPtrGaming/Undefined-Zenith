@@ -63,11 +63,11 @@ public class GameLoop {
 	// Method handling the main game loop itself, each frame with event handling 
 	public void loop () {
 		GL.createCapabilities(); 
-		long device = ALC10.alcOpenDevice((ByteBuffer) null);
-		ALCCapabilities deviceCaps = ALC.createCapabilities(device);
-		long context = ALC10.alcCreateContext(device, (IntBuffer) null);
-		ALC10.alcMakeContextCurrent(context);
-		AL.createCapabilities(deviceCaps);
+		long device = ALC10.alcOpenDevice((ByteBuffer) null); 
+		ALCCapabilities deviceCaps = ALC.createCapabilities(device); 
+		long context = ALC10.alcCreateContext(device, (IntBuffer) null); 
+		ALC10.alcMakeContextCurrent(context); 
+		AL.createCapabilities(deviceCaps); 
 		glClearColor(0, 0, 0, 0); 
 		glEnable(GL_TEXTURE_2D); 
 		glDisable(GL_DEPTH_TEST); 

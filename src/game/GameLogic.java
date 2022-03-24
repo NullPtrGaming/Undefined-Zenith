@@ -73,6 +73,7 @@ public class GameLogic {
 	}; 
 	
 	private static int tempScore = 0; 
+	private static int tempScoreHealth = 0; 
 	private static double enemyHealthMod = 1; 
 	private static double enemyDamageMod = 1; 
 	private static double enemyGenMod = 1; 
@@ -343,6 +344,15 @@ public class GameLogic {
 	}
 	public static void addTempScore (int add) {
 		tempScore += add; 
+		tempScoreHealth += add; 
+		if (shouldAddScoreHealth()) 
+			getMainPlayer().healthModify(10); 
+	}
+	public static boolean shouldAddScoreHealth () {
+		boolean result = tempScoreHealth >= 10000; 
+		if (result) 
+			tempScoreHealth = 0; 
+		return result; 
 	}
 	
 	// gets the menu input handler 
@@ -460,18 +470,15 @@ public class GameLogic {
 				Entity e; 
 				if (Math.random() >= 0.4) { 
 					e = physicalEnemyTypeList[(int)(Math.random()*physicalEnemyTypeList.length)].copy(); 
-					e.setX(coords[0]); 
-					e.setY(coords[1]); 
-					e.setHealth((int)(e.getHealth()*enemyHealthMod)); 
-					entityList.add(e); 
 				} 
 				else { 
 					e = projEnemyTypeList[(int)(Math.random()*projEnemyTypeList.length)].copy(); 
-					e.setX(coords[0]); 
-					e.setY(coords[1]); 
-					e.setHealth((int)(e.getHealth()*enemyHealthMod)); 
-					entityList.add(e); 
 				} 
+				e.setX(coords[0]); 
+				e.setY(coords[1]); 
+				e.setHealth((int)(e.getHealth()*enemyHealthMod)); 
+				e.setDamage((int)(e.getDamage()*enemyDamageMod)); 
+				entityList.add(e); 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
 					return; 
 				else 
@@ -544,6 +551,8 @@ public class GameLogic {
 		entityList = new ArrayList<Entity> (); 
 		currentBoss = bossTypeList[(int)(Math.random()*bossTypeList.length)].copy(); 
 		setBossState(); 
+		currentBoss.setHealth((int)(currentBoss.getHealth()*enemyHealthMod)); 
+		currentBoss.setDamage((int)(currentBoss.getDamage()*enemyDamageMod)); 
 	}
 	// gets current boss 
 	public static Boss getBoss () {
@@ -618,7 +627,7 @@ public class GameLogic {
 	public static void removeDeadEntities () { 
 		for (int i=0; i<entityList.size(); i++) {
 			if (entityList.get(i).getHealth() <= 0) {
-				if (Math.random() >= 0.95) 
+				if (Math.random() >= 0.9) 
 					newPowerUp(entityList.get(i).getX(), entityList.get(i).getY()); 
 				entityList.remove(i); 
 				i--; 
@@ -638,6 +647,7 @@ public class GameLogic {
 			newPowerUp(currentBoss.getX()+8, currentBoss.getY()+8); 
 			currentBoss = null; 
 			setBossState(); 
+			getMainPlayer().scoreAdd(1000); 
 		} 
 	}
 	

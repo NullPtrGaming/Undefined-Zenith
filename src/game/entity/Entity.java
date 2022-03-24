@@ -107,9 +107,11 @@ public class Entity {
 	
 	public void setX (int x) {
 		this.x = x; 
+		updateCollisionBox(); 
 	}
 	public void setY (int y) {
 		this.y = y; 
+		updateCollisionBox(); 
 	}
 	// changes speed by given value 
 	public void accelerate (int acceleration) {
@@ -118,6 +120,8 @@ public class Entity {
 	// Changes health by the given value 
 	public void healthModify (int h) {
 		health += h;  
+		if (health < 0) 
+			health = 0; 
 		if (this == GameLogic.getEntity(0, true) && h < 0) {
 			GameLogic.addDamageFrames(20); 
 		}
@@ -128,6 +132,11 @@ public class Entity {
 	public void setHealth (int h) {
 		health = h; 
 	}
+	// same thing for damage 
+	public void setDamage (int d) {
+		damage = d; 
+	}
+	
 	// sets attack type through variables 
 	public void setAttackType (int type) {
 		attackType = type; 

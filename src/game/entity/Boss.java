@@ -57,6 +57,7 @@ public class Boss extends Entity {
 				GameLogic.newEffect(GameLogic.getProjectile(i).getX(), GameLogic.getProjectile(i).getY(), 0, 20); 
 				GameLogic.startShake(2); 
 				GameLogic.removeProjectile(i); 
+				GameLogic.getMainPlayer().scoreAdd(100); 
 			}
 		}
 		if (GameLogic.getMainPlayer().getAttackType() == ATTACK_PHYSICAL && GameLogic.getMainPlayer().getAttackCollisions().intersects(collisionBox)) { 
