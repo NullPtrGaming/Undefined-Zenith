@@ -77,6 +77,7 @@ public class GameLogic {
 	private static double enemyHealthMod = 1; 
 	private static double enemyDamageMod = 1; 
 	private static double enemyGenMod = 1; 
+	private static double enemySpeedMod = 1; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
 	private static int[] newKeys = new int[7]; 
@@ -442,12 +443,15 @@ public class GameLogic {
 		}
 		pollPowerUps(); 
 		removeDeadEntities(); 
-		updateDifficulty(); 
+		updateDifficulty(false); 
 		newEntity(); 
 	}
 	
 	// updates the game's difficulty modifiers 
-	public static void updateDifficulty () {
+	public static void updateDifficulty (boolean isDamage) {
+		if (isDamage) {
+			tempScore -= 300; 
+		}
 		double mod = 1; 
 		try {
 			mod = 4/(1+(Math.pow(Math.E, -0.15*(double)tempScore/10000))) - 1; 
@@ -458,6 +462,7 @@ public class GameLogic {
 		enemyHealthMod = mod; 
 		enemyDamageMod = mod; 
 		enemyGenMod = mod; 
+		enemySpeedMod = mod; 
 	}
 	
 	// Enemy generator method - operates on cooldown system 
@@ -478,6 +483,7 @@ public class GameLogic {
 				e.setY(coords[1]); 
 				e.setHealth((int)(e.getHealth()*enemyHealthMod)); 
 				e.setDamage((int)(e.getDamage()*enemyDamageMod)); 
+				e.setCooldown((int)(e.getCooldown()/enemySpeedMod)); 
 				entityList.add(e); 
 				if (testEntityIntersect(entityList.get(entityList.size()-1)) == null && Math.abs(coords[0] - playerList[PRIMARY_PLAYER].getX()) > 16 && Math.abs(coords[1] - playerList[PRIMARY_PLAYER].getY()) > 16) 
 					return; 
@@ -553,6 +559,7 @@ public class GameLogic {
 		setBossState(); 
 		currentBoss.setHealth((int)(currentBoss.getHealth()*enemyHealthMod)); 
 		currentBoss.setDamage((int)(currentBoss.getDamage()*enemyDamageMod)); 
+		currentBoss.setCooldown((int)(currentBoss.getCooldown()/enemySpeedMod)); 
 	}
 	// gets current boss 
 	public static Boss getBoss () {

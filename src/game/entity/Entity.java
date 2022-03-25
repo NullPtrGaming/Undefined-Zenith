@@ -127,6 +127,8 @@ public class Entity {
 		}
 		if (h <= 0) 
 			GameLogic.playSound(4); 
+		if (this.equals(GameLogic.getEntity(0, true))) 
+			GameLogic.updateDifficulty(true); 
 	}
 	// health setting method, only to be used for initialization 
 	public void setHealth (int h) {
