@@ -26,6 +26,7 @@ public class PowerUp {
 	public static void loadTextures (TextureLoader textureLoader) {
 		textureArray[0] = textureLoader.loadTexture("res/PowerUps/Heart.png"); 
 		textureArray[1] = textureLoader.loadTexture("res/PowerUps/RapidFire.png"); 
+		textureArray[2] = textureLoader.loadTexture("res/PowerUps/GoldHeart.png"); 
 	}
 	public static int[] getTextures () {
 		return textureArray; 
@@ -56,6 +57,11 @@ public class PowerUp {
 		break; 
 		case 1: {
 			GameLogic.getMainPlayer().rapidFireStart(2, 10000); 
+		}
+		break; 
+		case 2: {
+			if (GameLogic.getMainPlayer().getHealth() < GameLogic.getMainPlayer().getOriginalHealth()) 
+				GameLogic.getMainPlayer().healthModify(GameLogic.getMainPlayer().getOriginalHealth()-GameLogic.getMainPlayer().getHealth()); 
 		}
 		}
 	}

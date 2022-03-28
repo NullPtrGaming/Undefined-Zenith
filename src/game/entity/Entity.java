@@ -39,6 +39,8 @@ public class Entity {
 	private int cooldown; 
 	private boolean rotatable; // determines if the texture can be rotated 
 	private int attackType = ATTACK_PHYSICAL; 
+	private double extraMovementX = 0; 
+	private double extraMovementY = 0; 
 	
 	private long cooldownTimer; // for determining cooldown times 
 	private long moveCooldownTimer; 
@@ -211,7 +213,7 @@ public class Entity {
 			if (this == GameLogic.getEntity(0, true) && GameLogic.isBoss() && getCollisionBox().intersects(GameLogic.getBoss().getCollisionBox())) {
 				if (GameLogic.getBoss().isCooldown()) { 
 					GameLogic.getMainPlayer().healthModify(-GameLogic.getBoss().getDamage()); 
-					GameLogic.newEffect(x, y, 0, 20); 
+					GameLogic.newEffect((int)x, (int)y, 0, 20); 
 					GameLogic.startShake(2); 
 				} 
 				while (getCollisionBox().intersects(GameLogic.getBoss().getCollisionBox())) {
@@ -275,7 +277,7 @@ public class Entity {
 		else if (this.y < -1*MAX_Y)
 			this.y = 128; 
 		updateCollisionBox(); 
-		setDirection(x, y); 
+		setDirection((int)x, (int)y); 
 	}
 
 	public void pollMovement () { 

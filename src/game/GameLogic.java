@@ -651,7 +651,7 @@ public class GameLogic {
 			}
 		}
 		if (isBoss() && currentBoss.getHealth() <= 0) { 
-			newPowerUp(currentBoss.getX()+8, currentBoss.getY()+8); 
+			powerUpList.add(new PowerUp(currentBoss.getX()+8, currentBoss.getY()+8, 2)); 
 			currentBoss = null; 
 			setBossState(); 
 			getMainPlayer().scoreAdd(1000); 
