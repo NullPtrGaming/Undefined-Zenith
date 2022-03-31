@@ -496,10 +496,10 @@ public class GameLogic {
 	// Generates a random coordinate pair in a 2-position int array 
 	public static int[] genCoordinates () {
 		int[] coords = new int[2]; 
-		coords[0] = (int)(Math.random()*256); 
+		coords[0] = (int)(Math.random()*240); 
 		if (Math.random() < 0.5) 
 			coords[0] *= -1; 
-		coords[1] = (int)(Math.random()*144); 
+		coords[1] = (int)(Math.random()*128); 
 		if (Math.random() < 0.5) 
 			coords[1] *= -1; 
 		return coords; 
