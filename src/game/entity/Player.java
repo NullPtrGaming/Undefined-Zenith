@@ -146,7 +146,7 @@ public class Player extends Entity {
 	} 
 	
 	public void setAttackCollisions () { // sets attack collision rectangle, only used for physical attack 
-		attackCollisionBox.setRect(((float)getX()-24)/MAX_X, ((float)getY()-24)/MAX_Y, (float)64/MAX_X, (float)64/MAX_Y); 
+		attackCollisionBox.setRect(((float)getX()-28)/MAX_X, ((float)getY()-28)/MAX_Y, (float)72/MAX_X, (float)72/MAX_Y); 
 	}
 	public Rectangle2D getAttackCollisions () {
 		return attackCollisionBox; 
@@ -157,9 +157,17 @@ public class Player extends Entity {
 		if (GameLogic.getTime() - getCooldownTimer() >= getCooldown()*2) {
 			setCooldownTimer(GameLogic.getTime()); 
 			ArrayList<Entity> hitEnemies = GameLogic.testPhysicalAttackIntersect(); 
+			if (GameLogic.isBoss() && GameLogic.getBoss().getCollisionBox().intersects(GameLogic.getBoss().getCollisionBox())) {
+				hitEnemies.add(GameLogic.getBoss()); 
+			}
 			for (Entity e : hitEnemies) {
 				e.healthModify(-this.getDamage()); 
-				GameLogic.newEffect(e.getX(), e.getY(), 0, 20); 
+				if (!e.equals(GameLogic.getBoss())) 
+					GameLogic.newEffect(e.getX(), e.getY(), 0, 20); 
+				else {
+					Boss b = (Boss)e; 
+					GameLogic.newEffect(e.getX()+(int)(b.getW()*128)-8, e.getY()+(int)(b.getH()*72)-8, 0, 20);
+				} 
 				GameLogic.startShake(2); 
 			}
 		}

@@ -134,7 +134,7 @@ public class GameLogic {
 	// loads a Player for starting the game 
 	public static Player loadPlayer () {
 		playerTypeList.add(new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, Player.getTextures()[0], true, true, keyStates)); 
-		playerTypeList.add(new Player(0, 0, 70, 5, 2, 250, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
+		playerTypeList.add(new Player(0, 0, 70, 10, 2, 250, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
 		Player player; 
 		File playerDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"Players"); 
 		File listDir[] = playerDir.listFiles(); 
@@ -272,25 +272,27 @@ public class GameLogic {
 	
 	// sets button lists with buttons 
 	public static void initMenus () {
-		titleButtonList.add(new Button(-16, 0, "Play", 1)); 
-		titleButtonList.add(new Button(-16, -48, "Settings", 2)); 
-		titleButtonList.add(new Button(-16, -96, "Exit", 3)); 
+		titleButtonList.add(new Button(-16, 0, "PLAY", 1)); 
+		titleButtonList.add(new Button(-16, -48, "SETTINGS", 2)); 
+		titleButtonList.add(new Button(-16, -96, "EXIT", 3)); 
 		
-		menuButtonList.add(new Button(-16, 48, "Resume", 1)); 
-		menuButtonList.add(new Button(-16, -16, "Settings", 2)); 
-		menuButtonList.add(new Button(-16, -80, "Save and Exit", 3)); 
+		menuButtonList.add(new Button(-16, 48, "RESUME", 1)); 
+		menuButtonList.add(new Button(-16, -16, "SETTINGS", 2)); 
+		menuButtonList.add(new Button(-16, -80, "SAVE+EXIT", 3)); 
 		
-		optionsButtonList.add(new Button(-16, 96, "Exit", 1)); 
-		optionsButtonList.add(new Button(-16, 60, "Rebind Keys", 4)); 
-		optionsButtonList.add(new Button(-16, 24, "Select = Attack", 6)); 
-		optionsButtonList.add(new Button(-16, -12, "Fullscreen", 5)); 
-		optionsButtonList.add(new Button(-16, -48, "Switch Character", 7)); 
+		optionsButtonList.add(new Button(-16, 96, "EXIT", 1)); 
+		optionsButtonList.add(new Button(-16, 60, "REBIND KEYS", 4)); 
+		optionsButtonList.add(new Button(-16, 24, "SELECT = ATTACK", 6)); 
+		optionsButtonList.add(new Button(-16, -12, "FULLSCREEN", 5)); 
+		optionsButtonList.add(new Button(-16, -48, "CHARACTER", 7)); 
 		
-		gameOverButtonList.add(new Button(-16, 0, "Game Over", 3)); 
+		gameOverButtonList.add(new Button(-16, 0, "GAME OVER", 3)); 
+		
+		String[] buttonNames = {"UP", "DOWN", "LEFT", "RIGHT", "ATTACK", "SELECT", "ESCAPE"}; 
 		
 		for (int i=1; i<8; i++) 
-			rebindButtonList.add(new Button(-16, 108-(36*(i-1)), "", 4)); 
-		rebindButtonList.add(new Button(-16, -144, "Exit", 1)); 
+			rebindButtonList.add(new Button(-16, 108-(36*(i-1)), buttonNames[i-1], 4)); 
+		rebindButtonList.add(new Button(-16, -144, "EXIT", 1)); 
 		
 		currentButtonList = titleButtonList; 
 	} 

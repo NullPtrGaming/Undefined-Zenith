@@ -60,11 +60,6 @@ public class Boss extends Entity {
 				GameLogic.getMainPlayer().scoreAdd(100); 
 			}
 		}
-		if (GameLogic.getMainPlayer().getAttackType() == ATTACK_PHYSICAL && GameLogic.getMainPlayer().getAttackCollisions().intersects(collisionBox)) { 
-			healthModify(-GameLogic.getMainPlayer().getDamage()); 
-			GameLogic.newEffect(getX(), getY(), 0, 20); 
-			GameLogic.startShake(2); 
-		} 
 		if (isCooldown()) {
 			pollAttack(); 
 			setCooldownTimer(GameLogic.getTime()); 
