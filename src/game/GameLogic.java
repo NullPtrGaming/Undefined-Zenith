@@ -324,6 +324,7 @@ public class GameLogic {
 		
 	// handles the player's death/game reset 
 	public static void gameOver () {
+		menuCooldownTimer = System.currentTimeMillis() + MENU_COOLDOWN; 
 		setMenu(4); 
 		wasGameOver = true; 
 	}
@@ -423,8 +424,12 @@ public class GameLogic {
 			deadEnemyCount = 0; 
 			bossCounterTemp = 0; 
 			if (wasGameOver) {// only for death reset 
-				Player player = playerList[PRIMARY_PLAYER]; 
-				playerList[PRIMARY_PLAYER] = new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, true, keyStates); 
+				int i=0; 
+				for (Player player : playerTypeList) { 
+					playerTypeList.set(i, new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, player.isPrimary(), keyStates)); 
+					setMainPlayer(currentPlayerIndex); 
+					i++; 
+				} 
 			} 
 			playMusic(0); 
 		}

@@ -177,6 +177,9 @@ public class Player extends Entity {
 	public void makePrimary (boolean primary) {
 		isPrimary = primary; 
 	}
+	public boolean isPrimary () {
+		return isPrimary; 
+	}
 	
 	public int getOriginalHealth () {
 		return originalHealth; 

@@ -29,7 +29,7 @@ public class GameSaver {
 		try { 
 			saveFile.createNewFile(); 
 			FileWriter saveWriter = new FileWriter("UndefinedZenithSave.txt"); 
-			saveWriter.write("Score: " + GameLogic.getMainPlayer().getScore() + "\n"); // saves score 
+			//saveWriter.write("Score: " + GameLogic.getMainPlayer().getScore() + "\n"); // saves score (disabled) 
 			saveWriter.write("Keybinds: "); 
 			for (int i=0; i<Input.getKeybinds().length; i++)
 				saveWriter.write(Input.getKeybinds()[i] + " "); // saves key binds 
@@ -51,7 +51,6 @@ public class GameSaver {
 		try { 
 			saveFile.createNewFile(); 
 			FileWriter saveWriter = new FileWriter(path); 
-			saveWriter.write("Score: " + GameLogic.getMainPlayer().getScore() + "\n"); // saves score 
 			saveWriter.write("Keybinds: "); 
 			for (int i=0; i<Input.getKeybinds().length; i++)
 				saveWriter.write(Input.getKeybinds()[i] + " "); // saves key binds 
@@ -76,7 +75,7 @@ public class GameSaver {
 			Scanner saveReader = new Scanner(saveFile); 
 			while (!saveReader.hasNextInt()) 
 				saveReader.next(); 
-			GameLogic.getMainPlayer().scoreAdd(saveReader.nextInt()); // loads score 
+			//GameLogic.getMainPlayer().scoreAdd(saveReader.nextInt()); // loads score (nope) 
 			while (!saveReader.hasNextInt()) 
 				saveReader.next();
 			for (int i=0; i<Input.getKeybinds().length; i++) 
@@ -109,7 +108,6 @@ public class GameSaver {
 			Scanner saveReader = new Scanner(saveFile); 
 			while (!saveReader.hasNextInt()) 
 				saveReader.next(); 
-			GameLogic.getMainPlayer().scoreAdd(saveReader.nextInt()); // loads score 
 			while (!saveReader.hasNextInt()) 
 				saveReader.next();
 			for (int i=0; i<Input.getKeybinds().length; i++) 
