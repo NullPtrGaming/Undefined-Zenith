@@ -2,18 +2,27 @@
 
 package game;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -106,6 +115,8 @@ public class GameLogic {
 	private static boolean physicalAttackState = false; 
 	
 	private static int[] soundList = new int[8]; 
+	
+	private static int testNumber = 0; 
 	
 	// Initializes game logic, including key states and the entity lists 
 	public static void gameInit (long window) {  
@@ -207,25 +218,27 @@ public class GameLogic {
 		playSound(index); 
 	}
 	public static void loadSounds() {
-		File soundDir = new File("res/Audio"); 
-		File listAudio[] = soundDir.listFiles(); 
-		if (listAudio != null) {
-			for (int i=0; i<listAudio.length; i++) {
-				int buffer = AL10.alGenBuffers(); 
-				// load audio files 
-				try (STBVorbisInfo info = STBVorbisInfo.malloc()) { 
-		            // Copy to buffer
-					ShortBuffer pcm = AudioLoader.readVorbis(listAudio[i].getPath(), (int)Files.size(Paths.get(listAudio[i].toURI())), info); 
-		            AL10.alBufferData(buffer, info.channels() == 1 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_STEREO16, pcm, info.sample_rate()); 
-				} catch (Exception e) {
-					continue; 
-				} 
-				soundList[i] = AL10.alGenSources(); 
-				AL10.alSourcei(soundList[i], AL10.AL_BUFFER, buffer); 
-				if (i <= 2) 
-					AL10.alSourcei(soundList[i], AL10.AL_LOOPING, AL10.AL_TRUE); 
-			}
+		String[] pathList = {"res/Audio/01 Spaceflight.ogg", "res/Audio/02 Zenith.ogg", "res/Audio/03 Undefined.ogg", "res/Audio/s_01 Laser.ogg", "res/Audio/s_02 Damage.ogg"}; 
+		for (int i=0; i<pathList.length; i++) {
+			int buffer = AL10.alGenBuffers(); 
+			// load audio files 
+			try (STBVorbisInfo info = STBVorbisInfo.malloc()) { 
+	            // Copy to buffer
+				ShortBuffer pcm = AudioLoader.readVorbis(pathList[i], 1048576, info); 
+	            AL10.alBufferData(buffer, info.channels() == 1 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_STEREO16, pcm, info.sample_rate()); 
+			} catch (Exception e) {
+				continue; 
+			} 
+			soundList[i] = AL10.alGenSources(); 
+			AL10.alSourcei(soundList[i], AL10.AL_BUFFER, buffer); 
+			if (i <= 2) 
+				AL10.alSourcei(soundList[i], AL10.AL_LOOPING, AL10.AL_TRUE); 
 		}
+	}
+	
+	// for debugging 
+	public static int getTestNumber () {
+		return testNumber; 
 	}
 	
 	// power-ups 

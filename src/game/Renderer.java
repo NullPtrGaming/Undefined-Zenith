@@ -430,6 +430,8 @@ public class Renderer {
 			vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 			renderNumberVertices(10, false); 
 			
+			//renderNumber(0, 128, GameLogic.getTestNumber()); // for debug purposes, should be disabled otherwise 
+			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE); 
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE); 
 		}
@@ -459,6 +461,34 @@ public class Renderer {
 			glTexCoord2f(textureArray[1], textureArray[2]);
 			glVertex2f(vertexArray[2], vertexArray[1]);
 			glEnd(); 
+		}
+		// currently unused, to be used later for different number renders 
+		public void renderNumber (int x, int y, int number) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL13.GL_CLAMP_TO_BORDER); 
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL13.GL_CLAMP_TO_BORDER); 
+			final float OFFSET_W = (float)1/32; 
+			final float OFFSET_H = (float)1/18; 
+			final int NUMBER_OFFSET = 8; 
+			vertexArray = new float[4]; 
+			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
+			if (number == 0) {
+				x -= NUMBER_OFFSET; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+				renderNumberVertices(0, true); 
+			} 
+			while (number > 0) {
+				int tempDigit = number % 10; 
+				number /= 10; 
+				x -= NUMBER_OFFSET; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+				renderNumberVertices(tempDigit, true); 
+			}
 		}
 		
 		// renders and polls Effects 

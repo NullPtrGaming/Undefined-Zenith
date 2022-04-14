@@ -56,7 +56,7 @@ public class AudioLoader {
             }
         } else {
             try (
-                    InputStream source = AudioLoader.class.getResourceAsStream(resource);
+                    InputStream source = ClassLoader.getSystemClassLoader().getResourceAsStream(resource); 
                     ReadableByteChannel rbc = Channels.newChannel(source)) {
                 buffer = BufferUtils.createByteBuffer(bufferSize); 
 
@@ -82,4 +82,5 @@ public class AudioLoader {
         newBuffer.put(buffer);
         return newBuffer;
     }
+	
 }

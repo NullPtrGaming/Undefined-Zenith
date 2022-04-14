@@ -138,5 +138,17 @@ public class GameSaver {
 			saveGame(); 
 		} 
 	}
+	
+	// writes a log file 
+	public static void logWrite (String data) {
+		File logDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"log.txt"); 
+		try {
+			FileWriter logWriter = new FileWriter(logDir); 
+			logWriter.write(data + "\n"); 
+			logWriter.close(); 
+		} catch (IOException e) {
+			return; 
+		} 
+	}
 }
 
