@@ -209,6 +209,7 @@ public class Renderer {
 				if (vertexArray != null) 
 					renderVertices(tempDirection); 
 				glEnd(); 
+				renderText(GameLogic.getButton(i).getName(), GameLogic.getButton(i).getX()+GameLogic.getButton(i).getWidth()+8, GameLogic.getButton(i).getY()+8); 
 			} 
 			if (GameLogic.getMenuIndex() == 3) {
 				vertexArray = new float[4]; 
@@ -488,6 +489,43 @@ public class Renderer {
 				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
 				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 				renderNumberVertices(tempDigit, true); 
+			}
+		}
+		
+		// renders a String at a position 
+		public void renderText (String text, int x, int y) {
+			final int ASCII_OFFSET = 64; // normalizes 'A' to the starting position 
+			final int LETTER_OFFSET = 10; 
+			final float OFFSET_W = (float)1/32; 
+			final float OFFSET_H = (float)1/18; 
+			glBindTexture(GL_TEXTURE_2D, textureList[8]); 
+			vertexArray = new float[4]; 
+			for (int i=0; i<text.length(); i++) {
+				int c = (int)text.charAt(i) - ASCII_OFFSET; 
+				if (c < 0 || c > 26) // spaces check 
+					c = 0; 
+				float[] textureArray = new float[2]; 
+				textureArray[0] = (float)c/27; 
+				textureArray[1] = (float)(c+1)/27; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+				glBegin(GL_TRIANGLES); 
+				glTexCoord2f(textureArray[1], 0f);
+				glVertex2f(vertexArray[2], vertexArray[1]);
+				glTexCoord2f(textureArray[1], 1f);
+				glVertex2f(vertexArray[2], vertexArray[3]);
+				glTexCoord2f(textureArray[0], 1f);
+				glVertex2f(vertexArray[0], vertexArray[3]);
+				glTexCoord2f(textureArray[0], 1f);
+				glVertex2f(vertexArray[0], vertexArray[3]);
+				glTexCoord2f(textureArray[0], 0f);
+				glVertex2f(vertexArray[0], vertexArray[1]);
+				glTexCoord2f(textureArray[1], 0f);
+				glVertex2f(vertexArray[2], vertexArray[1]);
+				glEnd(); 
+				x += LETTER_OFFSET; 
 			}
 		}
 		

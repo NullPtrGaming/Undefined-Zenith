@@ -75,5 +75,8 @@ public class Button {
 	public int getHeight () {
 		return h; 
 	}
-	
+	// name string 
+	public String getName () {
+		return name; 
+	}
 }

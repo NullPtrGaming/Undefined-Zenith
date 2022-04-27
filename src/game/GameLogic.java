@@ -291,11 +291,11 @@ public class GameLogic {
 		
 		menuButtonList.add(new Button(-16, 48, "RESUME", 1)); 
 		menuButtonList.add(new Button(-16, -16, "SETTINGS", 2)); 
-		menuButtonList.add(new Button(-16, -80, "SAVE+EXIT", 3)); 
+		menuButtonList.add(new Button(-16, -80, "EXIT", 3)); 
 		
 		optionsButtonList.add(new Button(-16, 96, "EXIT", 1)); 
 		optionsButtonList.add(new Button(-16, 60, "REBIND KEYS", 4)); 
-		optionsButtonList.add(new Button(-16, 24, "SELECT = ATTACK", 6)); 
+		optionsButtonList.add(new Button(-16, 24, "SELECT ATTACK", 6)); 
 		optionsButtonList.add(new Button(-16, -12, "FULLSCREEN", 5)); 
 		optionsButtonList.add(new Button(-16, -48, "CHARACTER", 7)); 
 		

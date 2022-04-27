@@ -30,7 +30,7 @@ import game.entity.Projectile;
 public class GameLoop {
 	
 	private long window; // Window ID  
-	private int[] textureList = new int[8]; 
+	private int[] textureList = new int[9]; 
 
 	// Constructor, initializes GLFW and other important stuff - recommended code adapted from main LWJGL documentation 
 	public GameLoop () { 
@@ -136,6 +136,7 @@ public class GameLoop {
 		textureList[5] = textureLoader.loadTexture("res/Check.png"); 
 		textureList[6] = textureLoader.loadTexture("res/X.png"); 
 		textureList[7] = textureLoader.loadTexture("res/Projectiles/Physical Attack.png"); 
+		textureList[8] = textureLoader.loadTexture("res/Letters.png"); 
 		Projectile.loadTextures(textureLoader); 
 		Entity.loadTextures(textureLoader); 
 		Player.loadTextures(textureLoader); 
