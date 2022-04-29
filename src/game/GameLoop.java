@@ -23,6 +23,7 @@ import game.entity.Boss;
 import game.entity.Button;
 import game.entity.Effect;
 import game.entity.Entity;
+import game.entity.Obstacle;
 import game.entity.Player;
 import game.entity.PowerUp;
 import game.entity.Projectile;
@@ -144,6 +145,7 @@ public class GameLoop {
 		Button.loadTextures(textureLoader); 
 		PowerUp.loadTextures(textureLoader); 
 		Boss.loadTextures(textureLoader); 
+		Obstacle.loadTextures(textureLoader); 
 	}
 	
 	// gets the window handle 

@@ -250,6 +250,20 @@ public class Entity {
 						}
 					}
 				}
+				Obstacle tempO = GameLogic.testObstacleIntersect(this); 
+				Obstacle o = tempO; 
+				while (tempO != null && o == tempO) { 
+					if (o.getX() > this.x) 
+						this.x--; 
+					else 
+						this.x++; 
+					if (o.getY() > this.y)
+						this.y--; 
+					else
+						this.y++; 
+					updateCollisionBox(); 
+					o = GameLogic.testObstacleIntersect(this); 
+				} 
 				if (tempX > 0) {
 					if (x > 0)
 						this.x++; 

@@ -61,6 +61,7 @@ public class GameLogic {
 	private static ArrayList<Entity> entityList; 
 	private static ArrayList<Projectile> projectileList; 
 	private static ArrayList<PowerUp> powerUpList; 
+	private static ArrayList<Obstacle> obstacleList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
 	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
@@ -133,6 +134,7 @@ public class GameLogic {
 		gameOverButtonList = new ArrayList<Button> (); 
 		rebindButtonList = new ArrayList<Button> (); 
 		powerUpList = new ArrayList<PowerUp> (); 
+		obstacleList = new ArrayList<Obstacle> (); 
 		playerTypeList = new ArrayList<Player> (); 
 		playerList[PRIMARY_PLAYER] = loadPlayer(); 
 		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
@@ -261,6 +263,28 @@ public class GameLogic {
 				powerUpList.remove(i); 
 				i--; 
 			}
+		}
+	}
+	
+	// obstacle handling 
+	public static void newObstacle (int x, int y, int type) {
+		obstacleList.add(new Obstacle(x, y, type)); 
+	}
+	public static Obstacle testObstacleIntersect (Entity e) {
+		Obstacle target = null; 
+		for (Obstacle o : obstacleList) {
+			if (o.getCollisionBox().intersects(e.getCollisionBox())) {
+				target = o; 
+			}
+		}
+		return target; 
+	}
+	
+	public static void newArea () {
+		obstacleList = new ArrayList<Obstacle> (); 
+		newObstacle(64, 64, 0); 
+		for (int i=0; i<5; i++) {
+			
 		}
 	}
 	
@@ -448,6 +472,9 @@ public class GameLogic {
 		}
 		else if (state == 1) 
 			setMenu(1); 
+		if (lastState == 0) {
+			newArea(); 
+		}
 	}
 	
 	// Updates all entities and player movements 
@@ -676,11 +703,6 @@ public class GameLogic {
 			setBossState(); 
 			getMainPlayer().scoreAdd(1000); 
 		} 
-	}
-	
-	// Sets up screen for a new area - returns true if successful 
-	public static boolean newArea (boolean move) {
-		return move; 
 	}
 	
 	// returns window handle but actually accessible to things 

@@ -490,14 +490,18 @@ public class Renderer {
 				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 				renderNumberVertices(tempDigit, true); 
 			}
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE); 
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE); 
 		}
 		
 		// renders a String at a position 
 		public void renderText (String text, int x, int y) {
-			final int ASCII_OFFSET = 64; // normalizes 'A' to the starting position 
+			final int ASCII_OFFSET = 64; // normalizes 'A' to the starting position (1) 
 			final int LETTER_OFFSET = 10; 
 			final float OFFSET_W = (float)1/32; 
 			final float OFFSET_H = (float)1/18; 
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL13.GL_CLAMP_TO_BORDER); 
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL13.GL_CLAMP_TO_BORDER); 
 			glBindTexture(GL_TEXTURE_2D, textureList[8]); 
 			vertexArray = new float[4]; 
 			for (int i=0; i<text.length(); i++) {
@@ -527,6 +531,8 @@ public class Renderer {
 				glEnd(); 
 				x += LETTER_OFFSET; 
 			}
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE); 
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE); 
 		}
 		
 		// renders and polls Effects 
