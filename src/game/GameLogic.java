@@ -279,6 +279,12 @@ public class GameLogic {
 		}
 		return target; 
 	}
+	public static Obstacle getObstacle (int index) {
+		return obstacleList.get(index); 
+	}
+	public static int numObstacles () {
+		return obstacleList.size(); 
+	}
 	
 	public static void newArea () {
 		obstacleList = new ArrayList<Obstacle> (); 
@@ -570,6 +576,9 @@ public class GameLogic {
 	public static void removeProjectile (int index) {
 		projectileList.remove(index); 
 	}
+	public static void removeProjectile (Projectile p) {
+		projectileList.remove(p); 
+	}
 	
 	// Adds a new projectile to the projectile list 
 	public static void createProjectile (int x, int y, int speed, int direction, int damage, boolean friendly, Entity owner) { 
@@ -643,6 +652,8 @@ public class GameLogic {
 		if (entity.getCooldown() != -1) {
 			for (int i=0; i<projectileList.size(); i++) {
 				Projectile p = projectileList.get(i); 
+				if (GameLogic.testObstacleIntersect(p) != null) 
+					GameLogic.removeProjectile(i); 
 				if (!(p.getX() <= Entity.MAX_X-4 && p.getY() <= Entity.MAX_Y-4 && p.getX() >= -1*Entity.MAX_X && p.getY() >= -1*Entity.MAX_Y)) { // destroys projectiles that leave the screen 
 					projectileList.remove(i); 
 					i--; 

@@ -18,6 +18,7 @@ import game.entity.Boss;
 import game.entity.Button;
 import game.entity.Effect;
 import game.entity.Entity;
+import game.entity.Obstacle;
 import game.entity.Player;
 import game.entity.PowerUp;
 import game.entity.Projectile; 
@@ -35,6 +36,7 @@ public class Renderer {
 	private int[] buttonTextureList; 
 	private int[] powerUpTextureList; 
 	private int[] bossTextureList; 
+	private int[] obstacleTextureList; 
 	private ArrayList<Effect> effectList; 
 	private int[] shakeArray; 
 	
@@ -50,6 +52,7 @@ public class Renderer {
 		buttonTextureList = Button.getTextures(); 
 		powerUpTextureList = PowerUp.getTextures(); 
 		bossTextureList = Boss.getTextures(); 
+		obstacleTextureList = Obstacle.getTextures(); 
 		effectList = GameLogic.getEffects(); 
 		shakeArray = GameLogic.getShake(); 
 	} 
@@ -87,6 +90,20 @@ public class Renderer {
 					renderVertices(GameLogic.getEntity(i, true).getDirection()); 
 				glEnd(); 
 			} 
+			
+			// obstacles 
+			for (int i=0; i<GameLogic.numObstacles(); i++) {
+				Obstacle o = GameLogic.getObstacle(i); 
+				glBindTexture(GL_TEXTURE_2D, obstacleTextureList[o.getTexture()]); 
+				glBegin(GL_TRIANGLES); 
+				vertexArray = new float[4]; 
+				vertexArray[0] = (float)(o.getX()+shakeArray[0])/Entity.MAX_X; 
+				vertexArray[1] = (float)(o.getY()+shakeArray[1])/Entity.MAX_Y; 
+				vertexArray[2] = (float)(o.getX()+shakeArray[0])/Entity.MAX_X + Entity.BOX_WIDTH; 
+				vertexArray[3] = (float)(o.getY()+shakeArray[1])/Entity.MAX_Y + Entity.BOX_HEIGHT; 
+				renderVertices(0); 
+				glEnd(); 
+			}
 			
 			// boss 
 			if (GameLogic.isBoss()) {

@@ -250,20 +250,37 @@ public class Entity {
 						}
 					}
 				}
-				Obstacle tempO = GameLogic.testObstacleIntersect(this); 
-				Obstacle o = tempO; 
-				while (tempO != null && o == tempO) { 
-					if (o.getX() > this.x) 
-						this.x--; 
-					else 
-						this.x++; 
-					if (o.getY() > this.y)
-						this.y--; 
-					else
-						this.y++; 
-					updateCollisionBox(); 
-					o = GameLogic.testObstacleIntersect(this); 
-				} 
+				if (this != GameLogic.getBoss()) {
+					Obstacle tempO = GameLogic.testObstacleIntersect(this); 
+					Obstacle o = tempO; 
+					if (this != GameLogic.getEntity(0, true))
+						while (tempO != null && o == tempO) { 
+							if (o.getX() > this.x) 
+								this.x--; 
+							else 
+								this.x++; 
+							if (o.getY() > this.y)
+								this.y--; 
+							else
+								this.y++; 
+							updateCollisionBox(); 
+							o = GameLogic.testObstacleIntersect(this); 
+						} 
+					else {
+						while (tempO != null && o == tempO) { 
+							if (o.getX() - this.getX() >= o.getY() - this.getY()) 
+								this.x--; 
+							else if (this.getX() - o.getX() > this.getY() - o.getY())
+								this.x++; 
+							else if (o.getY() - this.getY() >= o.getX() - this.getX()) 
+								this.y--; 
+							else if (this.getY() - o.getY() > this.getX() - o.getX())
+								this.y++; 
+							updateCollisionBox(); 
+							o = GameLogic.testObstacleIntersect(this); 
+						} 
+					}
+				}
 				if (tempX > 0) {
 					if (x > 0)
 						this.x++; 
