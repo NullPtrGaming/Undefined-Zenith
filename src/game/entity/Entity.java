@@ -31,6 +31,10 @@ public class Entity {
 	private int x; 
 	private int y; 
 	
+	// last position change variables 
+	private int lastXMove = 0; 
+	private int lastYMove = 0; 
+	
 	// status variables 
 	private int health; 
 	private int damage; 
@@ -267,33 +271,39 @@ public class Entity {
 							o = GameLogic.testObstacleIntersect(this); 
 						} 
 					else {
-						while (tempO != null && o == tempO) { 
-							if (o.getX() - this.getX() >= o.getY() - this.getY()) 
-								this.x--; 
-							else if (this.getX() - o.getX() > this.getY() - o.getY())
-								this.x++; 
-							else if (o.getY() - this.getY() >= o.getX() - this.getX()) 
-								this.y--; 
-							else if (this.getY() - o.getY() > this.getX() - o.getX())
-								this.y++; 
-							updateCollisionBox(); 
-							o = GameLogic.testObstacleIntersect(this); 
+						if (tempO != null && o == tempO) { 
+							undoMove(); 
+							return; 
 						} 
 					}
 				}
 				if (tempX > 0) {
-					if (x > 0)
+					if (x > 0) {
 						this.x++; 
-					else 
+						lastXMove = 1; 
+					}
+					else {
 						this.x--; 
+						lastXMove = -1; 
+					} 
 					tempX--; 
 				}
+				else {
+					lastXMove = 0; 
+				}
 				if (tempY > 0) {
-					if (y > 0) 
+					if (y > 0) {
 						this.y++; 
-					else 
+						lastYMove = 1; 
+					}
+					else {
 						this.y--; 
+						lastYMove = -1; 
+					} 
 					tempY--; 
+				}
+				else {
+					lastYMove = 0; 
 				}
 				updateCollisionBox();
 			}
@@ -352,6 +362,13 @@ public class Entity {
 	}
 	public void setMoveCooldown (long time) {
 		moveCooldownTimer = time; 
+	}
+	
+	// resets last move 
+	public void undoMove () {
+		this.x -= lastXMove; 
+		this.y -= lastYMove; 
+		updateCollisionBox(); 
 	}
 	
 	public int[] getTargetCoords () {
