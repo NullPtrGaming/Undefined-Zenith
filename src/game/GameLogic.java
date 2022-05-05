@@ -286,11 +286,20 @@ public class GameLogic {
 		return obstacleList.size(); 
 	}
 	
+	// initializes a new set of Obstacles after a Boss - resets all character positions 
 	public static void newArea () {
 		obstacleList = new ArrayList<Obstacle> (); 
-		newObstacle(64, 64, 0); 
-		for (int i=0; i<5; i++) {
-			
+		int numObstacles = (int)(Math.random()*4)+5; 
+		for (int i=0; i<numObstacles; i++) { 
+			int[] coords = genCoordinates(); 
+			if (Math.abs(coords[0]) < 32 || Math.abs(coords[1]) < 32) 
+				continue; 
+			else 
+				newObstacle(coords[0], coords[1], (int)(Math.random()*1)); 
+		}
+		for (Player p : playerTypeList) {
+			p.setX(0); 
+			p.setY(0); 
 		}
 	}
 	

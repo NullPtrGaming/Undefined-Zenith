@@ -60,8 +60,10 @@ public class PowerUp {
 		}
 		break; 
 		case 2: {
-			if (GameLogic.getMainPlayer().getHealth() < GameLogic.getMainPlayer().getOriginalHealth()) 
+			if (GameLogic.getMainPlayer().getHealth() < GameLogic.getMainPlayer().getOriginalHealth()) { 
 				GameLogic.getMainPlayer().healthModify(GameLogic.getMainPlayer().getOriginalHealth()-GameLogic.getMainPlayer().getHealth()); 
+			} 
+			GameLogic.newArea(); 
 		}
 		}
 	}

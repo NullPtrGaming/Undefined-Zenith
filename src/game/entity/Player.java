@@ -60,6 +60,7 @@ public class Player extends Entity {
 			rapidFirePoll(); 
 			if (getHealth() <= 0) { // death checking 
 				GameLogic.setState(1); 
+				setCooldown(originalCooldown); 
 				GameLogic.gameOver(); 
 			} 
 			if (keyStates[Input.ATTACK]) {
