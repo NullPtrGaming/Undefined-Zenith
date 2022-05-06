@@ -42,6 +42,8 @@ public class Obstacle {
 	// gets/loads textures 
 	public static void loadTextures (TextureLoader tl) {
 		obstacleTextureList[0] = tl.loadTexture("res/Obstacles/Asteroid.png"); 
+		obstacleTextureList[1] = tl.loadTexture("res/Obstacles/Space Station.png"); 
+		obstacleTextureList[2] = tl.loadTexture("res/Obstacles/Planet.png"); 
 	}
 	public static int[] getTextures () {
 		return obstacleTextureList; 

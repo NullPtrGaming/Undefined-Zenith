@@ -63,6 +63,7 @@ public class PowerUp {
 			if (GameLogic.getMainPlayer().getHealth() < GameLogic.getMainPlayer().getOriginalHealth()) { 
 				GameLogic.getMainPlayer().healthModify(GameLogic.getMainPlayer().getOriginalHealth()-GameLogic.getMainPlayer().getHealth()); 
 			} 
+			GameLogic.toggleEntities(); 
 			GameLogic.newArea(); 
 		}
 		}

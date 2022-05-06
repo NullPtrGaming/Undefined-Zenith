@@ -64,6 +64,7 @@ public class GameLogic {
 	private static ArrayList<Obstacle> obstacleList; 
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
+	private static boolean enemiesEnabled = true; 
 	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static int deadEnemyCount = 0; 
@@ -294,8 +295,10 @@ public class GameLogic {
 			int[] coords = genCoordinates(); 
 			if (Math.abs(coords[0]) < 32 || Math.abs(coords[1]) < 32) 
 				continue; 
+			else if (coords[0] <= -239 || coords[0] >= 223 || coords[1] <= -127 || coords[1] >= 111) 
+				continue; 
 			else 
-				newObstacle(coords[0], coords[1], (int)(Math.random()*1)); 
+				newObstacle(coords[0], coords[1], (int)(Math.random()*3)); 
 		}
 		for (Player p : playerTypeList) {
 			p.setX(0); 
@@ -469,6 +472,8 @@ public class GameLogic {
 		if (state == 0) { // clears game upon exit to title 
 			currentBoss = null; 
 			setBossState(); 
+			if (state == 0 && !enemiesEnabled) 
+				toggleEntities(); 
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
 			setMenu(0); 
@@ -529,7 +534,7 @@ public class GameLogic {
 	
 	// Enemy generator method - operates on cooldown system 
 	public static void newEntity () {
-		if (!isBoss && entityList.size() <= MAX_ENTITIES && gameTime - enemyCooldownTimer >= (ENEMY_COOLDOWN/enemyGenMod)) {
+		if (!isBoss && enemiesEnabled && entityList.size() <= MAX_ENTITIES && gameTime - enemyCooldownTimer >= (ENEMY_COOLDOWN/enemyGenMod)) {
 			enemyCooldownTimer = gameTime; 
 			int[] coords; 
 			for (int i=3; i>0; i--) {
@@ -567,6 +572,11 @@ public class GameLogic {
 		return coords; 
 	}
 		
+	// toggles enemy generation 
+	public static void toggleEntities () {
+		enemiesEnabled = !enemiesEnabled; 
+	}
+	
 	// gets the main player 
 	public static Player getMainPlayer () { 
 		return playerList[PRIMARY_PLAYER]; 
@@ -621,6 +631,7 @@ public class GameLogic {
 	public static void genBoss () {
 		entityList = new ArrayList<Entity> (); 
 		currentBoss = bossTypeList[(int)(Math.random()*bossTypeList.length)].copy(); 
+		toggleEntities(); 
 		setBossState(); 
 		currentBoss.setHealth((int)(currentBoss.getHealth()*enemyHealthMod)); 
 		currentBoss.setDamage((int)(currentBoss.getDamage()*enemyDamageMod)); 
