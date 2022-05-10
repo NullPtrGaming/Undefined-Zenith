@@ -129,7 +129,7 @@ public class GameLoop {
 	public void loadTextures () { 
 		TextureLoader textureLoader = new TextureLoader(); 
 		textureLoader.loadIcon("res/Icon.png", window); // loads the game icon 
-		textureList[0] = textureLoader.loadTexture("res/Background.png"); 
+		textureList[0] = textureLoader.loadTexture("res/Background/Stars.png"); 
 		textureList[1] = textureLoader.loadTexture("res/e.png"); 
 		textureList[2] = textureLoader.loadTexture("res/Numbers.png"); 
 		textureList[3] = textureLoader.loadTexture("res/Menus/Buttons/Title.png"); 
@@ -146,6 +146,8 @@ public class GameLoop {
 		PowerUp.loadTextures(textureLoader); 
 		Boss.loadTextures(textureLoader); 
 		Obstacle.loadTextures(textureLoader); 
+		GameLogic.getBackgroundTextures()[0] = textureList[0]; 
+		GameLogic.getBackgroundTextures()[1] = textureLoader.loadTexture("res/Background/Metal.png"); 
 	}
 	
 	// gets the window handle 

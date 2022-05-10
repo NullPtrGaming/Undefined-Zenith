@@ -123,11 +123,11 @@ public class Player extends Entity {
 	public void genProjectileTrail() { 
 		int offsetX = 0; 
 		int offsetY = 0; 
-		if (getDirection() == Input.LEFT) 
+		if (getDirectionTrue() == Input.LEFT) 
 			offsetX = 16; 
-		else if (getDirection() == Input.RIGHT) 
+		else if (getDirectionTrue() == Input.RIGHT) 
 			offsetX = -16; 
-		else if (getDirection() == Input.UP) 
+		else if (getDirectionTrue() == Input.UP) 
 			offsetY = -16; 
 		else 
 			offsetY = 16; 
@@ -158,7 +158,7 @@ public class Player extends Entity {
 		if (GameLogic.getTime() - getCooldownTimer() >= getCooldown()*2) {
 			setCooldownTimer(GameLogic.getTime()); 
 			ArrayList<Entity> hitEnemies = GameLogic.testPhysicalAttackIntersect(); 
-			if (GameLogic.isBoss() && GameLogic.getBoss().getCollisionBox().intersects(GameLogic.getBoss().getCollisionBox())) {
+			if (GameLogic.isBoss() && GameLogic.getBoss().getCollisionBox().intersects(this.getAttackCollisions())) {
 				hitEnemies.add(GameLogic.getBoss()); 
 			}
 			for (Entity e : hitEnemies) {

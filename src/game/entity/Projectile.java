@@ -49,7 +49,7 @@ public class Projectile extends Entity {
 	
 	// overrides the pollmovement, allows for projectile direction 
 	public void pollMovement () { 
-		switch (getDirection()) {
+		switch (getDirectionTrue()) {
 		case Input.UP: 
 			move(0, getSpeed()); 
 			break; 

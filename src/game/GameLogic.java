@@ -82,6 +82,7 @@ public class GameLogic {
 			new Boss(-16, 16, 300, 10, 1, 750, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
 			new Boss(-16, 16, 250, 15, 1, 1200, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
 	}; 
+	private static int levelType = 1; // type of level, determines textures and unique attributes - 0=original 
 	
 	private static int tempScore = 0; 
 	private static int tempScoreHealth = 0; 
@@ -117,6 +118,8 @@ public class GameLogic {
 	private static boolean physicalAttackState = false; 
 	
 	private static int[] soundList = new int[8]; 
+	
+	private static int[] backgroundTextureList = new int[3]; 
 	
 	private static int testNumber = 0; 
 	
@@ -304,6 +307,16 @@ public class GameLogic {
 			p.setX(0); 
 			p.setY(0); 
 		}
+	}
+	
+	// gets the level type 
+	public static int getLevelType () {
+		return levelType; 
+	}
+	
+	// gets level background textures 
+	public static int[] getBackgroundTextures () {
+		return backgroundTextureList; 
 	}
 	
 	// fullscreen toggle 

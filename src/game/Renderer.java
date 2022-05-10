@@ -344,7 +344,7 @@ public class Renderer {
 				glTexCoord2f(1, 0);
 				glVertex2f(vertexArray[0], vertexArray[3]);
 			}
-			else {
+			else if (direction == 0) {
 				glTexCoord2f(1, 0);
 				glVertex2f(vertexArray[2], vertexArray[1]);
 				glTexCoord2f(1, 1);
@@ -358,11 +358,25 @@ public class Renderer {
 				glTexCoord2f(1, 0);
 				glVertex2f(vertexArray[2], vertexArray[1]);
 			}
+			else if (direction == 5) { // vertical but reversed for human-like things 
+				glTexCoord2f(0, 0);
+				glVertex2f(vertexArray[2], vertexArray[1]);
+				glTexCoord2f(0, 1);
+				glVertex2f(vertexArray[2], vertexArray[3]);
+				glTexCoord2f(1, 1);
+				glVertex2f(vertexArray[0], vertexArray[3]);
+				glTexCoord2f(1, 1); 
+				glVertex2f(vertexArray[0], vertexArray[3]);
+				glTexCoord2f(1, 0);
+				glVertex2f(vertexArray[0], vertexArray[1]);
+				glTexCoord2f(0, 0);
+				glVertex2f(vertexArray[2], vertexArray[1]);
+			}
 		}
 		
 		// specifically renders the background 
 		public void renderBackground () {
-			glBindTexture(GL_TEXTURE_2D, textureList[0]); 
+			glBindTexture(GL_TEXTURE_2D, GameLogic.getBackgroundTextures()[GameLogic.getLevelType()]); 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // background uses repeat filter 
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			

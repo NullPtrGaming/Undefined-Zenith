@@ -96,6 +96,11 @@ public class Entity {
 		return speed; 
 	}
 	public int getDirection() {
+		if (GameLogic.getLevelType() == 1 && direction != 0)
+			return 5; 
+		return direction; 
+	}
+	public int getDirectionTrue() {
 		return direction; 
 	}
 	public int getHealth () { 
