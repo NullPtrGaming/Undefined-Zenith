@@ -21,6 +21,7 @@ public class Entity {
 	
 	// texture list 
 	private static int[] entityTextureList = new int[4]; 
+	private static int[] entityTextureList1 = new int[4]; 
 	private int texture; 
 	
 	// known enemy positions 
@@ -72,11 +73,18 @@ public class Entity {
 	// class-based textures 
 	public static void loadTextures (TextureLoader textureLoader) {
 		entityTextureList[0] = textureLoader.loadTexture("res/Enemies/Searchlight.png"); 
-		entityTextureList[1] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
-		entityTextureList[2] = textureLoader.loadTexture("res/Enemies/Alien Fast.png"); 
+		entityTextureList[1] = textureLoader.loadTexture("res/Enemies/Alien Ship.png"); 
+		entityTextureList[2] = textureLoader.loadTexture("res/Enemies/Alien Ship Fast.png"); 
 		entityTextureList[3] = textureLoader.loadTexture("res/Enemies/Searchlight Angry.png"); 
+		
+		entityTextureList1[0] = textureLoader.loadTexture("res/Enemies/Alien Robot.png"); 
+		entityTextureList1[1] = textureLoader.loadTexture("res/Enemies/Alien.png"); 
+		entityTextureList1[2] = textureLoader.loadTexture("res/Enemies/Alien Fast.png"); 
+		entityTextureList1[3] = textureLoader.loadTexture("res/Enemies/Alien Angry.png"); 
 	}
 	public static int[] getTextures () {
+		if (GameLogic.getLevelType() == 1) 
+			return entityTextureList1; 
 		return entityTextureList; 
 	}
 	
@@ -96,8 +104,12 @@ public class Entity {
 		return speed; 
 	}
 	public int getDirection() {
-		if (GameLogic.getLevelType() == 1 && direction != 0)
-			return 5; 
+		if (GameLogic.getLevelType() == 1) {
+			if (direction == 3 || direction == 1)
+				return 5; 
+			else 
+				return 0; 
+		} 
 		return direction; 
 	}
 	public int getDirectionTrue() {

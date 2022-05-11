@@ -82,7 +82,7 @@ public class GameLogic {
 			new Boss(-16, 16, 300, 10, 1, 750, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 0), 
 			new Boss(-16, 16, 250, 15, 1, 1200, Entity.ATTACK_PROJECTILE, true, 0, Boss.DEFAULT_BOSS_W, Boss.DEFAULT_BOSS_H, 1) 
 	}; 
-	private static int levelType = 1; // type of level, determines textures and unique attributes - 0=original 
+	private static int levelType = 0; // type of level, determines textures and unique attributes - 0=original 
 	
 	private static int tempScore = 0; 
 	private static int tempScoreHealth = 0; 
@@ -292,6 +292,8 @@ public class GameLogic {
 	
 	// initializes a new set of Obstacles after a Boss - resets all character positions 
 	public static void newArea () {
+		if (getMainPlayer().getScore() != 0) // check - first level will always be 0 
+			levelType = (int)(Math.random()*3); 
 		obstacleList = new ArrayList<Obstacle> (); 
 		int numObstacles = (int)(Math.random()*4)+5; 
 		for (int i=0; i<numObstacles; i++) { 
@@ -483,6 +485,7 @@ public class GameLogic {
 		if (lastState == 2 || lastState == 1) // game saving automatic after pausing or unpausing game 
 			GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
 		if (state == 0) { // clears game upon exit to title 
+			levelType = 0; 
 			currentBoss = null; 
 			setBossState(); 
 			if (state == 0 && !enemiesEnabled) 

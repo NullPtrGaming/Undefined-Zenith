@@ -5,10 +5,12 @@ package game.entity;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Float;
 
+import game.GameLogic;
 import game.TextureLoader;
 
 public class Obstacle {
 	private static int[] obstacleTextureList = new int[3]; 
+	private static int[] obstacleTextureList1 = new int[3]; 
 	
 	private int x; 
 	private int y; 
@@ -44,8 +46,13 @@ public class Obstacle {
 		obstacleTextureList[0] = tl.loadTexture("res/Obstacles/Asteroid.png"); 
 		obstacleTextureList[1] = tl.loadTexture("res/Obstacles/Space Station.png"); 
 		obstacleTextureList[2] = tl.loadTexture("res/Obstacles/Planet.png"); 
+		
+		obstacleTextureList1[0] = obstacleTextureList[0]; 
 	}
 	public static int[] getTextures () {
+		if (GameLogic.getLevelType() == 1) {
+			return obstacleTextureList1; 
+		}
 		return obstacleTextureList; 
 	}
 }
