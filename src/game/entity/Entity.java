@@ -106,9 +106,9 @@ public class Entity {
 	public int getDirection() {
 		if (GameLogic.getLevelType() == 1) {
 			if (direction == 3 || direction == 1)
-				return 5; 
-			else 
 				return 0; 
+			else 
+				return 5; 
 		} 
 		return direction; 
 	}

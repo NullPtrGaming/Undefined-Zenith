@@ -47,7 +47,9 @@ public class Obstacle {
 		obstacleTextureList[1] = tl.loadTexture("res/Obstacles/Space Station.png"); 
 		obstacleTextureList[2] = tl.loadTexture("res/Obstacles/Planet.png"); 
 		
-		obstacleTextureList1[0] = obstacleTextureList[0]; 
+		obstacleTextureList1[0] = tl.loadTexture("res/Obstacles/Test Tube.png"); 
+		obstacleTextureList1[1] = tl.loadTexture("res/Obstacles/Crates.png"); 
+		obstacleTextureList1[2] = tl.loadTexture("res/Obstacles/Computer.png"); 
 	}
 	public static int[] getTextures () {
 		if (GameLogic.getLevelType() == 1) {

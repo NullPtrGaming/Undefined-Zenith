@@ -17,6 +17,7 @@ public class Player extends Entity {
 	private long powerUpTimer = 0; 
 	private int powerUpDuration = 0; 
 	private int texture = 0; 
+	private int texture1 = 0; 
 	
 	private int acceleration = 2; // currently testing 
 	private int tempSpeed = 0; 
@@ -42,6 +43,8 @@ public class Player extends Entity {
 	public static void loadTextures (TextureLoader textureLoader) {
 		playerTextureArray[0] = textureLoader.loadTexture("res/Characters/Jay/Jay Spaceship.png"); 
 		playerTextureArray[1] = textureLoader.loadTexture("res/Characters/Iona/Iona Spaceship.png"); 
+		playerTextureArray[2] = textureLoader.loadTexture("res/Characters/Jay/Jay.png"); 
+		playerTextureArray[3] = textureLoader.loadTexture("res/Characters/Iona/Iona.png"); 
 	}
 	public static int[] getTextures () {
 		return playerTextureArray; 
@@ -186,8 +189,13 @@ public class Player extends Entity {
 		return originalHealth; 
 	}
 	
-	public int getTexture () {
+	public int getTexture () { // for human textures 
+		if (GameLogic.getLevelType() == 1) 
+			return texture1; 
 		return texture; 
+	}
+	public void setAltTexture (int texture) {
+		texture1 = texture; 
 	}
 	
 	// accelerates - not use normal speed variable (testing) 

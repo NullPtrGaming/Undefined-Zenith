@@ -47,7 +47,7 @@ public class GameLogic {
 	public static final int MAX_ENTITIES = 16; 
 	public static final int[] POSITION_NODE_ARRAY = {240, 110}; 
 	
-	private static int gameState = 0; // THE GAME'S MAIN STATE VARIABLE - 0=TITLE, 1=MENU, 2=RUNNING 
+	private static int gameState = -1; // THE GAME'S MAIN STATE VARIABLE - 0=TITLE, 1=MENU, 2=RUNNING 
 	private static long gameTime; 
 	private static long pauseTime; 
 	private static long pauseTimer; 
@@ -152,6 +152,8 @@ public class GameLogic {
 	public static Player loadPlayer () {
 		playerTypeList.add(new Player(0, 0, 50, 10, 2, 250, Entity.ATTACK_PROJECTILE, Player.getTextures()[0], true, true, keyStates)); 
 		playerTypeList.add(new Player(0, 0, 70, 10, 2, 250, Entity.ATTACK_PHYSICAL, Player.getTextures()[1], true, false, keyStates)); 
+		playerTypeList.get(0).setAltTexture(Player.getTextures()[2]); 
+		playerTypeList.get(1).setAltTexture(Player.getTextures()[3]); 
 		Player player; 
 		File playerDir = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Saved Games"+System.getProperty("file.separator")+"UndefinedZenith"+System.getProperty("file.separator")+"Players"); 
 		File listDir[] = playerDir.listFiles(); 
@@ -159,6 +161,7 @@ public class GameLogic {
 			for (int i=0; i<listDir.length; i++) {
 				int[] stats = new int[5]; 
 				int texture = 0; 
+				int texture1 = 0; 
 				try {
 					InputStream is = new FileInputStream(listDir[i]); // initial loading 
 					ZipFile file = new ZipFile(listDir[i]); 
@@ -292,8 +295,7 @@ public class GameLogic {
 	
 	// initializes a new set of Obstacles after a Boss - resets all character positions 
 	public static void newArea () {
-		if (getMainPlayer().getScore() != 0) // check - first level will always be 0 
-			levelType = (int)(Math.random()*3); 
+		levelType = (int)(Math.random()*3); 
 		obstacleList = new ArrayList<Obstacle> (); 
 		int numObstacles = (int)(Math.random()*4)+5; 
 		for (int i=0; i<numObstacles; i++) { 
@@ -562,6 +564,14 @@ public class GameLogic {
 				else { 
 					e = projEnemyTypeList[(int)(Math.random()*projEnemyTypeList.length)].copy(); 
 				} 
+				if (levelType == 2) { // only harder enemy types 
+					if (Math.random() >= 0.4) { 
+						e = physicalEnemyTypeList[1+(int)(Math.random()*(physicalEnemyTypeList.length-1))].copy(); 
+					} 
+					else { 
+						e = projEnemyTypeList[1+(int)(Math.random()*(projEnemyTypeList.length-1))].copy(); 
+					} 
+				}
 				e.setX(coords[0]); 
 				e.setY(coords[1]); 
 				e.setHealth((int)(e.getHealth()*enemyHealthMod)); 

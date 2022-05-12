@@ -148,6 +148,7 @@ public class GameLoop {
 		Obstacle.loadTextures(textureLoader); 
 		GameLogic.getBackgroundTextures()[0] = textureList[0]; 
 		GameLogic.getBackgroundTextures()[1] = textureLoader.loadTexture("res/Background/Metal.png"); 
+		GameLogic.getBackgroundTextures()[2] = textureLoader.loadTexture("res/Background/Sun.png"); 
 	}
 	
 	// gets the window handle 
