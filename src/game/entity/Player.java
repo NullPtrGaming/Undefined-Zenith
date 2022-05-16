@@ -197,6 +197,9 @@ public class Player extends Entity {
 	public void setAltTexture (int texture) {
 		texture1 = texture; 
 	}
+	public int getAltTexture () {
+		return texture1; 
+	}
 	
 	// accelerates - not use normal speed variable (testing) 
 	public void accelerate (boolean isNegative) {

@@ -19,29 +19,24 @@ public class Input {
 	public static final int SELECT = 5; // for menu navigation 
 	public static final int ESCAPE = 6; 
 	
-	private static int[] keybinds = {GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_ESCAPE}; 
+	private static int[] keybinds = {GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_V, GLFW_KEY_B, GLFW_KEY_ESCAPE}; // player 1 
+	private static int[] keybinds1 = {GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_RIGHT_CONTROL, GLFW_KEY_RIGHT_SHIFT, GLFW_KEY_ESCAPE}; // player 2 
 	// array for storing different bindings for different keys 
 	
 	private static int lastKey; 
 	private static boolean lastAttackKeyState; 
 	
 	// Constructor, sets up GLFW key callback 
-	public Input (long w, boolean isWASD, boolean[] keyStates) {
+	public Input (long w, boolean isWASD, boolean[] keyStates, boolean[] keyStates1) {
 		glfwSetKeyCallback(w, (window, key, scancode, action, mods) -> {
-			if (key == keybinds[ATTACK]) 
-				keyStates[ATTACK] = (glfwGetKey(window, keybinds[ATTACK]) == GLFW_PRESS); 
-			if (key == keybinds[UP]) 
-				keyStates[UP] = (glfwGetKey(window, keybinds[UP]) == GLFW_PRESS); 
-			if (key == keybinds[DOWN])
-				keyStates[DOWN] = (glfwGetKey(window, keybinds[DOWN]) == GLFW_PRESS); 
-			if (key == keybinds[LEFT])
-				keyStates[LEFT] = (glfwGetKey(window, keybinds[LEFT]) == GLFW_PRESS); 
-			if (key == keybinds[RIGHT])
-				keyStates[RIGHT] = (glfwGetKey(window, keybinds[RIGHT]) == GLFW_PRESS); 
-			if (key == keybinds[SELECT]) 
-				keyStates[SELECT] = (glfwGetKey(window, keybinds[SELECT]) == GLFW_PRESS);
-			if (key == keybinds[ESCAPE]) 
-				keyStates[ESCAPE] = (glfwGetKey(window, keybinds[ESCAPE]) == GLFW_PRESS);
+			for (int i=0; i<7; i++) {
+				if (key == keybinds[i])
+					keyStates[i] = (glfwGetKey(window, keybinds[i]) == GLFW_PRESS);  
+			}
+			for (int i=0; i<7; i++) {
+				if (key == keybinds1[i])
+					keyStates1[i] = (glfwGetKey(window, keybinds1[i]) == GLFW_PRESS);  
+			}
 			lastKey = key; 
 			lastAttackKeyState = keyStates[ATTACK]; 
 			GameLogic.setKeysPoll(); 

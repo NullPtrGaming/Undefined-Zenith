@@ -92,6 +92,7 @@ public class GameLogic {
 	private static double enemySpeedMod = 1; 
 	
 	private static boolean[] keyStates = new boolean[7]; 
+	private static boolean[] keyStates1 = new boolean[7]; 
 	private static int[] newKeys = new int[7]; 
 	private static int newKeysIndex = 0; 
 	private static boolean rebinding = false; 
@@ -103,6 +104,7 @@ public class GameLogic {
 	private static ArrayList<Button> optionsButtonList; 
 	private static ArrayList<Button> gameOverButtonList; 
 	private static ArrayList<Button> rebindButtonList; 
+	private static ArrayList<Button> numPlayersButtonList; 
 	private static ArrayList<Button> currentButtonList; 
 	private static int menuIndex = 0; 
 	private static boolean wasGameOver = false; 
@@ -137,11 +139,13 @@ public class GameLogic {
 		optionsButtonList = new ArrayList<Button> (); 
 		gameOverButtonList = new ArrayList<Button> (); 
 		rebindButtonList = new ArrayList<Button> (); 
+		numPlayersButtonList = new ArrayList<Button> (); 
 		powerUpList = new ArrayList<PowerUp> (); 
 		obstacleList = new ArrayList<Obstacle> (); 
 		playerTypeList = new ArrayList<Player> (); 
 		playerList[PRIMARY_PLAYER] = loadPlayer(); 
-		keyPressHandler = new Input(window, false, keyStates); // Key callbacks set 
+		playerList[1] = playerTypeList.get(1); 
+		keyPressHandler = new Input(window, false, keyStates, keyStates1); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
 		initMenus(); 
 		GameSaver.loadGame(GameSaver.getExpectedSaveLocation()); 
@@ -167,8 +171,13 @@ public class GameLogic {
 					ZipFile file = new ZipFile(listDir[i]); 
 					ZipInputStream z = new ZipInputStream(is); 
 					
-					ZipEntry ze = z.getNextEntry(); // the text file (Player.txt) 
+					ZipEntry ze = z.getNextEntry(); // the image (Character.png) 
 					InputStream internalIS = file.getInputStream(ze); 
+					TextureLoader tl = new TextureLoader(); 
+					texture1 = tl.loadTexture(internalIS); 
+					
+					ze = z.getNextEntry(); // the text file (Player.txt) 
+					internalIS = file.getInputStream(ze);
 					Scanner scan = new Scanner(internalIS); 
 					for (int j=0; j<5; j++) {
 						while (!scan.hasNextInt()) 
@@ -178,12 +187,12 @@ public class GameLogic {
 					
 					ze = z.getNextEntry(); // the image (Spaceship.png) 
 					internalIS = file.getInputStream(ze); 
-					TextureLoader tl = new TextureLoader(); 
 					texture = tl.loadTexture(internalIS); 
 				} catch (IOException e) {
 					continue; 
 				}  
 				playerTypeList.add(new Player(0, 0, stats[0], stats[1], stats[2], stats[3], stats[4], texture, true, false, keyStates)); 
+				playerTypeList.get(i+2).setAltTexture(texture1); 
 			} 
 		player = playerTypeList.get(0); 
 		return player; 
@@ -335,7 +344,7 @@ public class GameLogic {
 			GLFW.glfwSetWindowMonitor(gameWindow, monitor, 0, 0, monitorMode.width(), monitorMode.height(), monitorMode.refreshRate()); 
 			isFullscreen = true; 
 		}
-		GLFW.glfwSwapInterval(monitorMode.refreshRate()/60); 
+		//GLFW.glfwSwapInterval(monitorMode.refreshRate()/60); 
 		GameSaver.saveGame(GameSaver.getExpectedSaveLocation()); 
 	}
 	public static boolean getFullscreenState() {
@@ -365,6 +374,9 @@ public class GameLogic {
 		for (int i=1; i<8; i++) 
 			rebindButtonList.add(new Button(-16, 108-(36*(i-1)), buttonNames[i-1], 4)); 
 		rebindButtonList.add(new Button(-16, -144, "EXIT", 1)); 
+		
+		numPlayersButtonList.add(new Button(-16, 0, "1 PLAYER", 1)); 
+		numPlayersButtonList.add(new Button(-16, 0, "2 PLAYER", 1)); 
 		
 		currentButtonList = titleButtonList; 
 	} 
@@ -501,7 +513,9 @@ public class GameLogic {
 			if (wasGameOver) {// only for death reset 
 				int i=0; 
 				for (Player player : playerTypeList) { 
+					int altTexture = player.getAltTexture(); 
 					playerTypeList.set(i, new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, player.isPrimary(), keyStates)); 
+					playerTypeList.get(i).setAltTexture(altTexture); 
 					setMainPlayer(currentPlayerIndex); 
 					i++; 
 				} 

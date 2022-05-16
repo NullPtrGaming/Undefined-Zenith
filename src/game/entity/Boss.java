@@ -38,6 +38,8 @@ public class Boss extends Entity {
 	
 	public static void loadTextures (TextureLoader tl) {
 		bossTextureList[0] = tl.loadTexture("res/Enemies/Bosses/477 Drone Fighter.png"); 
+		bossTextureList[1] = tl.loadTexture("res/Enemies/Bosses/477 Drone Fighter Red.png"); 
+		bossTextureList[2] = tl.loadTexture("res/Enemies/Bosses/Security Robot.png"); 
 	}
 	public static int[] getTextures () {
 		return bossTextureList; 

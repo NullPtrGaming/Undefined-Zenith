@@ -111,6 +111,12 @@ public class Renderer {
 			// boss 
 			if (GameLogic.isBoss()) {
 				glBindTexture(GL_TEXTURE_2D, bossTextureList[GameLogic.getBoss().getTexture()]); 
+				if (GameLogic.getLevelType() == 1) {
+					glBindTexture(GL_TEXTURE_2D, bossTextureList[2]); 
+				}
+				else if (GameLogic.getLevelType() == 2) {
+					glBindTexture(GL_TEXTURE_2D, bossTextureList[1]); 
+				}
 				glBegin(GL_TRIANGLES); 
 				vertexArray = new float[4]; 
 				vertexArray[0] = (float)(GameLogic.getBoss().getX()+shakeArray[0])/Entity.MAX_X; 
