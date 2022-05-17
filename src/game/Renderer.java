@@ -86,7 +86,12 @@ public class Renderer {
 			
 			// players 
 			for (int i=0; i<4; i++) { 
-				glBindTexture(GL_TEXTURE_2D, GameLogic.getMainPlayer().getTexture()); 
+				try {
+					glBindTexture(GL_TEXTURE_2D, GameLogic.getEntity(i, true).getTexture()); 
+				}
+				catch (NullPointerException e) {
+					continue; 
+				}
 				glBegin(GL_TRIANGLES);
 				vertexArray = getVertexArray(GameLogic.getEntity(i, true)); 
 				if (vertexArray != null) 

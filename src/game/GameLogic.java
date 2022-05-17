@@ -70,6 +70,7 @@ public class GameLogic {
 	private static int deadEnemyCount = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players (characters) 
 	private static int currentPlayerIndex = 0; 
+	private static int currentPlayer1Index = 0; 
 	private static Entity[] physicalEnemyTypeList = {
 			new Entity(0, 0, 25, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
 			new Entity(0, 0, 5, 10, 2, 300, Entity.ATTACK_PHYSICAL, true, 2) // moves faster 
@@ -144,7 +145,6 @@ public class GameLogic {
 		obstacleList = new ArrayList<Obstacle> (); 
 		playerTypeList = new ArrayList<Player> (); 
 		playerList[PRIMARY_PLAYER] = loadPlayer(); 
-		playerList[1] = playerTypeList.get(1); 
 		keyPressHandler = new Input(window, false, keyStates, keyStates1); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
 		initMenus(); 
@@ -203,10 +203,23 @@ public class GameLogic {
 		playerTypeList.get(currentPlayerIndex).makePrimary(false); 
 		playerTypeList.get(index).makePrimary(true); 
 		playerList[0] = playerTypeList.get(index); 
+		playerList[0].setKeystates(keyStates); 
 		currentPlayerIndex = index; 
 	}
 	public static int getPlayerIndex () {
 		return currentPlayerIndex; 
+	}
+	public static void setPlayer2 (int index) {
+		if (index == -1) {
+			playerList[1] = null; 
+			return; 
+		}
+		playerList[1] = playerTypeList.get(index); 
+		playerList[1].setKeystates(keyStates1); 
+		currentPlayer1Index = index; 
+	}
+	public static int getPlayer2Index () {
+		return currentPlayer1Index; 
 	}
 	public static int numCharacters () {
 		return playerTypeList.size(); 
@@ -375,8 +388,8 @@ public class GameLogic {
 			rebindButtonList.add(new Button(-16, 108-(36*(i-1)), buttonNames[i-1], 4)); 
 		rebindButtonList.add(new Button(-16, -144, "EXIT", 1)); 
 		
-		numPlayersButtonList.add(new Button(-16, 0, "1 PLAYER", 1)); 
-		numPlayersButtonList.add(new Button(-16, 0, "2 PLAYER", 1)); 
+		numPlayersButtonList.add(new Button(-16, 0, "ONE PLAYER", 1)); 
+		numPlayersButtonList.add(new Button(-16, -36, "TWO PLAYER", 1)); 
 		
 		currentButtonList = titleButtonList; 
 	} 
@@ -399,6 +412,9 @@ public class GameLogic {
 			break; 
 		case 4: 
 			currentButtonList = gameOverButtonList; 
+			break; 
+		case 5: 
+			currentButtonList = numPlayersButtonList; 
 			break; 
 		}
 	}

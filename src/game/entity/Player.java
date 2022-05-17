@@ -185,6 +185,11 @@ public class Player extends Entity {
 		return isPrimary; 
 	}
 	
+	// sets which set of key states the Player uses 
+	public void setKeystates (boolean[] keyStates) {
+		this.keyStates = keyStates; 
+	}
+	
 	public int getOriginalHealth () {
 		return originalHealth; 
 	}

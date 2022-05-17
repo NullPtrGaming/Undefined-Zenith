@@ -36,7 +36,7 @@ public class MenuInputHandler {
 		if (GameLogic.getState() == 0 && GameLogic.getMenuIndex() == 0) 
 			switch (selectedButton) {
 		 	case 0: {
-		 		GameLogic.setState(2); 
+		 		GameLogic.setMenu(5); 
 		 		selectedButton = 0; 
 		 	}
 		 	break; 
@@ -129,6 +129,20 @@ public class MenuInputHandler {
 			break; 
 			}
 		} 
+		else if (GameLogic.getMenuIndex() == 5) {
+			switch (selectedButton) {
+			case 0: {
+				GameLogic.setState(2); 
+				GameLogic.setPlayer2(-1);
+			}
+			break; 
+			case 1: {
+				GameLogic.setState(2); 
+				GameLogic.setPlayer2(1); 
+			}
+			break; 
+			}
+		}
 		for (int i=0; i<keyStates.length; i++) 
 			keyStates[i] = false; 
 		selectedButton = 0; 
