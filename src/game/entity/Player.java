@@ -52,7 +52,7 @@ public class Player extends Entity {
 	
 	// Overrides the entity movement, utilizes key states 
 	public void pollMovement () {
-		if (GameLogic.getState() > 1 && isPrimary) { 
+		if (GameLogic.getState() > 1 && (isPrimary || GameLogic.isCharacterPlayer2(this))) { 
 			Entity e = GameLogic.testEntityIntersect(this); // this is the cause of the startup death bug 
 			if (e != null && GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown()) { 
 				healthModify(-e.getDamage()); 
@@ -176,6 +176,9 @@ public class Player extends Entity {
 			}
 		}
 	} 
+	public boolean isAttacking () {
+		return keyStates[Input.ATTACK]; 
+	}
 	
 	// sets primary player status (for switching) 
 	public void makePrimary (boolean primary) {

@@ -158,14 +158,18 @@ public class Renderer {
 			// physical attack forcefield 
 			if (GameLogic.getPhysicalAttackState()) {
 				glBindTexture(GL_TEXTURE_2D, textureList[7]); 
-				glBegin(GL_TRIANGLES); 
-				vertexArray = new float[4]; 
-				vertexArray[0] = (float)(GameLogic.getMainPlayer().getX()-8)/Entity.MAX_X; 
-				vertexArray[1] = (float)(GameLogic.getMainPlayer().getY()-8)/Entity.MAX_Y; 
-				vertexArray[2] = (float)(GameLogic.getMainPlayer().getX()-8)/Entity.MAX_X + 0.125f; 
-				vertexArray[3] = (float)(GameLogic.getMainPlayer().getY()-8)/Entity.MAX_Y + ((float)2/9); 
-				renderVertices(0); 
-				glEnd(); 
+				for (int i=0; i<2; i++) {
+					if (GameLogic.getEntity(i, true) != null && GameLogic.getEntity(i, true).getAttackType() == Entity.ATTACK_PHYSICAL && ((Player)GameLogic.getEntity(i, true)).isAttacking()) { 
+						glBegin(GL_TRIANGLES); 
+						vertexArray = new float[4]; 
+						vertexArray[0] = (float)(GameLogic.getEntity(i, true).getX()-8)/Entity.MAX_X; 
+						vertexArray[1] = (float)(GameLogic.getEntity(i, true).getY()-8)/Entity.MAX_Y; 
+						vertexArray[2] = (float)(GameLogic.getEntity(i, true).getX()-8)/Entity.MAX_X + 0.125f; 
+						vertexArray[3] = (float)(GameLogic.getEntity(i, true).getY()-8)/Entity.MAX_Y + ((float)2/9); 
+						renderVertices(0); 
+						glEnd(); 
+					}
+				}
 			}
 			
 			renderEffects(); 

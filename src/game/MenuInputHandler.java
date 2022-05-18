@@ -134,11 +134,13 @@ public class MenuInputHandler {
 			case 0: {
 				GameLogic.setState(2); 
 				GameLogic.setPlayer2(-1);
+				GameLogic.setTwoPlayer(false); 
 			}
 			break; 
 			case 1: {
 				GameLogic.setState(2); 
 				GameLogic.setPlayer2(1); 
+				GameLogic.setTwoPlayer(true); 
 			}
 			break; 
 			}

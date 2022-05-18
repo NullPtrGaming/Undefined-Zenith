@@ -71,6 +71,7 @@ public class GameLogic {
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players (characters) 
 	private static int currentPlayerIndex = 0; 
 	private static int currentPlayer1Index = 0; 
+	private static boolean twoPlayer = false; 
 	private static Entity[] physicalEnemyTypeList = {
 			new Entity(0, 0, 25, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
 			new Entity(0, 0, 5, 10, 2, 300, Entity.ATTACK_PHYSICAL, true, 2) // moves faster 
@@ -199,11 +200,13 @@ public class GameLogic {
 	}
 	
 	// switches loaded player 
-	public static void setMainPlayer (int index) {
+	public static void setMainPlayer (int index) { 
 		playerTypeList.get(currentPlayerIndex).makePrimary(false); 
 		playerTypeList.get(index).makePrimary(true); 
 		playerList[0] = playerTypeList.get(index); 
 		playerList[0].setKeystates(keyStates); 
+		if (twoPlayer && index == currentPlayer1Index) 
+			setPlayer2(currentPlayerIndex);
 		currentPlayerIndex = index; 
 	}
 	public static int getPlayerIndex () {
@@ -223,6 +226,17 @@ public class GameLogic {
 	}
 	public static int numCharacters () {
 		return playerTypeList.size(); 
+	}
+	// self-explanatory 
+	public static boolean isCharacterPlayer2 (Player p) {
+		return (p.equals(playerList[1])); 
+	}
+	// sets the number of players (mode) 
+	public static void setTwoPlayer (boolean y) {
+		twoPlayer = y; 
+	}
+	public static boolean isTwoPlayer () {
+		return twoPlayer; 
 	}
 	
 	// gets effects 
@@ -548,6 +562,8 @@ public class GameLogic {
 	// Updates all entities and player movements 
 	public static void updateEntities () {
 		playerList[PRIMARY_PLAYER].pollMovement(); 
+		if (twoPlayer)
+			playerList[1].pollMovement(); 
 		for (Entity e : entityList) {
 			e.pollMovement(); 
 		}
