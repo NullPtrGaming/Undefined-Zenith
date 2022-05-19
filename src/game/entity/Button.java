@@ -10,7 +10,7 @@ public class Button {
 	public static final int STANDARD_BUTTON_WIDTH = 32; 
 	
 	// textures 
-	private static int[] buttonTextureList = new int[8]; 
+	private static int[] buttonTextureList = new int[9]; 
 	
 	private int x; 
 	private int y; 

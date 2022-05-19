@@ -10,6 +10,7 @@ public class MenuInputHandler {
 	
 	private int selectedButton = 0; 
 	private int currentCharacter; 
+	private int currentCharacter1; 
 	
 	// constructor, sets keystates 
 	public MenuInputHandler (boolean keyStates[]) {
@@ -95,14 +96,38 @@ public class MenuInputHandler {
 			break; 
 			case 4: {
 				currentCharacter = GameLogic.getPlayerIndex(); 
+				currentCharacter1 = GameLogic.getPlayer2Index(); 
 				if (currentCharacter < GameLogic.numCharacters()-1) {
 					currentCharacter++;  
 				} 
 				else {
 					currentCharacter = 0; 
 				}
+				if (currentCharacter == currentCharacter1) { // swaps the characters if they are about to be the same 
+					GameLogic.setPlayer2(GameLogic.getPlayerIndex()); 
+				}
 				GameLogic.setMainPlayer(currentCharacter); 
 			} 
+			break; 
+			case 5: {
+				currentCharacter = GameLogic.getPlayerIndex(); 
+				currentCharacter1 = GameLogic.getPlayer2Index(); 
+				if (currentCharacter1 < GameLogic.numCharacters()-1) {
+					currentCharacter1++;  
+				} 
+				else {
+					currentCharacter1 = 0; 
+				}
+				if (currentCharacter == currentCharacter1) { // increments again if the characters are the same 
+					if (currentCharacter1 < GameLogic.numCharacters()-1) {
+						currentCharacter1++;  
+					} 
+					else {
+						currentCharacter1 = 0; 
+					}
+				}
+				GameLogic.setPlayer2(currentCharacter1); 
+			}
 			break; 
 			}
 		}
@@ -132,15 +157,15 @@ public class MenuInputHandler {
 		else if (GameLogic.getMenuIndex() == 5) {
 			switch (selectedButton) {
 			case 0: {
-				GameLogic.setState(2); 
-				GameLogic.setPlayer2(-1);
 				GameLogic.setTwoPlayer(false); 
+				GameLogic.setPlayer2(-1); 
+				GameLogic.setState(2);  
 			}
 			break; 
 			case 1: {
-				GameLogic.setState(2); 
-				GameLogic.setPlayer2(1); 
 				GameLogic.setTwoPlayer(true); 
+				GameLogic.setPlayer2(GameLogic.getPlayer2Index()); 
+				GameLogic.setState(2); 
 			}
 			break; 
 			}

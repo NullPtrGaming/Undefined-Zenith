@@ -70,7 +70,8 @@ public class GameLogic {
 	private static int deadEnemyCount = 0; 
 	private static ArrayList<Player> playerTypeList; // not the player list, this is for types of players (characters) 
 	private static int currentPlayerIndex = 0; 
-	private static int currentPlayer1Index = 0; 
+	private static int currentPlayer1Index = 1; 
+	private static Player currentPlayer2 = null; 
 	private static boolean twoPlayer = false; 
 	private static Entity[] physicalEnemyTypeList = {
 			new Entity(0, 0, 25, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
@@ -107,6 +108,7 @@ public class GameLogic {
 	private static ArrayList<Button> gameOverButtonList; 
 	private static ArrayList<Button> rebindButtonList; 
 	private static ArrayList<Button> numPlayersButtonList; 
+	private static ArrayList<Button> playerRebindButtonList; 
 	private static ArrayList<Button> currentButtonList; 
 	private static int menuIndex = 0; 
 	private static boolean wasGameOver = false; 
@@ -142,10 +144,12 @@ public class GameLogic {
 		gameOverButtonList = new ArrayList<Button> (); 
 		rebindButtonList = new ArrayList<Button> (); 
 		numPlayersButtonList = new ArrayList<Button> (); 
+		playerRebindButtonList = new ArrayList<Button> (); 
 		powerUpList = new ArrayList<PowerUp> (); 
 		obstacleList = new ArrayList<Obstacle> (); 
 		playerTypeList = new ArrayList<Player> (); 
 		playerList[PRIMARY_PLAYER] = loadPlayer(); 
+		currentPlayer2 = playerTypeList.get(1); 
 		keyPressHandler = new Input(window, false, keyStates, keyStates1); // Key callbacks set 
 		input = new MenuInputHandler(keyStates); 
 		initMenus(); 
@@ -217,8 +221,14 @@ public class GameLogic {
 			playerList[1] = null; 
 			return; 
 		}
+		if (!twoPlayer) {
+			currentPlayer2 = playerTypeList.get(index); 
+			currentPlayer1Index = index; 
+			return; 
+		}
 		playerList[1] = playerTypeList.get(index); 
 		playerList[1].setKeystates(keyStates1); 
+		currentPlayer2 = playerList[1]; 
 		currentPlayer1Index = index; 
 	}
 	public static int getPlayer2Index () {
@@ -237,6 +247,10 @@ public class GameLogic {
 	}
 	public static boolean isTwoPlayer () {
 		return twoPlayer; 
+	}
+	// gets player 2 regardless of 2 player status 
+	public static Player getPlayer2 () {
+		return currentPlayer2; 
 	}
 	
 	// gets effects 
@@ -392,7 +406,8 @@ public class GameLogic {
 		optionsButtonList.add(new Button(-16, 60, "REBIND KEYS", 4)); 
 		optionsButtonList.add(new Button(-16, 24, "SELECT ATTACK", 6)); 
 		optionsButtonList.add(new Button(-16, -12, "FULLSCREEN", 5)); 
-		optionsButtonList.add(new Button(-16, -48, "CHARACTER", 7)); 
+		optionsButtonList.add(new Button(-16, -48, "CHARACTER ONE", 7)); 
+		optionsButtonList.add(new Button(-16, -84, "CHARACTER TWO", 8)); 
 		
 		gameOverButtonList.add(new Button(-16, 0, "GAME OVER", 3)); 
 		
@@ -404,6 +419,9 @@ public class GameLogic {
 		
 		numPlayersButtonList.add(new Button(-16, 0, "ONE PLAYER", 1)); 
 		numPlayersButtonList.add(new Button(-16, -36, "TWO PLAYER", 1)); 
+		
+		playerRebindButtonList.add(new Button(-16, 0, "PLAYER ONE", 4)); 
+		playerRebindButtonList.add(new Button(-16, -36, "PLAYER TWO", 4)); 
 		
 		currentButtonList = titleButtonList; 
 	} 
@@ -547,6 +565,7 @@ public class GameLogic {
 					playerTypeList.set(i, new Player(0, 0, player.getOriginalHealth(), player.getDamage(), player.getSpeed(), player.getCooldown(), player.getAttackType(), player.getTexture(), true, player.isPrimary(), keyStates)); 
 					playerTypeList.get(i).setAltTexture(altTexture); 
 					setMainPlayer(currentPlayerIndex); 
+					setPlayer2(currentPlayer1Index); 
 					i++; 
 				} 
 			} 
