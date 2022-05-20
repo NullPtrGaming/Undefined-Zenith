@@ -84,7 +84,7 @@ public class Player extends Entity {
 			if (keyStates[Input.ESCAPE] && GameLogic.getMenuCooldownState())
 				GameLogic.setState(1); 
 			if (!keyStates[Input.ESCAPE] && Math.random() >= 0.9) 
-				 genProjectileTrail(); 
+				genProjectileTrail(); 
 			if (this.getAttackType() == Entity.ATTACK_PHYSICAL) 
 				Input.resetAttackStatePoll(); 
 		}

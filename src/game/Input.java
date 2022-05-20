@@ -38,7 +38,7 @@ public class Input {
 					keyStates1[i] = (glfwGetKey(window, keybinds1[i]) == GLFW_PRESS);  
 			}
 			lastKey = key; 
-			lastAttackKeyState = keyStates[ATTACK]; 
+			lastAttackKeyState = keyStates[ATTACK] || keyStates1[ATTACK]; 
 			GameLogic.setKeysPoll(); 
 			});
 	}

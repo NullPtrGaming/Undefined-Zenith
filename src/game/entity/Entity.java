@@ -212,7 +212,7 @@ public class Entity {
 	
 	// movement method, calls collision logic 
 	public void move (int x, int y) {
-		if (this != GameLogic.getEntity(0, true) && this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) { // checks initial collisions with Player 
+		if (this != GameLogic.getEntity(0, true) && this != GameLogic.getEntity(1, true) && this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) { // checks initial collisions with Player 
 			if ((GameLogic.getTime() - this.getCooldownTimer() >= this.getCooldown())) {
 				GameLogic.getMainPlayer().healthModify(-this.getDamage());
 				GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
@@ -221,7 +221,16 @@ public class Entity {
 			}
 			return; 
 		} 
-		if (this != GameLogic.getEntity(0, true)) { // collisions - prevents things from going inside Player 
+		if (this != GameLogic.getEntity(1, true) && this != GameLogic.getEntity(0, true) && this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox())) { // checks initial collisions with Player 
+			if ((GameLogic.getTime() - this.getCooldownTimer() >= this.getCooldown())) {
+				GameLogic.getPlayer2().healthModify(-this.getDamage());
+				GameLogic.newEffect(GameLogic.getPlayer2().getX(), GameLogic.getPlayer2().getY(), 0, 20); 
+				GameLogic.startShake(3); 
+				this.cooldownReset(); 
+			}
+			return; 
+		} 
+		if (this != GameLogic.getEntity(0, true) && this != GameLogic.getEntity(1, true)) { // collisions - prevents things from going inside Player 
 			if (Math.abs(this.x - lastPlayerX) <= 5) 
 				this.x -= x; 
 			if (Math.abs(this.y - lastPlayerY) <= 5) 
@@ -242,7 +251,7 @@ public class Entity {
 				}
 				if (e != null) {
 					if (e.getCollisionBox().intersects(this.getCollisionBox())) { 
-						if (this != GameLogic.getEntity(0, true) && !this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) { 
+						if ((this != GameLogic.getEntity(0, true) && !this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) || (this != GameLogic.getEntity(1, true) && !this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox()))) { 
 							if (lastPlayerY > y) {
 								this.y += speed; 
 							} 
@@ -250,11 +259,11 @@ public class Entity {
 								this.y -= speed; 
 							} 
 						}
-						else if (this == GameLogic.getEntity(0, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
+						else if (this == GameLogic.getEntity(0, true) || this == GameLogic.getEntity(1, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
 							healthModify(-e.getDamage()); 
 							GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
 							GameLogic.startShake(2); 
-							e.cooldownReset(); 
+							e.cooldownReset(); // fixing stopped here 
 						} 
 						Entity tempE = e; 
 						while (e == tempE) { 

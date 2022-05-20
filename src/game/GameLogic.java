@@ -230,6 +230,8 @@ public class GameLogic {
 		playerList[1].setKeystates(keyStates1); 
 		currentPlayer2 = playerList[1]; 
 		currentPlayer1Index = index; 
+		playerList[1].setX(16); // when 2 players are there, they get their x values separated 
+		playerList[0].setX(-15); 
 	}
 	public static int getPlayer2Index () {
 		return currentPlayer1Index; 
@@ -360,6 +362,10 @@ public class GameLogic {
 		for (Player p : playerTypeList) {
 			p.setX(0); 
 			p.setY(0); 
+			if (twoPlayer) {
+				playerList[1].setX(16); // when 2 players are there, they get their x values separated 
+				playerList[0].setX(-15); 
+			}
 		}
 	}
 	
@@ -785,10 +791,11 @@ public class GameLogic {
 	
 	public static ArrayList<Entity> testPhysicalAttackIntersect () { // physical attack 
 		ArrayList<Entity> hitEnemies = new ArrayList<Entity> (); 
-		for (Entity e : entityList) {
-			if (e.getCollisionBox().intersects(getMainPlayer().getAttackCollisions())) {
+		for (Entity e : entityList) { 
+			if (e.getCollisionBox().intersects(getMainPlayer().getAttackCollisions())) 
 				hitEnemies.add(e); 
-			}
+			if (e.getCollisionBox().intersects(getPlayer2().getAttackCollisions())) // checks for player 2 as well 
+				hitEnemies.add(e); 
 		} 
 		return hitEnemies; 
 	}

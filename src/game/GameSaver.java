@@ -35,7 +35,8 @@ public class GameSaver {
 				saveWriter.write(Input.getKeybinds()[i] + " "); // saves key binds 
 			saveWriter.write("\nFullscreen: " + GameLogic.getFullscreenState()); // saves fullscreen state 
 			saveWriter.write("\nPosition: " + GameLogic.getMainPlayer().getX() + " " + GameLogic.getMainPlayer().getY() + " " + GameLogic.getMainPlayer().getDirection()); // saves player position (might not be a thing) 
-			saveWriter.write("\nCharacter: " + GameLogic.getPlayerIndex()); 
+			saveWriter.write("\nCharacter One: " + GameLogic.getPlayerIndex()); 
+			saveWriter.write("\nCharacter Two: " + GameLogic.getPlayer2Index()); 
 			
 			saveWriter.write("\n"); // extra new line in save file because why not? 
 			saveWriter.close(); // testing 
@@ -57,7 +58,8 @@ public class GameSaver {
 			saveWriter.write("\nFullscreen: " + GameLogic.getFullscreenState()); // saves fullscreen state 
 			saveWriter.write("\nPosition: " + GameLogic.getMainPlayer().getX() + " " + GameLogic.getMainPlayer().getY() + " " + GameLogic.getMainPlayer().getDirection()); // saves player position (might not be a thing) 
 			saveWriter.write("\nHigh Score: " + GameLogic.getHighScore()); 
-			saveWriter.write("\nCharacter: " + GameLogic.getPlayerIndex()); 
+			saveWriter.write("\nCharacter One: " + GameLogic.getPlayerIndex()); 
+			saveWriter.write("\nCharacter Two: " + GameLogic.getPlayer2Index()); 
 			
 			saveWriter.write("\n"); // extra new line in save file because why not? 
 			saveWriter.close(); // testing 
@@ -94,6 +96,14 @@ public class GameSaver {
 			catch (Exception e) {
 				GameLogic.setMainPlayer(0); 
 			}
+			while (!saveReader.hasNextInt()) // player 2 
+				saveReader.next(); 
+			try {
+				GameLogic.setPlayer2(saveReader.nextInt()); 
+			} 
+			catch (Exception e) {
+				GameLogic.setPlayer2(1); 
+			}
 			
 			saveReader.close(); 
 		} 
@@ -123,13 +133,21 @@ public class GameSaver {
 			while (!saveReader.hasNextInt()) 
 				saveReader.next(); 
 			GameLogic.setHighScore(saveReader.nextInt()); 
-			while (!saveReader.hasNextInt()) 
+			while (!saveReader.hasNextInt())  // player 1 
 				saveReader.next(); 
 			try {
 				GameLogic.setMainPlayer(saveReader.nextInt()); 
 			} 
 			catch (Exception e) {
 				GameLogic.setMainPlayer(0); 
+			}
+			while (!saveReader.hasNextInt()) // player 2 
+				saveReader.next(); 
+			try {
+				GameLogic.setPlayer2(saveReader.nextInt()); 
+			} 
+			catch (Exception e) {
+				GameLogic.setPlayer2(1); 
 			}
 			
 			saveReader.close(); 
