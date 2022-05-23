@@ -73,6 +73,7 @@ public class GameLogic {
 	private static int currentPlayer1Index = 1; 
 	private static Player currentPlayer2 = null; 
 	private static boolean twoPlayer = false; 
+	private static int sharedHealth = 0; 
 	private static Entity[] physicalEnemyTypeList = {
 			new Entity(0, 0, 25, 10, 1, 500, Entity.ATTACK_PHYSICAL, true, 1), 
 			new Entity(0, 0, 5, 10, 2, 300, Entity.ATTACK_PHYSICAL, true, 2) // moves faster 
@@ -232,6 +233,7 @@ public class GameLogic {
 		currentPlayer1Index = index; 
 		playerList[1].setX(16); // when 2 players are there, they get their x values separated 
 		playerList[0].setX(-15); 
+		updateSharedHealth(); 
 	}
 	public static int getPlayer2Index () {
 		return currentPlayer1Index; 
@@ -246,6 +248,8 @@ public class GameLogic {
 	// sets the number of players (mode) 
 	public static void setTwoPlayer (boolean y) {
 		twoPlayer = y; 
+		if (!twoPlayer) 
+			sharedHealth = 0; 
 	}
 	public static boolean isTwoPlayer () {
 		return twoPlayer; 
@@ -254,7 +258,13 @@ public class GameLogic {
 	public static Player getPlayer2 () {
 		return currentPlayer2; 
 	}
-	
+	// updates 2 player shared health 
+	public static int updateSharedHealth () {
+		sharedHealth = playerList[0].getHealth() + playerList[1].getHealth(); 
+		if (sharedHealth < 0) 
+			sharedHealth = 0; 
+		return sharedHealth; 
+	}
 	// gets effects 
 	public static ArrayList<Effect> getEffects () { 
 		return effectList; 
@@ -317,7 +327,13 @@ public class GameLogic {
 	public static void pollPowerUps () {
 		for (int i=0; i<numPowerUps(); i++) {
 			if (powerUpList.get(i).getCollisionBox().intersects(getMainPlayer().getCollisionBox())) {
-				powerUpList.get(i).doAction(); 
+				powerUpList.get(i).doAction(getMainPlayer()); 
+				newEffect(powerUpList.get(i).getX(), powerUpList.get(i).getY(), 1, 20); 
+				powerUpList.remove(i); 
+				i--; 
+			}
+			else if (powerUpList.get(i).getCollisionBox().intersects(getPlayer2().getCollisionBox())) {
+				powerUpList.get(i).doAction(getPlayer2()); 
 				newEffect(powerUpList.get(i).getX(), powerUpList.get(i).getY(), 1, 20); 
 				powerUpList.remove(i); 
 				i--; 

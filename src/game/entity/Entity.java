@@ -143,7 +143,7 @@ public class Entity {
 	// Changes health by the given value 
 	public void healthModify (int h) {
 		health += h;  
-		if (health < 0) 
+		if (!GameLogic.isTwoPlayer() && health < 0) 
 			health = 0; 
 		if (this == GameLogic.getEntity(0, true) && h < 0) {
 			GameLogic.addDamageFrames(20); 
@@ -263,7 +263,7 @@ public class Entity {
 							healthModify(-e.getDamage()); 
 							GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
 							GameLogic.startShake(2); 
-							e.cooldownReset(); // fixing stopped here 
+							e.cooldownReset(); 
 						} 
 						Entity tempE = e; 
 						while (e == tempE) { 
@@ -283,7 +283,7 @@ public class Entity {
 				if (this != GameLogic.getBoss()) {
 					Obstacle tempO = GameLogic.testObstacleIntersect(this); 
 					Obstacle o = tempO; 
-					if (this != GameLogic.getEntity(0, true))
+					if (this != GameLogic.getEntity(0, true) && this != GameLogic.getEntity(1, true))
 						while (tempO != null && o == tempO) { 
 							if (o.getX() > this.x) 
 								this.x--; 

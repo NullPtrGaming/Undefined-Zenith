@@ -49,19 +49,22 @@ public class PowerUp {
 	}
 	
 	// does the PowerUp action based on type 
-	public void doAction () {
+	public void doAction (Player p) {
 		switch (type) {
 		case 0: {
-			GameLogic.getMainPlayer().healthModify(10); 
+			p.healthModify(10); 
 		}
 		break; 
 		case 1: {
-			GameLogic.getMainPlayer().rapidFireStart(2, 10000); 
+			p.rapidFireStart(2, 10000); 
 		}
 		break; 
 		case 2: {
 			if (GameLogic.getMainPlayer().getHealth() < GameLogic.getMainPlayer().getOriginalHealth()) { 
 				GameLogic.getMainPlayer().healthModify(GameLogic.getMainPlayer().getOriginalHealth()-GameLogic.getMainPlayer().getHealth()); 
+			} 
+			if (GameLogic.getPlayer2().getHealth() < GameLogic.getPlayer2().getOriginalHealth()) { 
+				GameLogic.getPlayer2().healthModify(GameLogic.getPlayer2().getOriginalHealth()-GameLogic.getPlayer2().getHealth()); 
 			} 
 			GameLogic.toggleEntities(); 
 			GameLogic.newArea(); 

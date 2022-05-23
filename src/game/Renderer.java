@@ -430,6 +430,10 @@ public class Renderer {
 			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
 			int health = GameLogic.getMainPlayer().getHealth(); 
 			int score = GameLogic.getMainPlayer().getScore(); 
+			if (GameLogic.isTwoPlayer()) {
+				health = GameLogic.updateSharedHealth(); 
+				score = GameLogic.getMainPlayer().getScore() + GameLogic.getPlayer2().getScore(); 
+			} 
 			int x = Entity.MAX_X - 4; 
 			final int y = 132; 
 			if (health == 0) {

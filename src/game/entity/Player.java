@@ -61,7 +61,15 @@ public class Player extends Entity {
 				e.cooldownReset(); 
 			}
 			rapidFirePoll(); 
-			if (getHealth() <= 0) { // death checking 
+			if (GameLogic.isTwoPlayer()) { // 2 player death checking 
+				if (GameLogic.updateSharedHealth() <= 0) {
+					GameLogic.setState(1); 
+					setCooldown(originalCooldown); 
+					GameLogic.gameOver(); 
+					return; 
+				}
+			}
+			else if (getHealth() <= 0) { // death checking 
 				GameLogic.setState(1); 
 				setCooldown(originalCooldown); 
 				GameLogic.gameOver(); 
@@ -173,6 +181,7 @@ public class Player extends Entity {
 					GameLogic.newEffect(e.getX()+(int)(b.getW()*128)-8, e.getY()+(int)(b.getH()*72)-8, 0, 20);
 				} 
 				GameLogic.startShake(2); 
+				GameLogic.getMainPlayer().scoreAdd(100); 
 			}
 		}
 	} 
