@@ -101,6 +101,7 @@ public class GameLogic {
 	private static int newKeysIndex = 0; 
 	private static boolean rebinding = false; 
 	private static int reboundButton = -1; 
+	private static int reboundCharacter = -1; 
 	private static boolean rebindSuccess = false; 
 	
 	private static ArrayList<Button> titleButtonList; // Stores buttons for menus - alternate game states 
@@ -257,6 +258,10 @@ public class GameLogic {
 	// gets player 2 regardless of 2 player status 
 	public static Player getPlayer2 () {
 		return currentPlayer2; 
+	}
+	// player 2 but it can be null if there is none 
+	public static Player getPlayer2Actual () {
+		return playerList[1]; 
 	}
 	// updates 2 player shared health 
 	public static int updateSharedHealth () {
@@ -425,11 +430,12 @@ public class GameLogic {
 		menuButtonList.add(new Button(-16, -80, "EXIT", 3)); 
 		
 		optionsButtonList.add(new Button(-16, 96, "EXIT", 1)); 
-		optionsButtonList.add(new Button(-16, 60, "REBIND KEYS", 4)); 
-		optionsButtonList.add(new Button(-16, 24, "SELECT ATTACK", 6)); 
-		optionsButtonList.add(new Button(-16, -12, "FULLSCREEN", 5)); 
-		optionsButtonList.add(new Button(-16, -48, "CHARACTER ONE", 7)); 
-		optionsButtonList.add(new Button(-16, -84, "CHARACTER TWO", 8)); 
+		optionsButtonList.add(new Button(-16, 60, "REBIND KEYS PLAYER ONE", 4)); 
+		optionsButtonList.add(new Button(-16, 24, "REBIND KEYS PLAYER TWO", 4)); 
+		optionsButtonList.add(new Button(-16, -12, "SELECT ATTACK", 6)); 
+		optionsButtonList.add(new Button(-16, -48, "FULLSCREEN", 5)); 
+		optionsButtonList.add(new Button(-16, -84, "CHARACTER ONE", 7)); 
+		optionsButtonList.add(new Button(-16, -120, "CHARACTER TWO", 8)); 
 		
 		gameOverButtonList.add(new Button(-16, 0, "GAME OVER", 3)); 
 		
@@ -532,9 +538,16 @@ public class GameLogic {
 		rebinding = true; 
 		reboundButton = selected; 
 	}
+	public static void setRebindCharacter (int index) {
+		reboundCharacter = index; 
+	}
 	// directly changes a key 
 	public static boolean rebindKey (int index, int key) {
-		int[] keybinds = Input.getKeybinds(); 
+		int[] keybinds; 
+		if (reboundCharacter == 0)
+			keybinds = Input.getKeybinds(); 
+		else  
+			keybinds = Input.getKeybinds1(); 
 		boolean cancel = false; 
 		for (int i=0; i<keybinds.length; i++) {
 			if (keybinds[i] == key) 
@@ -797,7 +810,7 @@ public class GameLogic {
 					startShake(2); 
 					projectileList.remove(i); 
 					i--; 
-					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER]) 
+					if (p.getOwner() == (Entity)playerList[PRIMARY_PLAYER] || p.getOwner() == (Entity)playerList[1]) 
 						playerList[PRIMARY_PLAYER].scoreAdd(100); 
 				}
 			}

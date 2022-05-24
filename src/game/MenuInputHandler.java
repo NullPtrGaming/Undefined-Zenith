@@ -79,22 +79,31 @@ public class MenuInputHandler {
 			break; 
 			case 1: {
 				//GameLogic.setKeysInit(); 
+				GameLogic.setRebindCharacter(0); 
 				GameLogic.setMenu(3); 
 				GameSaver.saveGame(); 
 			}
 			break; 
 			case 2: {
-				int[] keybinds = Input.getKeybinds(); 
-				keybinds[Input.SELECT] = keybinds[Input.ATTACK]; 
-				selectedButton = 0; 
+				GameLogic.setRebindCharacter(1); 
+				GameLogic.setMenu(3); 
+				GameSaver.saveGame(); 
 			}
 			break; 
 			case 3: {
-				GameLogic.toggleFullscreen(); 
+				int[] keybinds = Input.getKeybinds(); 
+				int[] keybinds1 = Input.getKeybinds1(); 
+				keybinds[Input.SELECT] = keybinds[Input.ATTACK]; 
+				keybinds1[Input.SELECT] = keybinds1[Input.ATTACK]; 
 				selectedButton = 0; 
 			}
 			break; 
 			case 4: {
+				GameLogic.toggleFullscreen(); 
+				selectedButton = 0; 
+			}
+			break; 
+			case 5: {
 				currentCharacter = GameLogic.getPlayerIndex(); 
 				currentCharacter1 = GameLogic.getPlayer2Index(); 
 				if (currentCharacter < GameLogic.numCharacters()-1) {
@@ -109,7 +118,7 @@ public class MenuInputHandler {
 				GameLogic.setMainPlayer(currentCharacter); 
 			} 
 			break; 
-			case 5: {
+			case 6: {
 				currentCharacter = GameLogic.getPlayerIndex(); 
 				currentCharacter1 = GameLogic.getPlayer2Index(); 
 				if (currentCharacter1 < GameLogic.numCharacters()-1) {

@@ -221,7 +221,7 @@ public class Entity {
 			}
 			return; 
 		} 
-		if (this != GameLogic.getEntity(1, true) && this != GameLogic.getEntity(0, true) && this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox())) { // checks initial collisions with Player 
+		if (GameLogic.isTwoPlayer() && this != GameLogic.getEntity(1, true) && this != GameLogic.getEntity(0, true) && this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox())) { // checks initial collisions with Player 
 			if ((GameLogic.getTime() - this.getCooldownTimer() >= this.getCooldown())) {
 				GameLogic.getPlayer2().healthModify(-this.getDamage());
 				GameLogic.newEffect(GameLogic.getPlayer2().getX(), GameLogic.getPlayer2().getY(), 0, 20); 
@@ -251,7 +251,7 @@ public class Entity {
 				}
 				if (e != null) {
 					if (e.getCollisionBox().intersects(this.getCollisionBox())) { 
-						if ((this != GameLogic.getEntity(0, true) && !this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) || (this != GameLogic.getEntity(1, true) && !this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox()))) { 
+						if ((this != GameLogic.getEntity(0, true) && !this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) || (this != GameLogic.getEntity(1, true) && !(GameLogic.isTwoPlayer() && this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox())))) { 
 							if (lastPlayerY > y) {
 								this.y += speed; 
 							} 
@@ -261,7 +261,7 @@ public class Entity {
 						}
 						else if (this == GameLogic.getEntity(0, true) || this == GameLogic.getEntity(1, true) && (GameLogic.getTime() - e.getCooldownTimer() >= e.getCooldown())) {
 							healthModify(-e.getDamage()); 
-							GameLogic.newEffect(GameLogic.getMainPlayer().getX(), GameLogic.getMainPlayer().getY(), 0, 20); 
+							GameLogic.newEffect(this.getX(), this.getY(), 0, 20); 
 							GameLogic.startShake(2); 
 							e.cooldownReset(); 
 						} 

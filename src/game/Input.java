@@ -47,6 +47,9 @@ public class Input {
 	public static int[] getKeybinds () {
 		return keybinds; 
 	}
+	public static int[] getKeybinds1 () { // player 2 
+		return keybinds1; 
+	}
 	
 	// returns the last pressed key 
 	public static int getLastKey () {
