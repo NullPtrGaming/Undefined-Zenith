@@ -826,6 +826,10 @@ public class GameLogic {
 			if (e.getCollisionBox().intersects(getPlayer2().getAttackCollisions())) // checks for player 2 as well 
 				hitEnemies.add(e); 
 		} 
+		if (isTwoPlayer() && getMainPlayer().getCollisionBox().intersects(getPlayer2().getAttackCollisions())) // allows Players to attack each other 
+			hitEnemies.add(getMainPlayer()); 
+		if (isTwoPlayer() && getPlayer2().getCollisionBox().intersects(getMainPlayer().getAttackCollisions())) 
+			hitEnemies.add(getPlayer2()); 
 		return hitEnemies; 
 	}
 	public static void displayPhysicalAttack (boolean value) { // displays the physical attack bubble thing 

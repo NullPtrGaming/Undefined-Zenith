@@ -27,6 +27,7 @@ public class Entity {
 	// known enemy positions 
 	private int lastPlayerX = 0; 
 	private int lastPlayerY = 0; 
+	private int targetPlayer; 
 	
 	// position variables 
 	private int x; 
@@ -68,6 +69,10 @@ public class Entity {
 		cooldownTimer = GameLogic.getTime(); 
 		moveCooldownTimer = GameLogic.getTime(); 
 		updateCollisionBox(); 
+		if (GameLogic.isTwoPlayer()) 
+			targetPlayer = (int)(Math.random()*2); // decides which Player to chase 
+		else 
+			targetPlayer = 0; 
 	}
 	
 	// class-based textures 
@@ -303,6 +308,16 @@ public class Entity {
 						} 
 					}
 				}
+				if (GameLogic.isTwoPlayer()) {
+					if (this == GameLogic.getMainPlayer() && this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox())) {
+						undoMove(); 
+						return; 
+					} 
+					if (this == GameLogic.getPlayer2() && this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) {
+						undoMove(); 
+						return; 
+					} 
+				}
 				if (tempX > 0) {
 					if (x > 0) {
 						this.x++; 
@@ -348,10 +363,14 @@ public class Entity {
 
 	public void pollMovement () { 
 		if (GameLogic.getTime() - moveCooldownTimer >= cooldown) { 
+			if (GameLogic.isTwoPlayer() && Math.random() >= 0.8) // switches what Player is targeted at random 
+				targetPlayer = (int)(Math.random()*2); 
+			else if (!GameLogic.isTwoPlayer()) 
+				targetPlayer = 0; 
 			moveCooldownTimer = GameLogic.getTime(); 
 			if (Math.random() >= 0.5) {
-				lastPlayerX = GameLogic.getMainPlayer().getX(); 
-				lastPlayerY = GameLogic.getMainPlayer().getY(); 
+				lastPlayerX = GameLogic.getEntity(targetPlayer, true).getX(); 
+				lastPlayerY = GameLogic.getEntity(targetPlayer, true).getY(); 
 			}
 			else {
 				if (Math.random() >= 0.5) 
