@@ -304,6 +304,7 @@ public class Entity {
 					else {
 						if (tempO != null && o == tempO) { 
 							undoMove(); 
+							setDirection((int)x, (int)y); 
 							return; 
 						} 
 					}
@@ -311,10 +312,12 @@ public class Entity {
 				if (GameLogic.isTwoPlayer()) {
 					if (this == GameLogic.getMainPlayer() && this.getCollisionBox().intersects(GameLogic.getPlayer2().getCollisionBox())) {
 						undoMove(); 
+						setDirection((int)x, (int)y); 
 						return; 
 					} 
 					if (this == GameLogic.getPlayer2() && this.getCollisionBox().intersects(GameLogic.getMainPlayer().getCollisionBox())) {
 						undoMove(); 
+						setDirection((int)x, (int)y); 
 						return; 
 					} 
 				}
@@ -413,6 +416,14 @@ public class Entity {
 	public void undoMove () {
 		this.x -= lastXMove; 
 		this.y -= lastYMove; 
+		if (this.x > 240)
+			this.x = -256; 
+		else if (this.x < -1*MAX_X)
+			this.x = 240; 
+		else if (this.y > 128)
+			this.y = -144; 
+		else if (this.y < -1*MAX_Y)
+			this.y = 128; 
 		updateCollisionBox(); 
 	}
 	
