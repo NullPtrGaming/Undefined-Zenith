@@ -91,7 +91,7 @@ public class GameLoop {
 			
 			GameLogic.updateTime(); 
 			
-			if (GameLogic.getState() == 2) 
+			if (GameLogic.getState() > 1) 
 				GameLogic.updateEntities(); 
 			else {
 				GameLogic.getEntity(GameLogic.PRIMARY_PLAYER, true).pollMovement(); 

@@ -42,7 +42,7 @@ public class GameLogic {
 	public static final int SPRITE_OFFSET = 16; 
 	public static final int PRIMARY_PLAYER = 0; 
 	public static final boolean PLAYER_TRUE = true; 
-	public static final int MENU_COOLDOWN = 250; 
+	public static final int MENU_COOLDOWN = 200; 
 	public static final int ENEMY_COOLDOWN = 5000; 
 	public static final int MAX_ENTITIES = 16; 
 	public static final int[] POSITION_NODE_ARRAY = {240, 110}; 
@@ -65,6 +65,7 @@ public class GameLogic {
 	private static Boss currentBoss = null; 
 	private static boolean isBoss = false; 
 	private static boolean enemiesEnabled = true; 
+	private static boolean isVersus = false; 
 	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static int deadEnemyCount = 0; 
@@ -447,6 +448,7 @@ public class GameLogic {
 		
 		numPlayersButtonList.add(new Button(-16, 0, "ONE PLAYER", 1)); 
 		numPlayersButtonList.add(new Button(-16, -36, "TWO PLAYER", 1)); 
+		numPlayersButtonList.add(new Button(-16, -72, "PLAYER BATTLE", 1)); 
 		
 		playerRebindButtonList.add(new Button(-16, 0, "PLAYER ONE", 4)); 
 		playerRebindButtonList.add(new Button(-16, -36, "PLAYER TWO", 4)); 
@@ -566,14 +568,14 @@ public class GameLogic {
 		return rebindSuccess; 
 	} 
 	
-	// gets/sets the main game state - important - 0=TITLE, 1=MENU, 2=RUNNING 
+	// gets/sets the main game state - important - 0=TITLE, 1=MENU, 2=RUNNING, 3=RUNNING (ALTERNATE MODES) 
 	public static int getState () { 
 		return gameState; 
 	}
 	public static void setState (int state) { 
 		int lastState = gameState; 
 		gameState = state; 
-		if (state == 2) {
+		if (state == 2 || state == 3) {
 			startTime(); 
 			playMusic(2); 
 		} 
@@ -589,6 +591,7 @@ public class GameLogic {
 				toggleEntities(); 
 			entityList = new ArrayList<Entity> (); 
 			projectileList = new ArrayList<Projectile> (); 
+			powerUpList = new ArrayList<PowerUp> (); 
 			setMenu(0); 
 			tempScore = 0; 
 			deadEnemyCount = 0; 
@@ -604,13 +607,17 @@ public class GameLogic {
 					i++; 
 				} 
 			} 
+			for (int j=0; j<effectList.size(); j++)
+				effectList.remove(j); 
+			shakeFrames = 0; 
+			damageFrames = 0; 
 			playMusic(0); 
 		}
 		else if (state == 1) 
 			setMenu(1); 
 		if (lastState == 0) {
 			newArea(); 
-		}
+		} 
 	}
 	
 	// Updates all entities and player movements 
@@ -701,6 +708,9 @@ public class GameLogic {
 	// toggles enemy generation 
 	public static void toggleEntities () {
 		enemiesEnabled = !enemiesEnabled; 
+	}
+	public static boolean isEnemiesEnabled() {
+		return enemiesEnabled; 
 	}
 	
 	// gets the main player 

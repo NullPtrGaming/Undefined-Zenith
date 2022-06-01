@@ -38,17 +38,14 @@ public class MenuInputHandler {
 			switch (selectedButton) {
 		 	case 0: {
 		 		GameLogic.setMenu(5); 
-		 		selectedButton = 0; 
 		 	}
 		 	break; 
 		 	case 1: {
 		 		GameLogic.setMenu(2); 
-		 		selectedButton = 0; 
 		 	}
 		 	break; 
 		 	case 2: {
 		 		glfwSetWindowShouldClose(GameLogic.getWindow(), true); 
-		 		
 		 	}
 		 	break; 
 			}
@@ -56,17 +53,14 @@ public class MenuInputHandler {
 			switch (selectedButton) {
 		 	case 0: {
 		 		GameLogic.setState(2); 
-		 		selectedButton = 0; 
 		 	}
 		 	break; 
 		 	case 1: {
 		 		GameLogic.setMenu(2); 
-		 		selectedButton = 0; 
 		 	}
 		 	break; 
 		 	case 2: {
 		 		GameLogic.setState(0); 
-		 		selectedButton = 0; 
 		 	}
 		 	break; 
 			}
@@ -74,7 +68,6 @@ public class MenuInputHandler {
 			switch (selectedButton) {
 			case 0: {
 				GameLogic.setMenu(GameLogic.getState()); 
-				selectedButton = 0; 
 			}
 			break; 
 			case 1: {
@@ -95,12 +88,10 @@ public class MenuInputHandler {
 				int[] keybinds1 = Input.getKeybinds1(); 
 				keybinds[Input.SELECT] = keybinds[Input.ATTACK]; 
 				keybinds1[Input.SELECT] = keybinds1[Input.ATTACK]; 
-				selectedButton = 0; 
 			}
 			break; 
 			case 4: {
 				GameLogic.toggleFullscreen(); 
-				selectedButton = 0; 
 			}
 			break; 
 			case 5: {
@@ -152,7 +143,6 @@ public class MenuInputHandler {
 			switch (selectedButton) {
 			case 7: { 
 				GameLogic.setMenu(2); 
-				selectedButton = 0; 
 			} 
 				break; 
 			default: {
@@ -168,13 +158,28 @@ public class MenuInputHandler {
 			case 0: {
 				GameLogic.setTwoPlayer(false); 
 				GameLogic.setPlayer2(-1); 
+				if (!GameLogic.isEnemiesEnabled()) {
+					GameLogic.toggleEntities(); 
+				}
 				GameLogic.setState(2);  
 			}
 			break; 
 			case 1: {
 				GameLogic.setTwoPlayer(true); 
 				GameLogic.setPlayer2(GameLogic.getPlayer2Index()); 
+				if (!GameLogic.isEnemiesEnabled()) {
+					GameLogic.toggleEntities(); 
+				}
 				GameLogic.setState(2); 
+			}
+			break; 
+			case 2: {
+				GameLogic.setTwoPlayer(true); 
+				GameLogic.setPlayer2(GameLogic.getPlayer2Index()); 
+				if (GameLogic.isEnemiesEnabled()) {
+					GameLogic.toggleEntities(); 
+				}
+				GameLogic.setState(3); 
 			}
 			break; 
 			}
