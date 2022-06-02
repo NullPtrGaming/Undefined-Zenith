@@ -430,7 +430,7 @@ public class Renderer {
 			glBindTexture(GL_TEXTURE_2D, textureList[2]); 
 			int health = GameLogic.getMainPlayer().getHealth(); 
 			int score = GameLogic.getMainPlayer().getScore(); 
-			if (GameLogic.isTwoPlayer()) {
+			if (GameLogic.isTwoPlayer() && !GameLogic.getIsVersus()) {
 				health = GameLogic.updateSharedHealth(); 
 				score = GameLogic.getMainPlayer().getScore() + GameLogic.getPlayer2().getScore(); 
 			} 
@@ -486,6 +486,9 @@ public class Renderer {
 			vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
 			renderNumberVertices(10, false); 
 			
+			if (GameLogic.isTwoPlayer() && GameLogic.getIsVersus()) {
+				
+			}
 			//renderNumber(0, 128, GameLogic.getTestNumber()); // for debug purposes, should be disabled otherwise 
 			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE); 

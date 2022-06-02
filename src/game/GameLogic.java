@@ -66,6 +66,8 @@ public class GameLogic {
 	private static boolean isBoss = false; 
 	private static boolean enemiesEnabled = true; 
 	private static boolean isVersus = false; 
+	public static int winner = 0; 
+	private static int pausedState = 2; 
 	private static int bossCounter = 15; // counts enemies before boss generation // temporarily small for testing 
 	private static int bossCounterTemp = 0; 
 	private static int deadEnemyCount = 0; 
@@ -250,7 +252,7 @@ public class GameLogic {
 	// sets the number of players (mode) 
 	public static void setTwoPlayer (boolean y) {
 		twoPlayer = y; 
-		if (!twoPlayer) 
+		if (!twoPlayer || isVersus) 
 			sharedHealth = 0; 
 	}
 	public static boolean isTwoPlayer () {
@@ -271,6 +273,22 @@ public class GameLogic {
 			sharedHealth = 0; 
 		return sharedHealth; 
 	}
+	
+	// sets the player versus state 
+	public static void setVersus (boolean v) {
+		isVersus = v; 
+	}
+	public static boolean getIsVersus () {
+		return isVersus; 
+	}
+	// set winning player 
+	public static void setWinner (int w) {
+		winner = w; 
+	}
+	public static int getWinner () {
+		return winner; 
+	}
+	
 	// gets effects 
 	public static ArrayList<Effect> getEffects () { 
 		return effectList; 
@@ -618,6 +636,15 @@ public class GameLogic {
 		if (lastState == 0) {
 			newArea(); 
 		} 
+		System.out.println(gameState); 
+	}
+	
+	// sets the paused state of the game for pausing 
+	public static void setPausedState (int s) {
+		pausedState = s; 
+	}
+	public static int getPausedState () {
+		return pausedState; 
 	}
 	
 	// Updates all entities and player movements 

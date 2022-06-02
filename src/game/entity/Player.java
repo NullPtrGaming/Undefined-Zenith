@@ -61,7 +61,7 @@ public class Player extends Entity {
 				e.cooldownReset(); 
 			}
 			rapidFirePoll(); 
-			if (GameLogic.isTwoPlayer()) { // 2 player death checking 
+			if (GameLogic.isTwoPlayer() && !GameLogic.getIsVersus()) { // 2 player death checking 
 				if (GameLogic.updateSharedHealth() <= 0) {
 					GameLogic.setState(1); 
 					setCooldown(originalCooldown); 
@@ -89,8 +89,10 @@ public class Player extends Entity {
 				move(-1*getSpeed(), 0); 
 			if (keyStates[Input.RIGHT])
 				move(getSpeed(), 0); 
-			if (keyStates[Input.ESCAPE] && GameLogic.getMenuCooldownState())
+			if (keyStates[Input.ESCAPE] && GameLogic.getMenuCooldownState()) {
+				GameLogic.setPausedState(GameLogic.getState()); 
 				GameLogic.setState(1); 
+			} 
 			if (!keyStates[Input.ESCAPE] && Math.random() >= 0.9) 
 				genProjectileTrail(); 
 			if (this.getAttackType() == Entity.ATTACK_PHYSICAL) 
@@ -98,7 +100,7 @@ public class Player extends Entity {
 		}
 		else { 
 			if (!GameLogic.isRebinding() && GameLogic.getState() == 1 && keyStates[Input.ESCAPE] && GameLogic.getMenuCooldownState()) 
-				GameLogic.setState(2); 
+				GameLogic.setState(GameLogic.getPausedState()); 
 			if (keyStates[Input.UP] && GameLogic.getMenuCooldownState())
 				GameLogic.getInput().changeSelection(false); 
 			if (keyStates[Input.DOWN] && GameLogic.getMenuCooldownState()) 

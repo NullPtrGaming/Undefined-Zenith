@@ -52,7 +52,7 @@ public class MenuInputHandler {
 		else if (GameLogic.getState() == 1 && GameLogic.getMenuIndex() == 1) 
 			switch (selectedButton) {
 		 	case 0: {
-		 		GameLogic.setState(2); 
+		 		GameLogic.setState(GameLogic.getPausedState()); 
 		 	}
 		 	break; 
 		 	case 1: {
@@ -158,15 +158,17 @@ public class MenuInputHandler {
 			case 0: {
 				GameLogic.setTwoPlayer(false); 
 				GameLogic.setPlayer2(-1); 
+				GameLogic.setVersus(false); 
 				if (!GameLogic.isEnemiesEnabled()) {
 					GameLogic.toggleEntities(); 
 				}
-				GameLogic.setState(2);  
+				GameLogic.setState(2); 
 			}
 			break; 
 			case 1: {
 				GameLogic.setTwoPlayer(true); 
 				GameLogic.setPlayer2(GameLogic.getPlayer2Index()); 
+				GameLogic.setVersus(false); 
 				if (!GameLogic.isEnemiesEnabled()) {
 					GameLogic.toggleEntities(); 
 				}
@@ -176,6 +178,7 @@ public class MenuInputHandler {
 			case 2: {
 				GameLogic.setTwoPlayer(true); 
 				GameLogic.setPlayer2(GameLogic.getPlayer2Index()); 
+				GameLogic.setVersus(true); 
 				if (GameLogic.isEnemiesEnabled()) {
 					GameLogic.toggleEntities(); 
 				}
