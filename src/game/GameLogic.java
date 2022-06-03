@@ -284,6 +284,10 @@ public class GameLogic {
 	// set winning player 
 	public static void setWinner (int w) {
 		winner = w; 
+		if (winner == 0) 
+			gameOverButtonList.get(0).setName("PLAYER ONE WINS"); 
+		else if (winner == 1) 
+			gameOverButtonList.get(0).setName("PLAYER TWO WINS"); 
 	}
 	public static int getWinner () {
 		return winner; 
@@ -515,6 +519,7 @@ public class GameLogic {
 		setState(0); 
 		setMenu(0); 
 		wasGameOver = false; 
+		gameOverButtonList.get(0).setName("GAME OVER"); 
 	}
 	
 	// gets high score 

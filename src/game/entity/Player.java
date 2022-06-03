@@ -72,6 +72,12 @@ public class Player extends Entity {
 			else if (getHealth() <= 0) { // death checking 
 				GameLogic.setState(1); 
 				setCooldown(originalCooldown); 
+				if (GameLogic.getIsVersus()) {
+					if (this == GameLogic.getMainPlayer())
+						GameLogic.setWinner(1); 
+					else if (this == GameLogic.getPlayer2())
+						GameLogic.setWinner(0); 
+				}
 				GameLogic.gameOver(); 
 			} 
 			if (keyStates[Input.ATTACK]) {

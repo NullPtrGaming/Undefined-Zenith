@@ -487,8 +487,34 @@ public class Renderer {
 			renderNumberVertices(10, false); 
 			
 			if (GameLogic.isTwoPlayer() && GameLogic.getIsVersus()) {
-				
+				x -= NUMBER_OFFSET; 
+				health = GameLogic.getPlayer2().getHealth(); 
+				if (health == 0) {
+					x -= NUMBER_OFFSET; 
+					vertexArray[0] = (float)x/(Entity.MAX_X); 
+					vertexArray[1] = (float)y/(Entity.MAX_Y); 
+					vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+					vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+					renderNumberVertices(0, true); 
+				} 
+				while (health > 0) {
+					int tempDigit = health % 10; 
+					health /= 10; 
+					x -= NUMBER_OFFSET; 
+					vertexArray[0] = (float)x/(Entity.MAX_X); 
+					vertexArray[1] = (float)y/(Entity.MAX_Y); 
+					vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+					vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+					renderNumberVertices(tempDigit, true); 
+				}
+				x -= NUMBER_OFFSET; 
+				vertexArray[0] = (float)x/(Entity.MAX_X); 
+				vertexArray[1] = (float)y/(Entity.MAX_Y); 
+				vertexArray[2] = (float)x/(Entity.MAX_X) + OFFSET_W; 
+				vertexArray[3] = (float)y/(Entity.MAX_Y) + OFFSET_H; 
+				renderNumberVertices(10, true); 
 			}
+			
 			//renderNumber(0, 128, GameLogic.getTestNumber()); // for debug purposes, should be disabled otherwise 
 			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE); 
