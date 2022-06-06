@@ -3,7 +3,6 @@
 package game.entity;
 
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Float; 
 import game.GameLogic;
 import game.Input;
 import game.TextureLoader; 
@@ -45,8 +44,6 @@ public class Entity {
 	private int cooldown; 
 	private boolean rotatable; // determines if the texture can be rotated 
 	private int attackType = ATTACK_PHYSICAL; 
-	private double extraMovementX = 0; 
-	private double extraMovementY = 0; 
 	
 	private long cooldownTimer; // for determining cooldown times 
 	private long moveCooldownTimer; 

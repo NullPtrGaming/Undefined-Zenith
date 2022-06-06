@@ -2,39 +2,19 @@
 
 package game;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.Scanner;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*; 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL10.*;
-import org.lwjgl.openal.EXTOffset;
 
 import game.entity.*; 
 
@@ -100,8 +80,6 @@ public class GameLogic {
 	
 	private static boolean[] keyStates = new boolean[7]; 
 	private static boolean[] keyStates1 = new boolean[7]; 
-	private static int[] newKeys = new int[7]; 
-	private static int newKeysIndex = 0; 
 	private static boolean rebinding = false; 
 	private static int reboundButton = -1; 
 	private static int reboundCharacter = -1; 
@@ -198,7 +176,7 @@ public class GameLogic {
 					ze = z.getNextEntry(); // the image (Spaceship.png) 
 					internalIS = file.getInputStream(ze); 
 					texture = tl.loadTexture(internalIS); 
-				} catch (IOException e) {
+				} catch (Exception e) {
 					continue; 
 				}  
 				playerTypeList.add(new Player(0, 0, stats[0], stats[1], stats[2], stats[3], stats[4], texture, true, false, keyStates)); 
@@ -397,8 +375,6 @@ public class GameLogic {
 		for (int i=0; i<numObstacles; i++) { 
 			int[] coords = genCoordinates(); 
 			if (Math.abs(coords[0]) < 32 || Math.abs(coords[1]) < 32) 
-				continue; 
-			else if (coords[0] <= -239 || coords[0] >= 223 || coords[1] <= -127 || coords[1] >= 111) 
 				continue; 
 			else 
 				newObstacle(coords[0], coords[1], (int)(Math.random()*3)); 
@@ -641,7 +617,6 @@ public class GameLogic {
 		if (lastState == 0) {
 			newArea(); 
 		} 
-		System.out.println(gameState); 
 	}
 	
 	// sets the paused state of the game for pausing 

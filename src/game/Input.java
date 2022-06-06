@@ -4,10 +4,6 @@ package game;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.util.ArrayList;
-
-import game.entity.Entity;
-
 public class Input {
 	
 	// Universal key identifier indices 

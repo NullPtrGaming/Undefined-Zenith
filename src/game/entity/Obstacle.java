@@ -3,7 +3,6 @@
 package game.entity;
 
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Float;
 
 import game.GameLogic;
 import game.TextureLoader;

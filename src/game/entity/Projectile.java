@@ -1,8 +1,6 @@
 // Represents a projectile, a smaller entity used in attacks for determining accuracy 
 package game.entity;
 
-import java.awt.geom.Rectangle2D;
-
 import game.TextureLoader; 
 import game.GameLogic;
 import game.Input;
