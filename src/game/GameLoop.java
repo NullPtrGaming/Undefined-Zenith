@@ -55,7 +55,7 @@ public class GameLoop {
 		centerWindow(); 
 		glfwMakeContextCurrent(window); 
 		long monitor = GLFW.glfwGetPrimaryMonitor(); 
-		GLFWVidMode monitorMode = GLFW.glfwGetVideoMode(monitor);
+		//GLFWVidMode monitorMode = GLFW.glfwGetVideoMode(monitor); 
 		//glfwSwapInterval(monitorMode.refreshRate()/60); 
 		glfwShowWindow(window); // At this point, we are visible 
 	}

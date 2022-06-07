@@ -107,6 +107,7 @@ public class GameLogic {
 	private static boolean physicalAttackState = false; 
 	
 	private static int[] soundList = new int[8]; 
+	private static boolean isMuted = false; 
 	
 	private static int[] backgroundTextureList = new int[3]; 
 	
@@ -176,6 +177,9 @@ public class GameLogic {
 					ze = z.getNextEntry(); // the image (Spaceship.png) 
 					internalIS = file.getInputStream(ze); 
 					texture = tl.loadTexture(internalIS); 
+					scan.close(); 
+					file.close(); 
+					z.close(); 
 				} catch (Exception e) {
 					continue; 
 				}  
@@ -250,6 +254,15 @@ public class GameLogic {
 		if (sharedHealth < 0) 
 			sharedHealth = 0; 
 		return sharedHealth; 
+	}
+	
+	// gets the other Player - null if used weirdly and the Players do not line up 
+	public static Player getTheOtherPlayer (Entity p) {
+		if (p == playerList[0] && twoPlayer) 
+			return playerList[1]; 
+		if (p == playerList[1] && twoPlayer) 
+			return playerList[0]; 
+		return null; 
 	}
 	
 	// sets the player versus state 
