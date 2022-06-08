@@ -34,6 +34,7 @@ public class GameSaver {
 			saveWriter.write("\nPosition: " + GameLogic.getMainPlayer().getX() + " " + GameLogic.getMainPlayer().getY() + " " + GameLogic.getMainPlayer().getDirection()); // saves player position (might not be a thing) 
 			saveWriter.write("\nCharacter One: " + GameLogic.getPlayerIndex()); 
 			saveWriter.write("\nCharacter Two: " + GameLogic.getPlayer2Index()); 
+			saveWriter.write("\nMuted: " + GameLogic.getIsMuted()); 
 			
 			saveWriter.write("\n"); // extra new line in save file because why not? 
 			saveWriter.close(); // testing 
@@ -57,6 +58,7 @@ public class GameSaver {
 			saveWriter.write("\nHigh Score: " + GameLogic.getHighScore()); 
 			saveWriter.write("\nCharacter One: " + GameLogic.getPlayerIndex()); 
 			saveWriter.write("\nCharacter Two: " + GameLogic.getPlayer2Index()); 
+			saveWriter.write("\nMuted: " + GameLogic.getIsMuted()); 
 			
 			saveWriter.write("\n"); // extra new line in save file because why not? 
 			saveWriter.close(); // testing 
@@ -101,6 +103,10 @@ public class GameSaver {
 			catch (Exception e) {
 				GameLogic.setPlayer2(1); 
 			}
+			while (!saveReader.hasNextBoolean()) 
+				saveReader.next();
+			if (saveReader.nextBoolean()) 
+				GameLogic.toggleMute(); 
 			
 			saveReader.close(); 
 		} 
@@ -146,6 +152,10 @@ public class GameSaver {
 			catch (Exception e) {
 				GameLogic.setPlayer2(1); 
 			}
+			while (!saveReader.hasNextBoolean()) 
+				saveReader.next();
+			if (saveReader.nextBoolean()) 
+				GameLogic.toggleMute(); 
 			
 			saveReader.close(); 
 		} 

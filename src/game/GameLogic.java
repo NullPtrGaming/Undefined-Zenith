@@ -297,7 +297,8 @@ public class GameLogic {
 		return soundList[index]; 
 	}
 	public static void playSound (int index) {
-		AL10.alSourcePlay(soundList[index]); 
+		if (!isMuted)
+			AL10.alSourcePlay(soundList[index]); 
 	}
 	public static void stopSound (int index) {
 		AL10.alSourceStop(soundList[index]); 
@@ -324,6 +325,23 @@ public class GameLogic {
 			if (i <= 2) 
 				AL10.alSourcei(soundList[i], AL10.AL_LOOPING, AL10.AL_TRUE); 
 		}
+	}
+	public static void toggleMute () {
+		isMuted = !isMuted; 
+		if (isMuted) 
+			for (int i=0; i<soundList.length; i++)
+				stopSound(i); 
+		else {
+			if (gameState == 0)
+				playMusic(0); 
+			else if (isBoss) 
+				playMusic(1); 
+			else 
+				playMusic(2); 
+		}
+	}
+	public static boolean getIsMuted () {
+		return isMuted; 
 	}
 	
 	// for debugging 
@@ -441,13 +459,14 @@ public class GameLogic {
 		menuButtonList.add(new Button(-16, -16, "SETTINGS", 2)); 
 		menuButtonList.add(new Button(-16, -80, "EXIT", 3)); 
 		
-		optionsButtonList.add(new Button(-16, 96, "EXIT", 1)); 
-		optionsButtonList.add(new Button(-16, 60, "REBIND KEYS PLAYER ONE", 4)); 
-		optionsButtonList.add(new Button(-16, 24, "REBIND KEYS PLAYER TWO", 4)); 
-		optionsButtonList.add(new Button(-16, -12, "SELECT ATTACK", 6)); 
-		optionsButtonList.add(new Button(-16, -48, "FULLSCREEN", 5)); 
-		optionsButtonList.add(new Button(-16, -84, "CHARACTER ONE", 7)); 
-		optionsButtonList.add(new Button(-16, -120, "CHARACTER TWO", 8)); 
+		optionsButtonList.add(new Button(-16, 108, "EXIT", 1)); 
+		optionsButtonList.add(new Button(-16, 72, "REBIND KEYS PLAYER ONE", 4)); 
+		optionsButtonList.add(new Button(-16, 36, "REBIND KEYS PLAYER TWO", 4)); 
+		optionsButtonList.add(new Button(-16, 0, "SELECT ATTACK", 6)); 
+		optionsButtonList.add(new Button(-16, -36, "FULLSCREEN", 5)); 
+		optionsButtonList.add(new Button(-16, -72, "CHARACTER ONE", 7)); 
+		optionsButtonList.add(new Button(-16, -108, "CHARACTER TWO", 8)); 
+		optionsButtonList.add(new Button(-16, -144, "MUTE SOUND", 9)); 
 		
 		gameOverButtonList.add(new Button(-16, 0, "GAME OVER", 3)); 
 		
@@ -589,7 +608,10 @@ public class GameLogic {
 		gameState = state; 
 		if (state == 2 || state == 3) {
 			startTime(); 
-			playMusic(2); 
+			if (isBoss)
+				playMusic(1); 
+			else 
+				playMusic(2); 
 		} 
 		else 
 			stopTime(); 

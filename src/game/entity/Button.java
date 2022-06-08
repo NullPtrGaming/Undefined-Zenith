@@ -10,7 +10,7 @@ public class Button {
 	public static final int STANDARD_BUTTON_WIDTH = 32; 
 	
 	// textures 
-	private static int[] buttonTextureList = new int[9]; 
+	private static int[] buttonTextureList = new int[11]; 
 	
 	private int x; 
 	private int y; 
@@ -49,6 +49,9 @@ public class Button {
 		buttonTextureList[4] = textureLoader.loadTexture("res/Menus/Buttons/Controller.png"); 
 		buttonTextureList[5] = textureLoader.loadTexture("res/Menus/Buttons/Fullscreen.png"); 
 		buttonTextureList[6] = textureLoader.loadTexture("res/Menus/Buttons/SelectAttack.png"); 
+		
+		buttonTextureList[9] = textureLoader.loadTexture("res/Menus/Buttons/Sound.png"); 
+		buttonTextureList[10] = textureLoader.loadTexture("res/Menus/Buttons/Sound Muted.png"); 
 	}
 	public static int[] getTextures () {
 		return buttonTextureList; 

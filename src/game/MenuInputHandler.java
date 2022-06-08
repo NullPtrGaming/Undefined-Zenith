@@ -129,6 +129,9 @@ public class MenuInputHandler {
 				GameLogic.setPlayer2(currentCharacter1); 
 			}
 			break; 
+			case 7: {
+				GameLogic.toggleMute(); 
+			}
 			}
 		}
 		else if (GameLogic.getWasGameOver()) {

@@ -202,6 +202,8 @@ public class Renderer {
 					glBindTexture(GL_TEXTURE_2D, GameLogic.getMainPlayer().getTexture()); 
 				if (GameLogic.getButton(i).getTexture() == 8)
 					glBindTexture(GL_TEXTURE_2D, GameLogic.getPlayer2().getTexture()); 
+				if (GameLogic.getButton(i).getTexture() == 9 && GameLogic.getIsMuted()) 
+					glBindTexture(GL_TEXTURE_2D, buttonTextureList[10]); 
 				if (GameLogic.getMenuIndex() == 3) { // cases for the rebinding menu - weird workarounds 
 					switch (i) {
 					case 0: {
