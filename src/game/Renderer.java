@@ -67,7 +67,6 @@ public class Renderer {
 		renderBackground(); // outside of state check 
 		
 		if (GameLogic.getState() != 0) { 
-			GameLogic.pollShake(); 
 			
 			// power ups 
 			for (int i=0; i<GameLogic.numPowerUps(); i++) {
@@ -264,7 +263,6 @@ public class Renderer {
 			}
 			
 			if (GameLogic.getDamageFrames() > 0) {
-				GameLogic.addDamageFrames(-1); 
 				glBindTexture(GL_TEXTURE_2D, textureList[4]); 
 				glBegin(GL_TRIANGLES); 
 				glTexCoord2f(18, 0);
@@ -642,12 +640,7 @@ public class Renderer {
 				glTexCoord2f(1, 0);
 				glVertex2f(vertexArray[2], vertexArray[1]);
 				glEnd(); 
-				e.pollDuration(); 
 			}
-			for (int i=0; i<effectList.size(); i++) {
-				if (effectList.get(i).getDuration() <= 0) 
-					effectList.remove(i); 
-			} 
 		} 
 		
 		// Returns the window's size in (width, height) format in a 2 position array 

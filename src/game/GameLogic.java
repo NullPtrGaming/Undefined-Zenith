@@ -608,10 +608,11 @@ public class GameLogic {
 		gameState = state; 
 		if (state == 2 || state == 3) {
 			startTime(); 
-			if (isBoss)
-				playMusic(1); 
-			else 
-				playMusic(2); 
+			if (lastState == 0) 
+				if (isBoss)
+					playMusic(1); 
+				else 
+					playMusic(2); 
 		} 
 		else 
 			stopTime(); 
@@ -959,6 +960,8 @@ public class GameLogic {
 			shakeScreen(); 
 			shakeFrames--; 
 		}
+		if (damageFrames > 0)
+			GameLogic.addDamageFrames(-1); 
 	}
 	public static void stopShake () {
 		shakeOffsetCoordinates[0] = 0; 
@@ -974,6 +977,16 @@ public class GameLogic {
 	}
 	public static int getDamageFrames () {
 		return damageFrames; 
+	}
+	
+	// polls all effects 
+	public static void pollEffects () {
+		pollShake(); 
+		for (int i=0; i<effectList.size(); i++) {
+			effectList.get(i).pollDuration(); 
+			if (effectList.get(i).getDuration() <= 0) 
+				effectList.remove(i); 
+		} 
 	}
 }
 

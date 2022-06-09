@@ -88,6 +88,8 @@ public class GameLoop {
 			glfwSwapBuffers(window); 
 			glfwPollEvents(); 
 			
+			GameLogic.pollEffects(); 
+			
 			GameLogic.updateTime(); 
 			
 			if (GameLogic.getState() > 1) 

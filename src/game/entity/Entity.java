@@ -357,6 +357,8 @@ public class Entity {
 		else if (this.y < -1*MAX_Y)
 			this.y = 128; 
 		updateCollisionBox(); 
+		if (this == GameLogic.getBoss()) 
+			return; 
 		Obstacle tempO = GameLogic.testObstacleIntersect(this); 
 		if (tempO != null || (GameLogic.isTwoPlayer() && GameLogic.getTheOtherPlayer(this).getCollisionBox().intersects(collisionBox))) { 
 			undoMove(); 
