@@ -360,7 +360,7 @@ public class Entity {
 		if (this == GameLogic.getBoss()) 
 			return; 
 		Obstacle tempO = GameLogic.testObstacleIntersect(this); 
-		if (tempO != null || (GameLogic.isTwoPlayer() && GameLogic.getTheOtherPlayer(this).getCollisionBox().intersects(collisionBox))) { 
+		if (tempO != null || (GameLogic.isTwoPlayer() && GameLogic.getTheOtherPlayer(this) != null && GameLogic.getTheOtherPlayer(this).getCollisionBox().intersects(collisionBox))) { 
 			undoMove(); 
 			setDirection((int)x, (int)y); 
 			return; 
