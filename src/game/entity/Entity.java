@@ -357,6 +357,7 @@ public class Entity {
 		else if (this.y < -1*MAX_Y)
 			this.y = 128; 
 		updateCollisionBox(); 
+		setDirection((int)x, (int)y); 
 		if (this == GameLogic.getBoss()) 
 			return; 
 		Obstacle tempO = GameLogic.testObstacleIntersect(this); 
